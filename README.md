@@ -1,16 +1,17 @@
 # ExpressionSolver
-A .NET C# logical expression solver with a sql like synthax.
+## A .NET C# logical expression solver with a sql like synthax.
 
+You pass a logical expression or a numeric and then you get it back resolved!
+It is intended to be compatible with [http://querybuilder.js.org/](http://querybuilder.js.org/)  sql expression generator.
 
-You pass a logical expression or a numeric and then you get it back resolved! 
-It is intended to be compatible with http://querybuilder.js.org/ sql expression generator.
-
-Example1:
-	Expression:TRUE AND FALSE
+### Example1:
+	Expression: TRUE AND FALSE
 	Return: FALSE
 
+***
 
-Example2:
+
+### Example2:
 	Expression: ('My Test String'='My Test String') AND (999=999) AND TRUE
 	Return: TRUE
 	Log:
@@ -28,7 +29,9 @@ Example2:
 	Result: TRUE
 	 ( 0ms )
 
-Example 3:
+***
+
+### Example 3:
 	Expression: (100*100)*-1
 	Return: -10000
 	Log:
