@@ -347,15 +347,5 @@ namespace ExpressionSolverUnitTest
             Assert.AreEqual(Solver.Solve("(x*x)/2"), "2");
         }
 
-
-        [TestMethod]
-        public void IsINClause()
-        {
-            Assert.AreEqual(Solver.CanBeInClause("(1)"), true);
-            Assert.AreEqual(Solver.CanBeInClause("1,3,4"), true);
-            Assert.AreEqual(Solver.CanBeInClause("1,3, AND 4"), false);
-            Assert.AreEqual(Solver.CanBeInClause("1,3,4,!"), false);
-            Assert.AreEqual(Solver.CanBeInClause("1,3, AND 4"), false);
-        }
     }
 }

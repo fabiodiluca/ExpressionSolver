@@ -79,13 +79,47 @@ namespace ExpressionSolverExample
             txtParameters.Text = "MY_VARIABLE = 'INSIDE';";
         }
 
+        private void btExampleNotIn_Click(object sender, EventArgs e)
+        {
+            txtExpression.Text = "MY_VARIABLE NOT IN ('A','B','C')";
+            txtResult.Text = "";
+            txtParameters.Text = "MY_VARIABLE = 'D';";
+        }
+
         private void btExampleMath_Click(object sender, EventArgs e)
         {
-            txtExpression.Text = "((2*2*2)+2-2)*1";
+            txtExpression.Text = "10 > (((2*2*2)+2-2)*1)";
             txtResult.Text = "";
             txtParameters.Text = "";
         }
 
+        private void btExampleLike_Click(object sender, EventArgs e)
+        {
+            txtExpression.Text = "MY_VARIABLE LIKE '%test%'";
+            txtResult.Text = "";
+            txtParameters.Text = "MY_VARIABLE = 'This is a test variable';";
+        }
+
+        private void btPerformance_Click(object sender, EventArgs e)
+        {
+            int MaxInteractions = 5000;
+            string Expression = "(10 > (((2*2*2)+2-2)*1)) AND (TRUE OR FALSE) AND ('TEST'='TEST') OR (1000 <= 1000)";
+            Log = new StringBuilder(15000);
+            Log.AppendLine("Resolving " + MaxInteractions + " times the expression " + Expression);
+
+            txtResult.Text = Log.ToString();
+            Application.DoEvents();
+
+            DateTime Start = DateTime.Now;
+            for (int aux = 1; aux <= MaxInteractions; aux++)
+            {
+                Solver.Solve(Expression);
+            }
+            DateTime End = DateTime.Now;
+            txtResult.Text = Log.ToString();
+            TimeSpan Solving = End - Start;
+            txtResult.Text += " ( " + Solving.Milliseconds.ToString() + "ms )";
+        }
 
     }
 }

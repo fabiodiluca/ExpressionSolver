@@ -12,7 +12,7 @@ namespace ExpressionSolver
     //IS NOT Operator not implemented
 
     /// <summary>
-    /// An logical expression solver with a sql like synthax
+    /// An logical expression solver with a sql like syntax
     /// </summary>
     public class Solver
     {
@@ -64,7 +64,7 @@ namespace ExpressionSolver
             {
                 Solved = SolveInnerParenthesis(Solved, out InnerParenthesisIndexStart, out InnerParenthesisIndexEnd);
                 if (Log != null)
-                    Log.AppendLine(Solved);
+                    Log.AppendLine("Current expression: " + Solved);
             }
 
             while (!IsBool(Solved) && !IsNumber(Solved))
@@ -74,7 +74,7 @@ namespace ExpressionSolver
                 {
                     if (!IsBool(Solved) && !IsNumber(Solved))
                     {
-                        Log.AppendLine(Solved);
+                        Log.AppendLine("Current expression: " + Solved);
                     }
                     else
                     {
@@ -387,7 +387,7 @@ namespace ExpressionSolver
                 throw new Exception("Invalid operator: " + Operator);
 
             if (Log != null)
-                Log.AppendLine("Solving: " + _LeftSide + Operator + _RightSide);
+                Log.AppendLine("Solving Primary Member: " + _LeftSide + Operator + _RightSide);
             string LeftSideTrimmed = _LeftSide.Trim();
             string OperatorTrimmed = Operator.Trim();
             string RightSideTrimmed = _RightSide.Trim();
@@ -664,6 +664,7 @@ namespace ExpressionSolver
             return FALSE;
         }
 
+        [Obsolete]
         private bool IsPossibleOperator2(string _PossibleOperator)
         {
             if (_PossibleOperator == null)
@@ -754,7 +755,7 @@ namespace ExpressionSolver
             return false;
         }
 
-        public bool IsPossibleOperator(string _PossibleOperator)
+        private bool IsPossibleOperator(string _PossibleOperator)
         {
             return IsPossibleEqual(ref _PossibleOperator) ||
                     IsPossibleDifferent(ref _PossibleOperator) ||
@@ -801,6 +802,7 @@ namespace ExpressionSolver
             return false;
         }
 
+        [Obsolete]
         private bool IsOperator2(string _PossibleOperator, Char? _NextChar)
         {
             if (_PossibleOperator == null)
@@ -838,11 +840,6 @@ namespace ExpressionSolver
                 return true;
 
             return false;
-            //if (_PossibleOperator.Contains(" " + OperatorIs + " "))
-            //    return true;
-            //if (_PossibleOperator.Contains(" " + OperatorIsNot + " "))
-            //    return true;
-
         }
 
         private bool IsBool(string _Value)
@@ -2051,7 +2048,7 @@ namespace ExpressionSolver
         /// Expecting a string with format: (..,..,..)  example: ('mytext',test','test3') 
         /// </summary>
         /// <returns></returns>
-        public List<string> InClauseParser(string _ToParse)
+        private List<string> InClauseParser(string _ToParse)
         {
             List<string> Values = new List<string>();
 
@@ -2135,7 +2132,7 @@ namespace ExpressionSolver
             return Values;
         }
 
-        public bool CanBeInClause(string _ToParse)
+        private bool CanBeInClause(string _ToParse)
         {
             try
             {

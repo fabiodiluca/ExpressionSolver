@@ -2,29 +2,36 @@
 ## ExpressionSolver is a .NET C# logical expression solver with a sql like syntax.
 
 You pass a logical expression or a numeric and then you get it back resolved!
-It is intended to be compatible with [http://querybuilder.js.org/](http://querybuilder.js.org/)  sql expression generator.
 
-### Example1:
+It is intended to be compatible with [http://querybuilder.js.org/](http://querybuilder.js.org/) combined with a sql expression plugin generator (see [http://querybuilder.js.org/demo.html](http://querybuilder.js.org/demo.html) Import/Export example.
+
+***
+
+### Example1: Simplest logical test
 
 **Source Code C#**
 ```sh
 Solver Solver = new Solver();
-string Return = Solver.Solve("TRUE AND FALSE", null);
+string Return = Solver.Solve("TRUE AND FALSE");
 ```
 **Result**
 ```sh
 	Expression: TRUE AND FALSE
 	Return: FALSE
+        Log:
+        Current expression: TRUE AND FALSE
+        Solving Primary Member: TRUE AND FALSE
+        Result: FALSE
+         ( 0ms )
 ```
 
 ***
 
-
-### Example2:
+### Example2: Equal operator comparisons
 **Source Code C#**
 ```sh
 Solver Solver = new Solver();
-string Return = Solver.Solve("('My Test String'='My Test String') AND (999=999) AND TRUE", null);
+string Return = Solver.Solve("('My Test String'='My Test String') AND (999=999) AND TRUE");
 ```
 **Result**
 ```sh
@@ -33,26 +40,26 @@ string Return = Solver.Solve("('My Test String'='My Test String') AND (999=999) 
 	Log:
 	('My Test String'='My Test String') AND (999=999) AND TRUE
 	Solving ('My Test String'='My Test String')
-	Solving: 'My Test String'='My Test String'
-	TRUE  AND (999=999) AND TRUE
+	Solving Primary Member: 'My Test String'='My Test String'
+	Current expression: TRUE  AND (999=999) AND TRUE
 	TRUE  AND (999=999) AND TRUE
 	Solving (999=999)
-	Solving: 999=999
-	TRUE  AND TRUE  AND TRUE
-	TRUE  AND TRUE  AND TRUE
-	Solving: TRUE  AND TRUE
-	Solving: TRUE  AND TRUE
+	Solving Primary Member: 999=999
+	Current expression: TRUE  AND TRUE  AND TRUE
+	Current expression: TRUE  AND TRUE  AND TRUE
+	Solving Primary Member: TRUE  AND TRUE
+	Solving Primary Member: TRUE  AND TRUE
 	Result: TRUE
-	 ( 0ms )
+	( 1ms )
 ```
 
 ***
 
-### Example 3:
+### Example 3: Simple Math
 **Source Code C#**
 ```sh
 Solver Solver = new Solver();
-string Return = Solver.Solve("(100*100)*-1", null);
+string Return = Solver.Solve("(100*100)*-1");
 ```
 **Result**
 ```sh
@@ -61,13 +68,36 @@ string Return = Solver.Solve("(100*100)*-1", null);
 	Log:
 	(100*100)*-1
 	Solving (100*100)
-	Solving: 100*100
-	10000 *-1
-	10000 *-1
-	Solving: 10000 *-1
+	Solving Primary Member: 100*100
+	Current expression: 10000 *-1
+	Current expression: 10000 *-1
+	Solving Primary Member: 10000 *-1
 	Result: -10000
+	( 0ms )
+```
+
+***
+
+### Example 4: IN Operator
+**Source Code C#**
+```sh
+Dictionary<string, string> Variables = new Dictionary<string, string>();
+Variables.Add("MY_VARIABLE", "'INSIDE'");
+string Return = Solver.Solve("(MY_VARIABLE IN ('A','B','INSIDE','D'))");
+```
+**Result**
+```sh
+	Expression: (MY_VARIABLE IN ('A','B','INSIDE','D'))
+	Return: TRUE
+	Log:
+	Solving (MY_VARIABLE IN ('A','B','INSIDE','D'))
+	Solving Primary Member: MY_VARIABLE IN ('A','B','INSIDE','D')
+	Current expression: TRUE
+	Current expression: TRUE
 	 ( 1ms )
 ```
 
+***
+
 # More Examples
-See 'ExpressionSolverExample' project and unit test project for more examples, you can even pass parameters and work with variables!
+See 'ExpressionSolverExample' project and unit test project for more examples.
