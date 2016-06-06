@@ -16,7 +16,7 @@ namespace ExpressionSolver
     /// </summary>
     public class Solver
     {
-        private CultureInfo CultureUS = new CultureInfo("en-US");
+        private CultureInfo Culture = new CultureInfo("en-US");
         private StringBuilder Log = null;
 
         public const string TRUE = "TRUE";
@@ -35,6 +35,7 @@ namespace ExpressionSolver
         private const string OperatorMinus = "-";
         private const string OperatorMultiply = "*";
         private const string OperatorDivide = "/";
+        private const string OperatorNotLike = "NOT LIKE";
         private const string OperatorLike = "LIKE";
         private const string OperatorNotIN = "NOT IN";
         private const string OperatorIN = "IN";
@@ -49,6 +50,16 @@ namespace ExpressionSolver
                 return parameters;
             }
             set { parameters = value; }
+        }
+
+        public Solver()
+        {
+
+        }
+
+        public Solver(CultureInfo _CultureInfo)
+        {
+            this.Culture = _CultureInfo;
         }
 
         public string Solve(string _Expression, ref StringBuilder _Log, Dictionary<string, string> _Parameters)
@@ -463,8 +474,8 @@ namespace ExpressionSolver
                     }
                     if (IsNumber(LeftSideValue) && IsNumber(RightSideValue))
                     {
-                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), CultureUS);
-                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), CultureUS);
+                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), Culture);
+                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), Culture);
                         if (Number1 == Number2)
                             return TRUE;
                         else
@@ -485,8 +496,8 @@ namespace ExpressionSolver
                     }
                     if (IsNumber(LeftSideValue) && IsNumber(RightSideValue))
                     {
-                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), CultureUS);
-                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), CultureUS);
+                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), Culture);
+                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), Culture);
                         if (Number1 != Number2)
                             return TRUE;
                         else
@@ -499,8 +510,8 @@ namespace ExpressionSolver
 
                 case OperatorGreater:
                     {
-                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), CultureUS);
-                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), CultureUS);
+                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), Culture);
+                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), Culture);
                         if (Number1 > Number2)
                             return TRUE;
                         else
@@ -509,8 +520,8 @@ namespace ExpressionSolver
 
                 case OperatorGreaterOrEqual:
                     {
-                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), CultureUS);
-                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), CultureUS);
+                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), Culture);
+                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), Culture);
                         if (Number1 >= Number2)
                             return TRUE;
                         else
@@ -519,8 +530,8 @@ namespace ExpressionSolver
 
                 case OperatorLess:
                     {
-                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), CultureUS);
-                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), CultureUS);
+                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), Culture);
+                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), Culture);
                         if (Number1 < Number2)
                             return TRUE;
                         else
@@ -529,8 +540,8 @@ namespace ExpressionSolver
 
                 case OperatorLessOrEqual:
                     {
-                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), CultureUS);
-                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), CultureUS);
+                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), Culture);
+                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), Culture);
                         if (Number1 <= Number2)
                             return TRUE;
                         else
@@ -538,27 +549,34 @@ namespace ExpressionSolver
                     }
                 case OperatorPlus:
                     {
-                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), CultureUS);
-                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), CultureUS);
-                        return (Number1 + Number2).ToString(CultureUS);
+                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), Culture);
+                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), Culture);
+                        return (Number1 + Number2).ToString(Culture);
                     }
                 case OperatorMinus:
                     {
-                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), CultureUS);
-                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), CultureUS);
-                        return (Number1 - Number2).ToString(CultureUS);
+                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), Culture);
+                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), Culture);
+                        return (Number1 - Number2).ToString(Culture);
                     }
                 case OperatorMultiply:
                     {
-                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), CultureUS);
-                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), CultureUS);
-                        return (Number1 * Number2).ToString(CultureUS);
+                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), Culture);
+                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), Culture);
+                        return (Number1 * Number2).ToString(Culture);
                     }
                 case OperatorDivide:
                     {
-                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), CultureUS);
-                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), CultureUS);
-                        return (Number1 / Number2).ToString(CultureUS);
+                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), Culture);
+                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), Culture);
+                        return (Number1 / Number2).ToString(Culture);
+                    }
+                case OperatorNotLike:
+                    {
+                        if (!LeftSideValue.Like(RightSideValue))
+                            return TRUE;
+                        else
+                            return FALSE;
                     }
                 case OperatorLike:
                     {
@@ -585,8 +603,8 @@ namespace ExpressionSolver
                                 }
                                 if (IsNumber(ValueLeft) && IsNumber(ValueRight))
                                 {
-                                    double Number1 = Convert.ToDouble(CorrectNumber(ValueLeft), CultureUS);
-                                    double Number2 = Convert.ToDouble(CorrectNumber(ValueRight), CultureUS);
+                                    double Number1 = Convert.ToDouble(CorrectNumber(ValueLeft), Culture);
+                                    double Number2 = Convert.ToDouble(CorrectNumber(ValueRight), Culture);
                                     if (Number1 == Number2)
                                         return TRUE;
                                 }
@@ -614,8 +632,8 @@ namespace ExpressionSolver
                                 }
                                 if (IsNumber(ValueLeft) && IsNumber(ValueRight))
                                 {
-                                    double Number1 = Convert.ToDouble(CorrectNumber(ValueLeft), CultureUS);
-                                    double Number2 = Convert.ToDouble(CorrectNumber(ValueRight), CultureUS);
+                                    double Number1 = Convert.ToDouble(CorrectNumber(ValueLeft), Culture);
+                                    double Number2 = Convert.ToDouble(CorrectNumber(ValueRight), Culture);
                                     if (Number1 == Number2)
                                         return FALSE;
                                 }
@@ -664,97 +682,6 @@ namespace ExpressionSolver
             return FALSE;
         }
 
-        [Obsolete]
-        private bool IsPossibleOperator2(string _PossibleOperator)
-        {
-            if (_PossibleOperator == null)
-                return false;
-            string _PossibleOperatorTrimmed = _PossibleOperator.Trim();
-
-            if (_PossibleOperatorTrimmed == "")
-                return true;
-
-            switch (_PossibleOperatorTrimmed.Length)
-            {
-                case 1:
-                    if (_PossibleOperatorTrimmed == "=")
-                        return true;
-
-                    if (_PossibleOperatorTrimmed == "!")
-                        return true;
-
-                    if (_PossibleOperatorTrimmed.Equals("A", StringComparison.InvariantCultureIgnoreCase) && _PossibleOperator.HasSpaceBeforeNonSpace())
-                        return true;
-
-                    if (_PossibleOperatorTrimmed.Equals("O", StringComparison.InvariantCultureIgnoreCase) && _PossibleOperator.HasSpaceBeforeNonSpace())
-                        return true;
-
-                    if (_PossibleOperatorTrimmed == ">")
-                        return true;
-
-                    if (_PossibleOperatorTrimmed == "<")
-                        return true;
-
-                    if (_PossibleOperatorTrimmed == "+")
-                        return true;
-
-                    if (_PossibleOperatorTrimmed == "-")
-                        return true;
-
-                    if (_PossibleOperatorTrimmed == "*")
-                        return true;
-
-                    if (_PossibleOperatorTrimmed == "/")
-                        return true;
-
-                    if (_PossibleOperatorTrimmed.Equals("L", StringComparison.InvariantCultureIgnoreCase) && _PossibleOperator.HasSpaceBeforeNonSpace())
-                        return true;
-
-                    if (_PossibleOperatorTrimmed.Equals("I", StringComparison.InvariantCultureIgnoreCase) && _PossibleOperator.HasSpaceBeforeNonSpace())
-                        return true;
-
-                    return false;
-                case 2:
-                    if (_PossibleOperatorTrimmed == "!=")
-                        return true;
-
-                    if (_PossibleOperatorTrimmed.Equals("AN", StringComparison.InvariantCultureIgnoreCase) && _PossibleOperator.HasSpaceBeforeNonSpace())
-                        return true;
-
-                    if (_PossibleOperatorTrimmed.Equals("OR", StringComparison.InvariantCultureIgnoreCase) && _PossibleOperator.HasSpaceBeforeNonSpace())
-                        return true;
-
-                    if (_PossibleOperatorTrimmed == ">=")
-                        return true;
-
-                    if (_PossibleOperatorTrimmed == "<=")
-                        return true;
-
-                    if (_PossibleOperatorTrimmed.Equals("LI", StringComparison.InvariantCultureIgnoreCase) && _PossibleOperator.HasSpaceBeforeNonSpace())
-                        return true;
-
-                    if (_PossibleOperatorTrimmed.Equals("IN", StringComparison.InvariantCultureIgnoreCase) && _PossibleOperator.HasSpaceBeforeNonSpace())
-                        return true;
-
-                    return false;
-                case 3:
-                    if (_PossibleOperatorTrimmed.Equals("AND", StringComparison.InvariantCultureIgnoreCase) && _PossibleOperator.HasSpaceBeforeNonSpace())
-                        return true;
-
-                    if (_PossibleOperatorTrimmed.Equals("LIK", StringComparison.InvariantCultureIgnoreCase) && _PossibleOperator.HasSpaceBeforeNonSpace())
-                        return true;
-
-                    return false;
-                case 4:
-                    if (_PossibleOperatorTrimmed.Equals("LIKE", StringComparison.InvariantCultureIgnoreCase) && _PossibleOperator.HasSpaceBeforeNonSpace())
-                        return true;
-
-                    return false;
-
-            }
-            return false;
-        }
-
         private bool IsPossibleOperator(string _PossibleOperator)
         {
             return IsPossibleEqual(ref _PossibleOperator) ||
@@ -770,6 +697,7 @@ namespace ExpressionSolver
                     IsPossibleMinus(ref _PossibleOperator) ||
                     IsPossibleDivide(ref _PossibleOperator) ||
                     IsPossibleMultiply(ref _PossibleOperator) ||
+                    IsPossibleNotLike(ref _PossibleOperator) ||
                     IsPossibleLike(ref _PossibleOperator) ||
                     IsPossibleNotIN(ref _PossibleOperator) ||
                     IsPossibleIN(ref _PossibleOperator);
@@ -793,50 +721,11 @@ namespace ExpressionSolver
                     (IsOperatorMinus(ref _PossibleOperator)) ||
                     (IsOperatorMultiply(ref _PossibleOperator)) ||
                     (IsOperatorDivide(ref _PossibleOperator)) ||
+                    (IsOperatorNotLike(ref _PossibleOperator)) ||
                     (IsOperatorLike(ref _PossibleOperator)) ||
                     (IsOperatorNotIN(ref _PossibleOperator)) ||
                     (IsOperatorIN(ref _PossibleOperator))
                 )
-                return true;
-
-            return false;
-        }
-
-        [Obsolete]
-        private bool IsOperator2(string _PossibleOperator, Char? _NextChar)
-        {
-            if (_PossibleOperator == null)
-                return false;
-            string _PossibleOperatorTrimmed = _PossibleOperator.Trim();
-            if (_PossibleOperatorTrimmed == OperatorEqual)
-                return true;
-            if (_PossibleOperatorTrimmed == OperatorDifferent)
-                return true;
-            if (_PossibleOperator.ToLowerInvariant().Contains(" " + OperatorAND.ToLowerInvariant() + " "))
-                return true;
-            if (_PossibleOperator.ToLowerInvariant().Contains(" " + OperatorOR.ToLowerInvariant() + " "))
-                return true;
-            if (_PossibleOperatorTrimmed == OperatorGreater && _NextChar != '=')
-                return true;
-            if (_PossibleOperatorTrimmed == OperatorGreaterOrEqual)
-                return true;
-            if (_PossibleOperatorTrimmed == OperatorLess && _NextChar != '=')
-                return true;
-            if (_PossibleOperatorTrimmed == OperatorLessOrEqual)
-                return true;
-            if (_PossibleOperatorTrimmed == OperatorPlus)
-                return true;
-            if (_PossibleOperatorTrimmed == OperatorMinus)
-                return true;
-            if (_PossibleOperatorTrimmed == OperatorMultiply)
-                return true;
-            if (_PossibleOperatorTrimmed == OperatorDivide)
-                return true;
-            if (_PossibleOperator.ToLowerInvariant().Contains(" " + OperatorLike.ToLowerInvariant() + " "))
-                return true;
-            if (_PossibleOperator.ToLowerInvariant().Contains(" " + OperatorIN.ToLowerInvariant() + " "))
-                return true;
-            if (_PossibleOperator.ToLowerInvariant().Contains(" " + OperatorIN.ToLowerInvariant() + "("))
                 return true;
 
             return false;
@@ -1312,6 +1201,39 @@ namespace ExpressionSolver
             if (!_PossibleOperator.HasSpaceBeforeNonSpace())
                 return false;
             string Operator = OperatorLike;
+            int SearchingCharIndex = 0;
+            Char SearchingChar = Operator[SearchingCharIndex];
+            bool Started = false;
+            for (int aux = 0; aux < _PossibleOperator.Length; aux++)
+            {
+                Char C = Char.ToUpper(_PossibleOperator[aux]);
+
+                if (C != ' ')
+                    Started = true;
+
+                if (C == ' ' && !Started)
+                    continue;
+
+                if (C == SearchingChar)
+                {
+                    SearchingCharIndex++;
+                    if (SearchingCharIndex > Operator.Length - 1)
+                        return true;
+                    SearchingChar = Operator[SearchingCharIndex];
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private bool IsPossibleNotLike(ref string _PossibleOperator)
+        {
+            if (!_PossibleOperator.HasSpaceBeforeNonSpace())
+                return false;
+            string Operator = OperatorNotLike;
             int SearchingCharIndex = 0;
             Char SearchingChar = Operator[SearchingCharIndex];
             bool Started = false;
@@ -1969,6 +1891,43 @@ namespace ExpressionSolver
             }
             return false;
         }
+
+        private bool IsOperatorNotLike(ref string _PossibleOperator)
+        {
+            if (_PossibleOperator.Length < OperatorLike.Length)
+                return false;
+
+            if (!_PossibleOperator.HasSpaceBeforeNonSpace())
+                return false;
+            string Operator = OperatorNotLike;
+            int SearchingCharIndex = 0;
+            Char SearchingChar = Operator[SearchingCharIndex];
+            bool Started = false;
+            for (int aux = 0; aux < _PossibleOperator.Length; aux++)
+            {
+                Char C = Char.ToUpper(_PossibleOperator[aux]);
+
+                if (C != ' ')
+                    Started = true;
+
+                if (C == ' ' && !Started)
+                    continue;
+
+                if (C == SearchingChar)
+                {
+                    SearchingCharIndex++;
+                    if (SearchingCharIndex > Operator.Length - 1)
+                        return true;
+                    SearchingChar = Operator[SearchingCharIndex];
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
 
         private bool IsOperatorIN(ref string _PossibleOperator)
         {

@@ -240,6 +240,15 @@ namespace ExpressionSolverUnitTest
         }
 
         [TestMethod]
+        public void TestNotLike()
+        {
+            Assert.AreEqual(Solver.Solve("'TESTE' NOT LIKE '%EST%'"), "FALSE");
+            Assert.AreEqual(Solver.Solve("'TESTE' NOT LIKE 'TEST%'"), "FALSE");
+            Assert.AreEqual(Solver.Solve("'TESTE' NOT LIKE '%TESTE%'"), "FALSE");
+            Assert.AreEqual(Solver.Solve("'TESTE' NOT LIKE 'TTEST%'"), "TRUE");
+        }
+
+        [TestMethod]
         public void TestLike()
         {
             Assert.AreEqual(Solver.Solve("'TESTE' LIKE '%EST%'"), "TRUE");

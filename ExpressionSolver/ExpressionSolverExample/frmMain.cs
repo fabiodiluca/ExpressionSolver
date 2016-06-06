@@ -100,6 +100,13 @@ namespace ExpressionSolverExample
             txtParameters.Text = "MY_VARIABLE = 'This is a test variable';";
         }
 
+        private void btExampleNotLike_Click(object sender, EventArgs e)
+        {
+            txtExpression.Text = "MY_VARIABLE NOT LIKE '%test vaaaariable%'";
+            txtResult.Text = "";
+            txtParameters.Text = "MY_VARIABLE = 'This is a test variable';";
+        }
+
         private void btPerformance_Click(object sender, EventArgs e)
         {
             int MaxInteractions = 5000;
