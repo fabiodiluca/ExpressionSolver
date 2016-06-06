@@ -7,7 +7,7 @@ It is intended to be compatible with [http://querybuilder.js.org/](http://queryb
 
 ***
 
-### Example1: Simplest logical test
+### Example 1: Simplest logical test
 
 **Source Code C#**
 ```sh
@@ -27,7 +27,7 @@ string Return = Solver.Solve("TRUE AND FALSE");
 
 ***
 
-### Example2: Equal operator comparisons
+### Example 2: Equal operator comparisons
 **Source Code C#**
 ```sh
 Solver Solver = new Solver();
@@ -83,7 +83,7 @@ string Return = Solver.Solve("(100*100)*-1");
 ```sh
 Dictionary<string, string> Variables = new Dictionary<string, string>();
 Variables.Add("MY_VARIABLE", "'INSIDE'");
-string Return = Solver.Solve("(MY_VARIABLE IN ('A','B','INSIDE','D'))");
+string Return = Solver.Solve("(MY_VARIABLE IN ('A','B','INSIDE','D'))",Variables);
 ```
 **Result**
 ```sh
