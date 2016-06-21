@@ -7,10 +7,6 @@ using System.Threading.Tasks;
 
 namespace ExpressionSolver
 {
-    //!!!Limitations!!!
-    //IS Operator not implemented
-    //IS NOT Operator not implemented
-
     /// <summary>
     /// An logical expression solver with a sql like syntax
     /// </summary>
