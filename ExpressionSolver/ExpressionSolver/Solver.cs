@@ -1332,30 +1332,55 @@ namespace ExpressionSolver
 
         #region IsOperator
 
-        private bool IsOperatorEqual(ref string _PossibleOperator)
+        private bool IsOperatorForText(ref string _PossibleOperator, string _Operator)
         {
-            if (_PossibleOperator.Length < OperatorEqual.Length)
+            if (_PossibleOperator.Length < _Operator.Length)
                 return false;
 
+            if (!_PossibleOperator.HasSpaceBeforeNonSpace())
+                return false;
+            string Operator = _Operator;
+            int SearchingCharIndex = 0;
+            Char SearchingChar = Operator[SearchingCharIndex];
+            bool Started = false;
             for (int aux = 0; aux < _PossibleOperator.Length; aux++)
             {
-                Char C = _PossibleOperator[aux];
-                if (C == ' ')
+                Char C = Char.ToUpper(_PossibleOperator[aux]);
+
+                if (C != ' ')
+                    Started = true;
+
+                if (C == ' ' && !Started)
                     continue;
-                if (C != '=')
+
+                if (C == SearchingChar)
+                {
+                    SearchingCharIndex++;
+                    if (SearchingCharIndex > Operator.Length - 1)
+                    {
+                        if (aux >= _PossibleOperator.Length - 1)
+                            return false;
+                        else
+                        {
+                            return _PossibleOperator[aux + 1] == ' ';
+                        }
+                    }
+                    SearchingChar = Operator[SearchingCharIndex];
+                }
+                else
+                {
                     return false;
-                if (C == '=')
-                    return true;
+                }
             }
             return false;
         }
 
-        private bool IsOperatorDifferent(ref string _PossibleOperator)
+        private bool IsOperatorForCompare(ref string _PossibleOperator, string _Operator)
         {
-            if (_PossibleOperator.Length < OperatorDifferent.Length)
+            if (_PossibleOperator.Length < _Operator.Length)
                 return false;
 
-            string Operator = OperatorDifferent;
+            string Operator = _Operator;
             int SearchingCharIndex = 0;
             Char SearchingChar = Operator[SearchingCharIndex];
             bool Started = false;
@@ -1384,20 +1409,21 @@ namespace ExpressionSolver
             return false;
         }
 
-        private bool IsOperatorAND(ref string _PossibleOperator)
+        private bool IsOperatorForMath(ref string _PossibleOperator, string _Operator)
         {
-            if (_PossibleOperator.Length < OperatorAND.Length)
+            if (_PossibleOperator.Length < _Operator.Length)
                 return false;
 
-            if (!_PossibleOperator.HasSpaceBeforeNonSpace())
+            if (_PossibleOperator.Length < 1)
                 return false;
-            string Operator = OperatorAND;
+            string Operator = _Operator;
             int SearchingCharIndex = 0;
             Char SearchingChar = Operator[SearchingCharIndex];
             bool Started = false;
+            bool OperatorWasFound = false;
             for (int aux = 0; aux < _PossibleOperator.Length; aux++)
             {
-                Char C = Char.ToUpper(_PossibleOperator[aux]);
+                Char C = _PossibleOperator[aux];
 
                 if (C != ' ')
                     Started = true;
@@ -1405,69 +1431,65 @@ namespace ExpressionSolver
                 if (C == ' ' && !Started)
                     continue;
 
-                if (C == SearchingChar)
+                if (SearchingCharIndex <= Operator.Length - 1)
                 {
-                    SearchingCharIndex++;
-                    if (SearchingCharIndex > Operator.Length - 1)
+                    if (C == SearchingChar)
                     {
-                        if (aux >= _PossibleOperator.Length - 1)
-                            return false;
-                        else
+                        if (SearchingCharIndex == Operator.Length - 1)
                         {
-                            return _PossibleOperator[aux + 1] == ' ';
+                            OperatorWasFound = true;
+                        }
+                        SearchingCharIndex++;
+                        if (SearchingCharIndex < Operator.Length - 1)
+                        {
+                            SearchingChar = Operator[SearchingCharIndex];
                         }
                     }
-                    SearchingChar = Operator[SearchingCharIndex];
+                    else
+                    {
+                        return false;
+                    }
                 }
                 else
                 {
-                    return false;
+                    if (C != ' ')
+                        return false;
                 }
+            }
+            return OperatorWasFound;
+        }
+
+        private bool IsOperatorEqual(ref string _PossibleOperator)
+        {
+            if (_PossibleOperator.Length < OperatorEqual.Length)
+                return false;
+
+            for (int aux = 0; aux < _PossibleOperator.Length; aux++)
+            {
+                Char C = _PossibleOperator[aux];
+                if (C == ' ')
+                    continue;
+                if (C != '=')
+                    return false;
+                if (C == '=')
+                    return true;
             }
             return false;
         }
 
+        private bool IsOperatorDifferent(ref string _PossibleOperator)
+        {
+            return IsOperatorForCompare(ref _PossibleOperator, OperatorDifferent);
+        }
+
+        private bool IsOperatorAND(ref string _PossibleOperator)
+        {
+            return IsOperatorForText(ref _PossibleOperator, OperatorAND);
+        }
+
         private bool IsOperatorOR(ref string _PossibleOperator)
         {
-            if (_PossibleOperator.Length < OperatorOR.Length)
-                return false;
-
-            if (!_PossibleOperator.HasSpaceBeforeNonSpace())
-                return false;
-            string Operator = OperatorOR;
-            int SearchingCharIndex = 0;
-            Char SearchingChar = Operator[SearchingCharIndex];
-            bool Started = false;
-            for (int aux = 0; aux < _PossibleOperator.Length; aux++)
-            {
-                Char C = Char.ToUpper(_PossibleOperator[aux]);
-
-                if (C != ' ')
-                    Started = true;
-
-                if (C == ' ' && !Started)
-                    continue;
-
-                if (C == SearchingChar)
-                {
-                    SearchingCharIndex++;
-                    if (SearchingCharIndex > Operator.Length - 1)
-                    {
-                        if (aux >= _PossibleOperator.Length - 1)
-                            return false;
-                        else
-                        {
-                            return _PossibleOperator[aux + 1] == ' ';
-                        }
-                    }
-                    SearchingChar = Operator[SearchingCharIndex];
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            return false;
+            return IsOperatorForText(ref _PossibleOperator, OperatorOR);
         }
 
         private bool IsOperatorGreater(ref string _PossibleOperator, Char? _NextChar)
@@ -1498,7 +1520,7 @@ namespace ExpressionSolver
                             return false;
                         else
                         {
-                            return _NextChar != '='; //To identify >=
+                            return _NextChar != '='; //To differ from '>='
                         }
                     }
                     SearchingChar = Operator[SearchingCharIndex];
@@ -1513,36 +1535,7 @@ namespace ExpressionSolver
 
         private bool IsOperatorGreaterOrEqual(ref string _PossibleOperator)
         {
-            if (_PossibleOperator.Length < OperatorGreaterOrEqual.Length)
-                return false;
-
-            string Operator = OperatorGreaterOrEqual;
-            int SearchingCharIndex = 0;
-            Char SearchingChar = Operator[SearchingCharIndex];
-            bool Started = false;
-            for (int aux = 0; aux < _PossibleOperator.Length; aux++)
-            {
-                Char C = _PossibleOperator[aux];
-
-                if (C != ' ')
-                    Started = true;
-
-                if (C == ' ' && !Started)
-                    continue;
-
-                if (C == SearchingChar)
-                {
-                    SearchingCharIndex++;
-                    if (SearchingCharIndex > Operator.Length - 1)
-                        return true;
-                    SearchingChar = Operator[SearchingCharIndex];
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            return false;
+            return IsOperatorForCompare(ref _PossibleOperator, OperatorGreaterOrEqual);
         }
 
         private bool IsOperatorLess(ref string _PossibleOperator, Char? _NextChar)
@@ -1573,7 +1566,7 @@ namespace ExpressionSolver
                             return false;
                         else
                         {
-                            return _NextChar != '='; //To identify <=
+                            return _NextChar != '='; //To differ from '<='
                         }
                     }
                     SearchingChar = Operator[SearchingCharIndex];
@@ -1588,36 +1581,7 @@ namespace ExpressionSolver
 
         private bool IsOperatorLessOrEqual(ref string _PossibleOperator)
         {
-            if (_PossibleOperator.Length < OperatorLessOrEqual.Length)
-                return false;
-
-            string Operator = OperatorLessOrEqual;
-            int SearchingCharIndex = 0;
-            Char SearchingChar = Operator[SearchingCharIndex];
-            bool Started = false;
-            for (int aux = 0; aux < _PossibleOperator.Length; aux++)
-            {
-                Char C = _PossibleOperator[aux];
-
-                if (C != ' ')
-                    Started = true;
-
-                if (C == ' ' && !Started)
-                    continue;
-
-                if (C == SearchingChar)
-                {
-                    SearchingCharIndex++;
-                    if (SearchingCharIndex > Operator.Length - 1)
-                        return true;
-                    SearchingChar = Operator[SearchingCharIndex];
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            return false;
+            return IsOperatorForCompare(ref _PossibleOperator, OperatorLessOrEqual);
         }
 
         //private bool IsOperatorIs(ref string _PossibleOperator)
@@ -1658,347 +1622,42 @@ namespace ExpressionSolver
 
         private bool IsOperatorPlus(ref string _PossibleOperator)
         {
-            if (_PossibleOperator.Length < OperatorPlus.Length)
-                return false;
-
-            if (_PossibleOperator.Length < 1)
-                return false;
-            string Operator = OperatorPlus;
-            int SearchingCharIndex = 0;
-            Char SearchingChar = Operator[SearchingCharIndex];
-            bool Started = false;
-            bool OperatorWasFound = false;
-            for (int aux = 0; aux < _PossibleOperator.Length; aux++)
-            {
-                Char C = _PossibleOperator[aux];
-
-                if (C != ' ')
-                    Started = true;
-
-                if (C == ' ' && !Started)
-                    continue;
-
-                if (SearchingCharIndex <= Operator.Length - 1)
-                {
-                    if (C == SearchingChar)
-                    {
-                        if (SearchingCharIndex == Operator.Length - 1)
-                        {
-                            OperatorWasFound = true;
-                        }
-                        SearchingCharIndex++;
-                        if (SearchingCharIndex < Operator.Length - 1)
-                        {
-                            SearchingChar = Operator[SearchingCharIndex];
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    if (C != ' ')
-                        return false;
-                }
-            }
-            return OperatorWasFound;
+            return IsOperatorForMath(ref _PossibleOperator, OperatorPlus);
         }
 
         private bool IsOperatorMinus(ref string _PossibleOperator)
         {
-            if (_PossibleOperator.Length < OperatorMinus.Length)
-                return false;
-
-            if (_PossibleOperator.Length < 1)
-                return false;
-            string Operator = OperatorMinus;
-            int SearchingCharIndex = 0;
-            Char SearchingChar = Operator[SearchingCharIndex];
-            bool Started = false;
-            bool OperatorWasFound = false;
-            for (int aux = 0; aux < _PossibleOperator.Length; aux++)
-            {
-                Char C = _PossibleOperator[aux];
-
-                if (C != ' ')
-                    Started = true;
-
-                if (C == ' ' && !Started)
-                    continue;
-
-                if (SearchingCharIndex <= Operator.Length - 1)
-                {
-                    if (C == SearchingChar)
-                    {
-                        if (SearchingCharIndex == Operator.Length - 1)
-                        {
-                            OperatorWasFound = true;
-                        }
-                        SearchingCharIndex++;
-                        if (SearchingCharIndex < Operator.Length - 1)
-                        {
-                            SearchingChar = Operator[SearchingCharIndex];
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    if (C != ' ')
-                        return false;
-                }
-            }
-            return OperatorWasFound;
+            return IsOperatorForMath(ref _PossibleOperator, OperatorMinus);
         }
 
         private bool IsOperatorDivide(ref string _PossibleOperator)
         {
-            if (_PossibleOperator.Length < OperatorDivide.Length)
-                return false;
-
-            if (_PossibleOperator.Length < 1)
-                return false;
-            string Operator = OperatorDivide;
-            int SearchingCharIndex = 0;
-            Char SearchingChar = Operator[SearchingCharIndex];
-            bool Started = false;
-            bool OperatorWasFound = false;
-            for (int aux = 0; aux < _PossibleOperator.Length; aux++)
-            {
-                Char C = _PossibleOperator[aux];
-
-                if (C != ' ')
-                    Started = true;
-
-                if (C == ' ' && !Started)
-                    continue;
-
-                if (SearchingCharIndex <= Operator.Length - 1)
-                {
-                    if (C == SearchingChar)
-                    {
-                        if (SearchingCharIndex == Operator.Length - 1)
-                        {
-                            OperatorWasFound = true;
-                        }
-                        SearchingCharIndex++;
-                        if (SearchingCharIndex < Operator.Length - 1)
-                        {
-                            SearchingChar = Operator[SearchingCharIndex];
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    if (C != ' ')
-                        return false;
-                }
-            }
-            return OperatorWasFound;
+            return IsOperatorForMath(ref _PossibleOperator, OperatorDivide);
         }
 
         private bool IsOperatorMultiply(ref string _PossibleOperator)
         {
-            if (_PossibleOperator.Length < OperatorMultiply.Length)
-                return false;
-
-            if (_PossibleOperator.Length < 1)
-                return false;
-            string Operator = OperatorMultiply;
-            int SearchingCharIndex = 0;
-            Char SearchingChar = Operator[SearchingCharIndex];
-            bool Started = false;
-            bool OperatorWasFound = false;
-            for (int aux = 0; aux < _PossibleOperator.Length; aux++)
-            {
-                Char C = _PossibleOperator[aux];
-
-                if (C != ' ')
-                    Started = true;
-
-                if (C == ' ' && !Started)
-                    continue;
-
-                if (SearchingCharIndex <= Operator.Length - 1)
-                {
-                    if (C == SearchingChar)
-                    {
-                        if (SearchingCharIndex == Operator.Length - 1)
-                        {
-                            OperatorWasFound = true;
-                        }
-                        SearchingCharIndex++;
-                        if (SearchingCharIndex < Operator.Length - 1)
-                        {
-                            SearchingChar = Operator[SearchingCharIndex];
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    if (C != ' ')
-                        return false;
-                }
-            }
-            return OperatorWasFound;
+            return IsOperatorForMath(ref _PossibleOperator, OperatorMultiply);
         }
 
         private bool IsOperatorLike(ref string _PossibleOperator)
         {
-            if (_PossibleOperator.Length < OperatorLike.Length)
-                return false;
-
-            if (!_PossibleOperator.HasSpaceBeforeNonSpace())
-                return false;
-            string Operator = OperatorLike;
-            int SearchingCharIndex = 0;
-            Char SearchingChar = Operator[SearchingCharIndex];
-            bool Started = false;
-            for (int aux = 0; aux < _PossibleOperator.Length; aux++)
-            {
-                Char C = Char.ToUpper(_PossibleOperator[aux]);
-
-                if (C != ' ')
-                    Started = true;
-
-                if (C == ' ' && !Started)
-                    continue;
-
-                if (C == SearchingChar)
-                {
-                    SearchingCharIndex++;
-                    if (SearchingCharIndex > Operator.Length - 1)
-                        return true;
-                    SearchingChar = Operator[SearchingCharIndex];
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            return false;
+            return IsOperatorForText(ref _PossibleOperator, OperatorLike);
         }
 
         private bool IsOperatorNotLike(ref string _PossibleOperator)
         {
-            if (_PossibleOperator.Length < OperatorLike.Length)
-                return false;
-
-            if (!_PossibleOperator.HasSpaceBeforeNonSpace())
-                return false;
-            string Operator = OperatorNotLike;
-            int SearchingCharIndex = 0;
-            Char SearchingChar = Operator[SearchingCharIndex];
-            bool Started = false;
-            for (int aux = 0; aux < _PossibleOperator.Length; aux++)
-            {
-                Char C = Char.ToUpper(_PossibleOperator[aux]);
-
-                if (C != ' ')
-                    Started = true;
-
-                if (C == ' ' && !Started)
-                    continue;
-
-                if (C == SearchingChar)
-                {
-                    SearchingCharIndex++;
-                    if (SearchingCharIndex > Operator.Length - 1)
-                        return true;
-                    SearchingChar = Operator[SearchingCharIndex];
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            return false;
+            return IsOperatorForText(ref _PossibleOperator, OperatorNotLike);
         }
-
 
         private bool IsOperatorIN(ref string _PossibleOperator)
         {
-            if (_PossibleOperator.Length < OperatorIN.Length)
-                return false;
-
-            if (!_PossibleOperator.HasSpaceBeforeNonSpace())
-                return false;
-            string Operator = OperatorIN;
-            int SearchingCharIndex = 0;
-            Char SearchingChar = Operator[SearchingCharIndex];
-            bool Started = false;
-            for (int aux = 0; aux < _PossibleOperator.Length; aux++)
-            {
-                Char C = Char.ToUpper(_PossibleOperator[aux]);
-
-                if (C != ' ')
-                    Started = true;
-
-                if (C == ' ' && !Started)
-                    continue;
-
-                if (C == SearchingChar)
-                {
-                    SearchingCharIndex++;
-                    if (SearchingCharIndex > Operator.Length - 1)
-                        return true;
-                    SearchingChar = Operator[SearchingCharIndex];
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            return false;
+            return IsOperatorForText(ref _PossibleOperator, OperatorIN);
         }
 
         private bool IsOperatorNotIN(ref string _PossibleOperator)
         {
-            if (_PossibleOperator.Length < OperatorIN.Length)
-                return false;
-
-            if (!_PossibleOperator.HasSpaceBeforeNonSpace())
-                return false;
-            string Operator = OperatorNotIN;
-            int SearchingCharIndex = 0;
-            Char SearchingChar = Operator[SearchingCharIndex];
-            bool Started = false;
-            for (int aux = 0; aux < _PossibleOperator.Length; aux++)
-            {
-                Char C = Char.ToUpper(_PossibleOperator[aux]);
-
-                if (C != ' ')
-                    Started = true;
-
-                if (C == ' ' && !Started)
-                    continue;
-
-                if (C == SearchingChar)
-                {
-                    SearchingCharIndex++;
-                    if (SearchingCharIndex > Operator.Length - 1)
-                        return true;
-                    SearchingChar = Operator[SearchingCharIndex];
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            return false;
+            return IsOperatorForText(ref _PossibleOperator, OperatorNotIN);
         }
 
         #endregion
