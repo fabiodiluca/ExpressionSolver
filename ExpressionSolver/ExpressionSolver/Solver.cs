@@ -29,8 +29,8 @@ namespace ExpressionSolver
         private const string OperatorGreaterOrEqual = ">=";
         private const string OperatorLess = "<";
         private const string OperatorLessOrEqual = "<=";
-        //private const string OperatorIs = "IS";
-        //private const string OperatorIsNot = "IS NOT";
+        private const string OperatorIsNull = "IS NULL";
+        private const string OperatorIsNotNull = "IS NOT NULL";
         private const string OperatorPlus = "+";
         private const string OperatorMinus = "-";
         private const string OperatorMultiply = "*";
@@ -431,24 +431,31 @@ namespace ExpressionSolver
 
             #region RightSideValue
             string RightSideValue = RightSideTrimmed;
-
-            if (Parameters != null)
+            if (OperatorTrimmed.ToUpperInvariant() != OperatorIsNull &&
+                OperatorTrimmed.ToUpperInvariant() != OperatorIsNotNull)
             {
-                if (Parameters.ContainsKey(RightSideTrimmed) && !IsNumber(RightSideValue) && !IsBool(RightSideTrimmed) && !IsNull(RightSideTrimmed) && !IsString(RightSideTrimmed))
+                if (Parameters != null)
                 {
-                    RightSideValue = Parameters[RightSideTrimmed];
-                    if (RightSideValue == null)
-                        RightSideValue = "NULL";
+                    if (Parameters.ContainsKey(RightSideTrimmed) && !IsNumber(RightSideValue) && !IsBool(RightSideTrimmed) && !IsNull(RightSideTrimmed) && !IsString(RightSideTrimmed))
+                    {
+                        RightSideValue = Parameters[RightSideTrimmed];
+                        if (RightSideValue == null)
+                            RightSideValue = "NULL";
+                    }
+                    if (!Parameters.ContainsKey(RightSideTrimmed) && !IsNumber(RightSideValue) && !IsBool(RightSideTrimmed) && !IsNull(RightSideTrimmed) && !IsString(RightSideTrimmed) && (OperatorTrimmed.ToUpperInvariant() != OperatorIN) && (OperatorTrimmed.ToUpperInvariant() != OperatorIN) && (OperatorTrimmed.ToUpperInvariant() != OperatorNotIN))
+                    {
+                        throw new Exception("Could not evaluate '" + RightSideTrimmed + "'");
+                    }
                 }
-                if (!Parameters.ContainsKey(RightSideTrimmed) && !IsNumber(RightSideValue) && !IsBool(RightSideTrimmed) && !IsNull(RightSideTrimmed) && !IsString(RightSideTrimmed) && (OperatorTrimmed.ToUpperInvariant() != OperatorIN) && (OperatorTrimmed.ToUpperInvariant() != OperatorIN) && (OperatorTrimmed.ToUpperInvariant() != OperatorNotIN))
+                else
                 {
-                    throw new Exception("Could not evaluate '" + RightSideTrimmed + "'");
+                    if (!IsNumber(RightSideTrimmed) && !IsBool(RightSideTrimmed) && !IsNull(RightSideTrimmed) && !IsString(RightSideTrimmed))
+                        throw new Exception("Could not evaluate '" + RightSideTrimmed + "'");
                 }
             }
             else
             {
-                if (!IsNumber(RightSideTrimmed) && !IsBool(RightSideTrimmed) && !IsNull(RightSideTrimmed) && !IsString(RightSideTrimmed))
-                    throw new Exception("Could not evaluate '" + RightSideTrimmed + "'");
+                RightSideValue = "NULL";
             }
             #endregion
 
@@ -643,12 +650,20 @@ namespace ExpressionSolver
                         }
                         return TRUE;
                     }
-
+                case OperatorIsNotNull:
+                    if (!IsNull(LeftSideValue))
+                        return TRUE;
+                    else
+                        return FALSE;
+                case OperatorIsNull:
+                    if (IsNull(LeftSideValue))
+                        return TRUE;
+                    else
+                        return FALSE;
                 default:
                     throw new Exception("Operator not reconized: " + Operator);
             }
 
-            return TRUE;
         }
 
         private string SolvePrimaryMemberBool(string _LeftSide, string Operator, string _RightSide)
@@ -700,7 +715,9 @@ namespace ExpressionSolver
                     IsPossibleNotLike(ref _PossibleOperator) ||
                     IsPossibleLike(ref _PossibleOperator) ||
                     IsPossibleNotIN(ref _PossibleOperator) ||
-                    IsPossibleIN(ref _PossibleOperator);
+                    IsPossibleIN(ref _PossibleOperator) ||
+                    IsPossibleIsNotNull(ref _PossibleOperator) ||
+                    IsPossibleIsNull(ref _PossibleOperator);
         }
 
         private bool IsOperator(string _PossibleOperator, Char? _NextChar)
@@ -724,7 +741,9 @@ namespace ExpressionSolver
                     (IsOperatorNotLike(ref _PossibleOperator)) ||
                     (IsOperatorLike(ref _PossibleOperator)) ||
                     (IsOperatorNotIN(ref _PossibleOperator)) ||
-                    (IsOperatorIN(ref _PossibleOperator))
+                    (IsOperatorIN(ref _PossibleOperator)) ||
+                    (IsOperatorIsNotNull(ref _PossibleOperator)) ||
+                    (IsOperatorIsNull(ref _PossibleOperator))
                 )
                 return true;
 
@@ -917,38 +936,15 @@ namespace ExpressionSolver
             return IsPossibleForCompareOrMath(ref _PossibleOperator, OperatorLessOrEqual);
         }
 
-        //private bool IsPossibleIs(ref string _PossibleOperator)
-        //{
-        //    if (!_PossibleOperator.HasSpaceBeforeNonSpace())
-        //        return false;
-        //    string Operator = OperatorIs;
-        //    int SearchingCharIndex = 0;
-        //    Char SearchingChar = Operator[SearchingCharIndex];
-        //    bool Started = false;
-        //    for (int aux = 0; aux < _PossibleOperator.Length; aux++)
-        //    {
-        //        Char C = Char.ToUpper(_PossibleOperator[aux]);
+        private bool IsPossibleIsNull(ref string _PossibleOperator)
+        {
+            return IsPossileForText(ref _PossibleOperator, OperatorIsNull);
+        }
 
-        //        if (C != ' ')
-        //            Started = true;
-
-        //        if (C == ' ' && !Started)
-        //            continue;
-
-        //        if (C == SearchingChar)
-        //        {
-        //            SearchingCharIndex++;
-        //            if (SearchingCharIndex > Operator.Length - 1)
-        //                return true;
-        //            SearchingChar = Operator[SearchingCharIndex];
-        //        }
-        //        else
-        //        {
-        //            return false;
-        //        }
-        //    }
-        //    return true;
-        //}
+        private bool IsPossibleIsNotNull(ref string _PossibleOperator)
+        {
+            return IsPossileForText(ref _PossibleOperator, OperatorIsNotNull);
+        }
 
         private bool IsPossiblePlus(ref string _PossibleOperator)
         {
@@ -1026,6 +1022,44 @@ namespace ExpressionSolver
                         {
                             return _PossibleOperator[aux + 1] == ' ';
                         }
+                    }
+                    SearchingChar = Operator[SearchingCharIndex];
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        private bool IsOperatorForNullComparison(ref string _PossibleOperator, string _Operator)
+        {
+            if (_PossibleOperator.Length < _Operator.Length)
+                return false;
+
+            if (!_PossibleOperator.HasSpaceBeforeNonSpace())
+                return false;
+            string Operator = _Operator;
+            int SearchingCharIndex = 0;
+            Char SearchingChar = Operator[SearchingCharIndex];
+            bool Started = false;
+            for (int aux = 0; aux < _PossibleOperator.Length; aux++)
+            {
+                Char C = Char.ToUpper(_PossibleOperator[aux]);
+
+                if (C != ' ')
+                    Started = true;
+
+                if (C == ' ' && !Started)
+                    continue;
+
+                if (C == SearchingChar)
+                {
+                    SearchingCharIndex++;
+                    if (SearchingCharIndex == Operator.Length)
+                    {
+                        return true;
                     }
                     SearchingChar = Operator[SearchingCharIndex];
                 }
@@ -1246,41 +1280,15 @@ namespace ExpressionSolver
             return IsOperatorForCompare(ref _PossibleOperator, OperatorLessOrEqual);
         }
 
-        //private bool IsOperatorIs(ref string _PossibleOperator)
-        //{
-        //    if (_PossibleOperator.Length < OperatorIs.Length)
-        //        return false;
+        private bool IsOperatorIsNull(ref string _PossibleOperator)
+        {
+            return IsOperatorForNullComparison(ref _PossibleOperator, OperatorIsNull);
+        }
 
-        //    if (!_PossibleOperator.HasSpaceBeforeNonSpace())
-        //        return false;
-        //    string Operator = OperatorIs;
-        //    int SearchingCharIndex = 0;
-        //    Char SearchingChar = Operator[SearchingCharIndex];
-        //    bool Started = false;
-        //    for (int aux = 0; aux < _PossibleOperator.Length; aux++)
-        //    {
-        //        Char C = Char.ToUpper(_PossibleOperator[aux]);
-
-        //        if (C != ' ')
-        //            Started = true;
-
-        //        if (C == ' ' && !Started)
-        //            continue;
-
-        //        if (C == SearchingChar)
-        //        {
-        //            SearchingCharIndex++;
-        //            if (SearchingCharIndex > Operator.Length - 1)
-        //                return true;
-        //            SearchingChar = Operator[SearchingCharIndex];
-        //        }
-        //        else
-        //        {
-        //            return false;
-        //        }
-        //    }
-        //    return false;
-        //}
+        private bool IsOperatorIsNotNull(ref string _PossibleOperator)
+        {
+            return IsOperatorForNullComparison(ref _PossibleOperator, OperatorIsNotNull);
+        }
 
         private bool IsOperatorPlus(ref string _PossibleOperator)
         {

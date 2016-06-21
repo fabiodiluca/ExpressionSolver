@@ -44,6 +44,8 @@
             this.btPerformance = new System.Windows.Forms.Button();
             this.btExampleNotLike = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
+            this.btExampleIs = new System.Windows.Forms.Button();
+            this.btExampleIsNot = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtParameters
@@ -171,7 +173,7 @@
             // 
             // btPerformance
             // 
-            this.btPerformance.Location = new System.Drawing.Point(525, 13);
+            this.btPerformance.Location = new System.Drawing.Point(788, 13);
             this.btPerformance.Name = "btPerformance";
             this.btPerformance.Size = new System.Drawing.Size(104, 23);
             this.btPerformance.TabIndex = 19;
@@ -198,11 +200,33 @@
             this.label3.TabIndex = 21;
             this.label3.Text = "Result";
             // 
+            // btExampleIs
+            // 
+            this.btExampleIs.Location = new System.Drawing.Point(525, 13);
+            this.btExampleIs.Name = "btExampleIs";
+            this.btExampleIs.Size = new System.Drawing.Size(37, 23);
+            this.btExampleIs.TabIndex = 22;
+            this.btExampleIs.Text = "Is";
+            this.btExampleIs.UseVisualStyleBackColor = true;
+            this.btExampleIs.Click += new System.EventHandler(this.btExampleIs_Click);
+            // 
+            // btExampleIsNot
+            // 
+            this.btExampleIsNot.Location = new System.Drawing.Point(568, 13);
+            this.btExampleIsNot.Name = "btExampleIsNot";
+            this.btExampleIsNot.Size = new System.Drawing.Size(61, 23);
+            this.btExampleIsNot.TabIndex = 23;
+            this.btExampleIsNot.Text = "Is Not";
+            this.btExampleIsNot.UseVisualStyleBackColor = true;
+            this.btExampleIsNot.Click += new System.EventHandler(this.btExampleIsNot_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(905, 503);
+            this.Controls.Add(this.btExampleIsNot);
+            this.Controls.Add(this.btExampleIs);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btExampleNotLike);
             this.Controls.Add(this.btPerformance);
@@ -245,6 +269,8 @@
         private System.Windows.Forms.Button btPerformance;
         private System.Windows.Forms.Button btExampleNotLike;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button btExampleIs;
+        private System.Windows.Forms.Button btExampleIsNot;
     }
 }
 

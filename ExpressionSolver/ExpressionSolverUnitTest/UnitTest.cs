@@ -306,6 +306,26 @@ namespace ExpressionSolverUnitTest
         }
 
         [TestMethod]
+        public void TestIsNull()
+        {
+            Solver.Parameters.Clear();
+            Solver.Parameters.Add("VARIABLE", null);
+            Solver.Parameters.Add("VARIABLE_2", "null");
+            Assert.AreEqual(Solver.Solve("VARIABLE IS NULL"), "TRUE");
+            Assert.AreEqual(Solver.Solve("VARIABLE IS NULL AND VARIABLE_2 IS NULL"), "TRUE");
+        }
+
+        [TestMethod]
+        public void TestIsNotNull()
+        {
+            Solver.Parameters.Clear();
+            Solver.Parameters.Add("VARIABLE", "'this is a string'");
+            Solver.Parameters.Add("VARIABLE_2", "387");
+            Assert.AreEqual(Solver.Solve("VARIABLE IS NULL"), "FALSE");
+            Assert.AreEqual(Solver.Solve("VARIABLE IS NULL AND VARIABLE_2 IS NULL"), "FALSE");
+        }
+
+        [TestMethod]
         public void Parenthesis()
         {
             Assert.AreEqual(Solver.Solve("(TRUE)"), "TRUE");

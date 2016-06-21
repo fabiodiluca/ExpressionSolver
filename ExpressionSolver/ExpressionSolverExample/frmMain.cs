@@ -128,5 +128,19 @@ namespace ExpressionSolverExample
             txtResult.Text += " ( " + Solving.Milliseconds.ToString() + "ms )";
         }
 
+        private void btExampleIs_Click(object sender, EventArgs e)
+        {
+            txtExpression.Text = "MY_VARIABLE IS NULL AND MY_VARIABLE_2 IS NULL";
+            txtResult.Text = "";
+            txtParameters.Text = "MY_VARIABLE = null;\r\nMY_VARIABLE_2 = null;";
+        }
+
+        private void btExampleIsNot_Click(object sender, EventArgs e)
+        {
+            txtExpression.Text = "MY_VARIABLE IS NOT NULL AND MY_VARIABLE_2 IS NOT NULL";
+            txtResult.Text = "";
+            txtParameters.Text = "MY_VARIABLE = 'this is a string';\r\nMY_VARIABLE_2 = 343;";
+        }
+
     }
 }
