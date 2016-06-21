@@ -838,7 +838,7 @@ namespace ExpressionSolver
 
         private bool IsPossibleForCompareOrMath(ref string _PossibleOperator, string _Operator)
         {
-            string Operator = OperatorDifferent;
+            string Operator = _Operator;
             int SearchingCharIndex = 0;
             Char SearchingChar = Operator[SearchingCharIndex];
             bool Started = false;
