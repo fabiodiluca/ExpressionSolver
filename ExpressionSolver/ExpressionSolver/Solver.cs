@@ -393,11 +393,21 @@ namespace ExpressionSolver
             if (!IsOperator(Operator, null))
                 throw new Exception("Invalid operator: " + Operator);
 
+            #region This will correct Operator when 'IN(..)' 'NOT IN(..)' does not have a space
+            if (Operator.Trim().EndsWith("("))
+            {
+                Operator = Operator.Substring(0, Operator.Length - 1);
+                _RightSide = "(" + _RightSide;
+            }
+            #endregion
+
             if (Log != null)
                 Log.AppendLine("Solving Primary Member: " + _LeftSide + Operator + _RightSide);
             string LeftSideTrimmed = _LeftSide.Trim();
             string OperatorTrimmed = Operator.Trim();
             string RightSideTrimmed = _RightSide.Trim();
+
+
 
             if (IsBool(LeftSideTrimmed) && IsBool(RightSideTrimmed))
                 return SolvePrimaryMemberBool(_LeftSide, Operator, _RightSide);
@@ -1016,7 +1026,8 @@ namespace ExpressionSolver
                             return false;
                         else
                         {
-                            return _PossibleOperator[aux + 1] == ' ';
+                            return _PossibleOperator[aux + 1] == ' ' || 
+                                   _PossibleOperator[aux + 1] == '('; //( for recognize operator when In or Not In does not have a space before parenthesis
                         }
                     }
                     SearchingChar = Operator[SearchingCharIndex];
