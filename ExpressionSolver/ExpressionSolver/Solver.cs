@@ -110,17 +110,40 @@ namespace ExpressionSolver
             int InnerParenthisCounter = -1;
             int MaxParenthis = -1;
             int Index = -1;
+            bool IsInsideString = false;
+            int SlashCounterInsideString = 0;
             foreach (char Char in _ParseString)
             {
                 Index++;
-                if (Char == '(')
+
+                Char? NextChar = null;
+                if (Index + 1 != _ParseString.Length)
+                    NextChar = _ParseString[Index + 1];
+
+                #region Inside string detection
+                if (Char == '\'' && IsInsideString)
+                { SlashCounterInsideString++; }
+
+                if (!IsInsideString && Char == '\'')
+                {
+                    IsInsideString = true;
+                    SlashCounterInsideString++;
+                }
+                else if (IsInsideString && Char == '\'' && NextChar != '\'' && ((SlashCounterInsideString % 2) == 0))
+                {
+                    IsInsideString = false;
+                    SlashCounterInsideString = 0;
+                }
+                #endregion
+
+                if (Char == '(' && !IsInsideString)
                 {
                     bool IsINCLAUSE = IsINClauseParenthesis(_ParseString, Index);
                     InnerParenthisCounter++;
                     if ((MaxParenthis < InnerParenthisCounter) && !IsINCLAUSE)
                         MaxParenthis = InnerParenthisCounter;
                 }
-                if (Char == ')')
+                if (Char == ')' && !IsInsideString)
                     InnerParenthisCounter--;
             }
 
@@ -393,21 +416,12 @@ namespace ExpressionSolver
             if (!IsOperator(Operator, null))
                 throw new Exception("Invalid operator: " + Operator);
 
-            #region This will correct Operator when 'IN(..)' 'NOT IN(..)' does not have a space
-            if (Operator.Trim().EndsWith("("))
-            {
-                Operator = Operator.Substring(0, Operator.Length - 1);
-                _RightSide = "(" + _RightSide;
-            }
-            #endregion
-
             if (Log != null)
                 Log.AppendLine("Solving Primary Member: " + _LeftSide + Operator + _RightSide);
+
             string LeftSideTrimmed = _LeftSide.Trim();
             string OperatorTrimmed = Operator.Trim();
             string RightSideTrimmed = _RightSide.Trim();
-
-
 
             if (IsBool(LeftSideTrimmed) && IsBool(RightSideTrimmed))
                 return SolvePrimaryMemberBool(_LeftSide, Operator, _RightSide);
@@ -1019,6 +1033,11 @@ namespace ExpressionSolver
 
                 if (C == SearchingChar)
                 {
+                    if (SearchingCharIndex == Operator.Length - 1)
+                    {
+                        if (_Operator == OperatorIN || _Operator == OperatorNotIN)
+                            return true;
+                    }
                     SearchingCharIndex++;
                     if (SearchingCharIndex > Operator.Length - 1)
                     {
@@ -1026,10 +1045,13 @@ namespace ExpressionSolver
                             return false;
                         else
                         {
-                            return _PossibleOperator[aux + 1] == ' ' || 
-                                   _PossibleOperator[aux + 1] == '('; //( for recognize operator when In or Not In does not have a space before parenthesis
+                            //Operators that are text need to have a space after then, except 'IN' and 'NOT IN'
+                            if (!(_Operator == OperatorIN) && !(_Operator == OperatorNotIN))
+                                return _PossibleOperator[aux + 1] == ' ';
                         }
                     }
+
+
                     SearchingChar = Operator[SearchingCharIndex];
                 }
                 else
