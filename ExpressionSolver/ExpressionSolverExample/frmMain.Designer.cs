@@ -50,17 +50,17 @@
             // 
             // txtParameters
             // 
-            this.txtParameters.Location = new System.Drawing.Point(76, 79);
+            this.txtParameters.Location = new System.Drawing.Point(76, 121);
             this.txtParameters.Multiline = true;
             this.txtParameters.Name = "txtParameters";
             this.txtParameters.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtParameters.Size = new System.Drawing.Size(816, 125);
+            this.txtParameters.Size = new System.Drawing.Size(816, 83);
             this.txtParameters.TabIndex = 11;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 79);
+            this.label2.Location = new System.Drawing.Point(9, 121);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(60, 13);
             this.label2.TabIndex = 10;
@@ -97,8 +97,9 @@
             // txtExpression
             // 
             this.txtExpression.Location = new System.Drawing.Point(76, 47);
+            this.txtExpression.Multiline = true;
             this.txtExpression.Name = "txtExpression";
-            this.txtExpression.Size = new System.Drawing.Size(816, 20);
+            this.txtExpression.Size = new System.Drawing.Size(816, 68);
             this.txtExpression.TabIndex = 6;
             // 
             // btExampleEqual

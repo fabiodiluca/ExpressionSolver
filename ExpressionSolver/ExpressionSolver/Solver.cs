@@ -63,6 +63,9 @@ namespace ExpressionSolver
             this.Log = _Log;
             this.Parameters = _Parameters;
 
+            PutSpaceArroundParenthesis(ref _Expression);
+            _Expression = ReplaceSpecialChars(ref _Expression);
+
             string Solved = _Expression;
             int InnerParenthesisIndexStart = 0;
             int InnerParenthesisIndexEnd = 0;
@@ -100,6 +103,160 @@ namespace ExpressionSolver
         public string Solve(string _Expression)
         {
             return Solve(_Expression, ref this.Log, this.parameters);
+        }
+
+        /// <summary>
+        /// To avoid parse problems (operators are recognitions needs space)
+        /// </summary>
+        /// <param name="_ParseString"></param>
+        public void PutSpaceArroundParenthesis(ref string _ParseString)
+        {
+            bool IsInsideString = false;
+            int SlashCounterInsideString = 0;
+            for (int Index = 0; Index <= _ParseString.Length - 1; Index++)
+            {
+                Char C = _ParseString[Index];
+
+                Char? NextChar = null;
+                if (Index + 1 != _ParseString.Length)
+                    NextChar = _ParseString[Index + 1];
+                 
+                Char? PreviousChar = null;
+                if (Index != 0)
+                    PreviousChar = _ParseString[Index - 1];
+
+                #region Inside string detection
+                if (C == '\'' && IsInsideString)
+                { SlashCounterInsideString++; }
+
+                if (!IsInsideString && C == '\'')
+                {
+                    IsInsideString = true;
+                    SlashCounterInsideString++;
+                }
+                else if (IsInsideString && C == '\'' && NextChar != '\'' && ((SlashCounterInsideString % 2) == 0))
+                {
+                    IsInsideString = false;
+                    SlashCounterInsideString = 0;
+                }
+                #endregion
+
+                if ((C == '(' || C == ')') && !IsInsideString)
+                {
+                    if (PreviousChar.HasValue)
+                    {
+                        if (PreviousChar != ' ')
+                        {
+                            _ParseString = _ParseString.Insert(Index, " ");
+                        }
+                    }
+                    if (NextChar.HasValue && (Index <= _ParseString.Length - 1))
+                    {
+                        if (NextChar != ' ')
+                        {
+                            if (NextChar != ' ')
+                            {
+                                _ParseString = _ParseString.Insert(Index + 1, " ");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Ignoring chars \r,\n,\t and putting a space
+        /// </summary>
+        /// <param name="_ParseString"></param>
+        /// <returns></returns>
+        public string ReplaceSpecialChars(ref string _ParseString)
+        {
+            StringBuilder Return = new StringBuilder();
+            bool IsInsideString = false;
+            int SlashCounterInsideString = 0;
+            Char? LastAddedChar = null;
+            for (int Index = 0; Index < _ParseString.Length; Index++)
+            {
+                Char C = _ParseString[Index];
+
+                Char? NextChar = null;
+                if (Index + 1 != _ParseString.Length)
+                    NextChar = _ParseString[Index + 1];
+
+                Char? PreviousChar = null;
+                if (Index != 0)
+                    PreviousChar = _ParseString[Index - 1];
+
+                #region Inside string detection
+                if (C == '\'' && IsInsideString)
+                { SlashCounterInsideString++; }
+
+                if (!IsInsideString && C == '\'')
+                {
+                    IsInsideString = true;
+                    SlashCounterInsideString++;
+                }
+                else if (IsInsideString && C == '\'' && NextChar != '\'' && ((SlashCounterInsideString % 2) == 0))
+                {
+                    IsInsideString = false;
+                    SlashCounterInsideString = 0;
+                }
+                #endregion
+
+                if (!IsInsideString)
+                {
+                    if ((C == '\r' || C == '\n' || C == '\t'))
+                    {
+                        if (PreviousChar.HasValue)
+                        {
+                            if (PreviousChar != ' ')
+                            {
+                                if (LastAddedChar != ' ')
+                                {
+                                    Return.Append(' ');
+                                    LastAddedChar = ' ';
+                                }
+                            }
+                        }
+                        if (NextChar.HasValue && (Index <= _ParseString.Length - 1))
+                        {
+                            if (NextChar != ' ')
+                            {
+                                if (NextChar != ' ')
+                                {
+                                    if (LastAddedChar != ' ')
+                                    {
+                                        Return.Append(' ');
+                                        LastAddedChar = ' ';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else 
+                    {
+                        if (C == ' ')
+                        {
+                            if (LastAddedChar != ' ')
+                            {
+                                Return.Append(C);
+                                LastAddedChar = C;
+                            }
+                        }
+                        else
+                        {
+                            Return.Append(C);
+                            LastAddedChar = C;
+                        }
+                    }
+                }
+                else
+                {
+                    Return.Append(C);
+                    LastAddedChar = C;
+                }
+            }
+            return Return.ToString();
         }
 
         private string SolveInnerParenthesis(string _ParseString, out int InnerParenthesisIndexStart, out int InnerParenthesisIndexEnd)
@@ -196,20 +353,8 @@ namespace ExpressionSolver
                 Log.AppendLine("Solving (" + InnerParenthesis + ")");
             }
 
-            bool PutSpaceBefore = false;
-            if (BeforeParenthesis.Length > 0)
-                if (BeforeParenthesis[BeforeParenthesis.Length - 1] != ' ')
-                    PutSpaceBefore = true;
-
-            bool PutSpaceAfter = false;
-            if (AfterParenthesis.Length > 0)
-                if (AfterParenthesis[AfterParenthesis.Length - 1] != ' ')
-                    PutSpaceAfter = true;
-
             return BeforeParenthesis
-                + (PutSpaceBefore ? " " : "")
                 + SolveExpression(InnerParenthesis)
-                + (PutSpaceAfter ? " " : "")
                 + AfterParenthesis;
         }
 
@@ -221,7 +366,7 @@ namespace ExpressionSolver
             for (int aux = _ParenthesisStartIndex - 1; aux >= 0; aux--)
             {
                 Char C = _ParseString[aux];
-                if (C != ' ')
+                if (C != ' ' && C != '\r' && C != '\n' && C != '\t')
                 {
                     if (C != OperatorIN[ClauseIndex])
                     {
@@ -291,6 +436,12 @@ namespace ExpressionSolver
                     SlashCounterInsideString = 0;
                 }
                 #endregion
+
+                if (!IsInsideString)
+                {
+                    if (Char == '\r' || Char == '\n')
+                        continue;
+                }
 
                 //Operator Recognition
                 if (!bPossibleAnotherOperator && IsPossibleOperator(Char.ToString()) && !IsInsideString)
@@ -1033,11 +1184,6 @@ namespace ExpressionSolver
 
                 if (C == SearchingChar)
                 {
-                    if (SearchingCharIndex == Operator.Length - 1)
-                    {
-                        if (_Operator == OperatorIN || _Operator == OperatorNotIN)
-                            return true;
-                    }
                     SearchingCharIndex++;
                     if (SearchingCharIndex > Operator.Length - 1)
                     {
@@ -1045,9 +1191,7 @@ namespace ExpressionSolver
                             return false;
                         else
                         {
-                            //Operators that are text need to have a space after then, except 'IN' and 'NOT IN'
-                            if (!(_Operator == OperatorIN) && !(_Operator == OperatorNotIN))
-                                return _PossibleOperator[aux + 1] == ' ';
+                            return _PossibleOperator[aux + 1] == ' ';
                         }
                     }
 
