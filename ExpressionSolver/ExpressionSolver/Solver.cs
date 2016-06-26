@@ -870,6 +870,10 @@ namespace ExpressionSolver
 
         private bool IsPossibleOperator(string _PossibleOperator)
         {
+            //Fast discard for increased performance
+            if (!IsOperatorFirstChar(ref _PossibleOperator))
+                return false;
+
             return IsPossibleEqual(ref _PossibleOperator) ||
                     IsPossibleDifferent(ref _PossibleOperator) ||
                     IsPossibleAND(ref _PossibleOperator) ||
@@ -1002,7 +1006,7 @@ namespace ExpressionSolver
             bool Started = false;
             for (int aux = 0; aux < _PossibleOperator.Length; aux++)
             {
-                Char C = Char.ToUpper(_PossibleOperator[aux]);
+                Char C = Char.ToUpperInvariant(_PossibleOperator[aux]);
 
                 if (C != ' ')
                     Started = true;
@@ -1160,6 +1164,35 @@ namespace ExpressionSolver
 
         #region IsOperator
 
+        private bool IsOperatorFirstChar(ref string _PossibleOperator)
+        {
+            foreach(Char C in _PossibleOperator)
+            {
+                if (C == ' ')
+                    continue;
+                switch(C)
+                {
+                    case '=':
+                    case '!':
+                    case 'A':
+                    case 'O':
+                    case '>':
+                    case '<':
+                    case 'I':
+                    case '+':
+                    case '-':
+                    case '*':
+                    case '/':
+                    case 'N':
+                    case 'L':
+                        return true;
+                    default :
+                        return false;
+                }
+            }
+            return true;
+        }
+
         private bool IsOperatorForText(ref string _PossibleOperator, string _Operator)
         {
             if (_PossibleOperator.Length < _Operator.Length)
@@ -1173,7 +1206,7 @@ namespace ExpressionSolver
             bool Started = false;
             for (int aux = 0; aux < _PossibleOperator.Length; aux++)
             {
-                Char C = Char.ToUpper(_PossibleOperator[aux]);
+                Char C = Char.ToUpperInvariant(_PossibleOperator[aux]);
 
                 if (C != ' ')
                     Started = true;
@@ -1218,7 +1251,7 @@ namespace ExpressionSolver
             bool Started = false;
             for (int aux = 0; aux < _PossibleOperator.Length; aux++)
             {
-                Char C = Char.ToUpper(_PossibleOperator[aux]);
+                Char C = Char.ToUpperInvariant(_PossibleOperator[aux]);
 
                 if (C != ' ')
                     Started = true;
