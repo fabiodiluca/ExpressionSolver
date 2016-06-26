@@ -125,7 +125,8 @@ namespace ExpressionSolverExample
             DateTime End = DateTime.Now;
             txtResult.Text = Log.ToString();
             TimeSpan Solving = End - Start;
-            txtResult.Text += " ( " + Solving.Milliseconds.ToString() + "ms )";
+            txtResult.Text += " ( " + Solving.Milliseconds.ToString() + "ms )\r\n";
+            txtResult.Text += (((double)1000 * (double)MaxInteractions) / (double)Solving.Milliseconds).ToString("f2") + " expressions/second";
         }
 
         private void btExampleIs_Click(object sender, EventArgs e)

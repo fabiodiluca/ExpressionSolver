@@ -878,7 +878,6 @@ namespace ExpressionSolver
                     IsPossibleGreaterOrEqual(ref _PossibleOperator) ||
                     IsPossibleLess(ref _PossibleOperator) ||
                     IsPossibleLessOrEqual(ref _PossibleOperator) ||
-                    IsPossibleDifferent(ref _PossibleOperator) ||
                     IsPossiblePlus(ref _PossibleOperator) ||
                     IsPossibleMinus(ref _PossibleOperator) ||
                     IsPossibleDivide(ref _PossibleOperator) ||
@@ -1619,7 +1618,7 @@ namespace ExpressionSolver
                     }
                     else
                     {
-                        if (_string.Substring(index - 1, 1) == " ")
+                        if (_string[index - 1] == ' ')
                             return true;
                     }
             }
