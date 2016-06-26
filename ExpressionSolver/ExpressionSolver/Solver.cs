@@ -1166,8 +1166,9 @@ namespace ExpressionSolver
 
         private bool IsOperatorFirstChar(ref string _PossibleOperator)
         {
-            foreach(Char C in _PossibleOperator)
+            foreach(Char c in _PossibleOperator)
             {
+                Char C = char.ToUpperInvariant(c);
                 if (C == ' ')
                     continue;
                 switch(C)
