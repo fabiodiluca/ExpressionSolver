@@ -205,19 +205,19 @@
             // 
             this.btExampleIs.Location = new System.Drawing.Point(525, 13);
             this.btExampleIs.Name = "btExampleIs";
-            this.btExampleIs.Size = new System.Drawing.Size(37, 23);
+            this.btExampleIs.Size = new System.Drawing.Size(51, 23);
             this.btExampleIs.TabIndex = 22;
-            this.btExampleIs.Text = "Is";
+            this.btExampleIs.Text = "Is Null";
             this.btExampleIs.UseVisualStyleBackColor = true;
             this.btExampleIs.Click += new System.EventHandler(this.btExampleIs_Click);
             // 
             // btExampleIsNot
             // 
-            this.btExampleIsNot.Location = new System.Drawing.Point(568, 13);
+            this.btExampleIsNot.Location = new System.Drawing.Point(582, 13);
             this.btExampleIsNot.Name = "btExampleIsNot";
-            this.btExampleIsNot.Size = new System.Drawing.Size(61, 23);
+            this.btExampleIsNot.Size = new System.Drawing.Size(77, 23);
             this.btExampleIsNot.TabIndex = 23;
-            this.btExampleIsNot.Text = "Is Not";
+            this.btExampleIsNot.Text = "Is Not Null";
             this.btExampleIsNot.UseVisualStyleBackColor = true;
             this.btExampleIsNot.Click += new System.EventHandler(this.btExampleIsNot_Click);
             // 

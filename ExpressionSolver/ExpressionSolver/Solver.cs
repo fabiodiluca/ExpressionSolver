@@ -92,6 +92,19 @@ namespace ExpressionSolver
                     }
                 }
             }
+
+            //To maintain the upper case 'TRUE' standard
+            if (IsTrue(Solved))
+            {
+                Solved = TRUE;
+            }
+
+            //To maintain the upper case 'FALSE' standard
+            if (IsFalse(Solved))
+            {
+                Solved = FALSE;
+            }
+
             return Solved;
         }
 
@@ -934,6 +947,22 @@ namespace ExpressionSolver
                 );
         }
 
+        private bool IsTrue(string _Value)
+        {
+            if (_Value == null)
+                return false;
+            return 
+                _Value.Trim().Equals(TRUE, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        private bool IsFalse(string _Value)
+        {
+            if (_Value == null)
+                return false;
+            return
+                _Value.Trim().Equals(FALSE, StringComparison.InvariantCultureIgnoreCase);
+        }
+
         private bool IsNumber(string _Value)
         {
             if (_Value == null)
@@ -1418,7 +1447,7 @@ namespace ExpressionSolver
                     SearchingCharIndex++;
                     if (SearchingCharIndex > Operator.Length - 1)
                     {
-                        if (aux >= _PossibleOperator.Length - 1)
+                        if (aux > _PossibleOperator.Length - 1)
                             return false;
                         else
                         {
@@ -1464,7 +1493,7 @@ namespace ExpressionSolver
                     SearchingCharIndex++;
                     if (SearchingCharIndex > Operator.Length - 1)
                     {
-                        if (aux >= _PossibleOperator.Length - 1)
+                        if (aux > _PossibleOperator.Length - 1)
                             return false;
                         else
                         {
