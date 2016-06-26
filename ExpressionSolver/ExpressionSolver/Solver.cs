@@ -365,7 +365,7 @@ namespace ExpressionSolver
                 return false;
             for (int aux = _ParenthesisStartIndex - 1; aux >= 0; aux--)
             {
-                Char C = _ParseString[aux];
+                Char C = Char.ToUpperInvariant(_ParseString[aux]);
                 if (C != ' ' && C != '\r' && C != '\n' && C != '\t')
                 {
                     if (C != OperatorIN[ClauseIndex])
