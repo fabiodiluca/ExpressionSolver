@@ -30,6 +30,7 @@ namespace ExpressionSolver
         private const string OperatorPlus = "+";
         private const string OperatorMinus = "-";
         private const string OperatorMultiply = "*";
+        private const string OperatorPower = "^";
         private const string OperatorDivide = "/";
         private const string OperatorNotLike = "NOT LIKE";
         private const string OperatorLike = "LIKE";
@@ -762,6 +763,12 @@ namespace ExpressionSolver
                         double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), Culture);
                         return (Number1 / Number2).ToString(Culture);
                     }
+                case OperatorPower:
+                    {
+                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), Culture);
+                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), Culture);
+                        return Math.Pow(Number1,Number2).ToString(Culture);
+                    }
                 case OperatorNotLike:
                     {
                         if (!LeftSideValue.Like(RightSideValue))
@@ -899,6 +906,7 @@ namespace ExpressionSolver
                     IsPossibleMinus(ref _PossibleOperator) ||
                     IsPossibleDivide(ref _PossibleOperator) ||
                     IsPossibleMultiply(ref _PossibleOperator) ||
+                    IsPossiblePower(ref _PossibleOperator) ||
                     IsPossibleNotLike(ref _PossibleOperator) ||
                     IsPossibleLike(ref _PossibleOperator) ||
                     IsPossibleNotIN(ref _PossibleOperator) ||
@@ -924,6 +932,7 @@ namespace ExpressionSolver
                     (IsOperatorPlus(ref _PossibleOperator)) ||
                     (IsOperatorMinus(ref _PossibleOperator)) ||
                     (IsOperatorMultiply(ref _PossibleOperator)) ||
+                    (IsOperatorPower(ref _PossibleOperator)) ||
                     (IsOperatorDivide(ref _PossibleOperator)) ||
                     (IsOperatorNotLike(ref _PossibleOperator)) ||
                     (IsOperatorLike(ref _PossibleOperator)) ||
@@ -1169,6 +1178,11 @@ namespace ExpressionSolver
             return IsPossibleForCompareOrMath(ref _PossibleOperator, OperatorMultiply);
         }
 
+        private bool IsPossiblePower(ref string _PossibleOperator)
+        {
+            return IsPossibleForCompareOrMath(ref _PossibleOperator, OperatorPower);
+        }
+
         private bool IsPossibleLike(ref string _PossibleOperator)
         {
             return IsPossileForText(ref _PossibleOperator, OperatorLike);
@@ -1212,6 +1226,7 @@ namespace ExpressionSolver
                     case '+':
                     case '-':
                     case '*':
+                    case '^':
                     case '/':
                     case 'N':
                     case 'L':
@@ -1543,6 +1558,11 @@ namespace ExpressionSolver
         private bool IsOperatorMultiply(ref string _PossibleOperator)
         {
             return IsOperatorForMath(ref _PossibleOperator, OperatorMultiply);
+        }
+
+        private bool IsOperatorPower(ref string _PossibleOperator)
+        {
+            return IsOperatorForMath(ref _PossibleOperator, OperatorPower);
         }
 
         private bool IsOperatorLike(ref string _PossibleOperator)

@@ -262,6 +262,16 @@ namespace ExpressionSolverUnitTest
         }
 
         [TestMethod]
+        public void TestPower()
+        {
+            Assert.AreEqual(Solver.Solve("1^1"), "1");
+            Assert.AreEqual(Solver.Solve("1^ 1"), "1");
+            Assert.AreEqual(Solver.Solve("1 ^ 1"), "1");
+            Assert.AreEqual(Solver.Solve("2^2"), "4");
+            Assert.AreEqual(Solver.Solve("9^3"), "729");
+        }
+
+        [TestMethod]
         public void TestMath()
         {
             Assert.AreEqual(Solver.Solve("(((100/5)/20)*5)+10"), "15");
