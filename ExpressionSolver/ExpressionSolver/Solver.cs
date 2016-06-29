@@ -74,7 +74,8 @@ namespace ExpressionSolver
             {
                 Solved = SolveInnerParenthesis(Solved, out InnerParenthesisIndexStart, out InnerParenthesisIndexEnd);
                 if (Log != null)
-                    Log.AppendLine("Current expression: " + Solved);
+                    if (InnerParenthesisIndexStart > -1)
+                        Log.AppendLine("Current expression: " + Solved);
             }
 
             while (!IsBool(Solved) && !IsNumber(Solved))
@@ -362,8 +363,7 @@ namespace ExpressionSolver
 
             if (Log != null)
             {
-                Log.AppendLine(_ParseString);
-                Log.AppendLine("Solving (" + InnerParenthesis + ")");
+                Log.AppendLine("Solving Parenthesis (" + InnerParenthesis + ")");
             }
 
             return BeforeParenthesis
