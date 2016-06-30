@@ -446,5 +446,65 @@ namespace ExpressionSolverUnitTest
             Assert.AreEqual(Solver.Solve("(x*x)/2"), "2");
         }
 
+        [TestMethod]
+        public void Multiline()
+        {
+            Assert.AreEqual(Solver.Solve("\rTRUE\n"), Solver.TRUE);
+            Assert.AreEqual(Solver.Solve("tRuE\r\n"), Solver.TRUE);
+            Assert.AreEqual(Solver.Solve("true\t\t\t"), Solver.TRUE);
+
+            Assert.AreEqual(Solver.Solve("TrUE\rANd\n\ttrUE\ranD TRue"), Solver.TRUE);
+
+            Assert.AreEqual(Solver.Solve("\r\nTRUE\rOR\r\n\r\nFALSE\tOR\tTRUE"), Solver.TRUE);
+
+            Assert.AreEqual(Solver.Solve("'2'\r\n=\r\n\t'1'"), Solver.FALSE);
+            Assert.AreEqual(Solver.Solve("\r\n'TESTE'\r\n=\r\n'TESTE'"), Solver.TRUE);
+
+            Assert.AreEqual(Solver.Solve("\r\n''''''\t=\r\n''''''\r\n"), Solver.TRUE);
+
+            Assert.AreEqual(Solver.Solve("1\r=\n\r\t00001\r"), Solver.TRUE);
+
+            Assert.AreEqual(Solver.Solve("\r\nTRUE\n\n!=\r\tTRUE"), Solver.FALSE);
+
+            Assert.AreEqual(Solver.Solve("2\r\n>\t\t\t\r\n1"), Solver.TRUE);
+
+            Assert.AreEqual(Solver.Solve("1.000\t\t\r\n>\r\n\t\t\t'1.009'"), Solver.FALSE);
+
+            Assert.AreEqual(Solver.Solve("\t\t\r\n1.0\n >=\r\n'1.00'"), Solver.TRUE);
+            Assert.AreEqual(Solver.Solve("1.000\r\n>=\t\t\r\n'1.009'"), Solver.FALSE);
+
+            Assert.AreEqual(Solver.Solve("1.0\r\n\t\r\n<\n\n\n'1.00'\t\t\t"), Solver.FALSE);
+
+            Assert.AreEqual(Solver.Solve("1\r\n\n\r<\t\n\r'2'"), Solver.TRUE);
+
+            Assert.AreEqual(Solver.Solve("\t(1\r\n+\t2)\r+\n\n3+\t4"), "10");
+
+            Assert.AreEqual(Solver.Solve("\t\t\t\r\n(\t\t\r\n-1-\r\n2)\t\n\r-\r3-\n\n4"), "-10");
+
+            Assert.AreEqual(Solver.Solve("-\r\n(\n\n1\r\n*\r\n\n2)\r*3\n\r*\r\n4\t\t"), "-24");
+
+            Assert.AreEqual(Solver.Solve("-\n\n\r\t100\r\n/\t\t-5\n\r"), "20");
+
+            Assert.AreEqual(Solver.Solve("\r\n9^\r\n3\r\n"), "729");
+
+            Assert.AreEqual(Solver.Solve("\n\n(\r\n(\t\t(\n\r\t100\n/   5)   /\r\n20  )\r\n*5\r\n)\t\t+\t10"), "15");
+
+            Assert.AreEqual(Solver.Solve("\r\n\t'\rTESTE'\t\r\nNOT LIKE\r\n'\rTTEST%'"), Solver.TRUE);
+
+            Assert.AreEqual(Solver.Solve("\r\t\n(TRUE\nAND\r\n((TRUE\r\n\tOR\tFALSE\r\n)\r\nOR    TRUE))\nAND   ((102+  1) = (103))"), Solver.TRUE);
+
+            Solver.Parameters.Clear();
+            Solver.Parameters.Add("VARIABLE", "'TEST'");
+            Assert.AreEqual(Solver.Solve("VARIABLE =\r\n\t 'TEST'"), Solver.TRUE);
+            Assert.AreEqual(Solver.Solve("VARIABLE\r\n !=\t 'TEST'"), Solver.FALSE);
+
+            //Null parameters comparison
+            Solver.Parameters.Add("VARIABLE_NULL", null);
+            Assert.AreEqual(Solver.Solve("VARIABLE_NULL = NULL"), Solver.TRUE);
+            Assert.AreEqual(Solver.Solve("VARIABLE_NULL != NULL"), Solver.FALSE);
+
+            Solver.Parameters.Add("x", "2");
+            Assert.AreEqual(Solver.Solve("(x*x)/2"), "2");
+        }
     }
 }

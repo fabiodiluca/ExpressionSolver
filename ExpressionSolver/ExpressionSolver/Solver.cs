@@ -271,7 +271,7 @@ namespace ExpressionSolver
                     LastAddedChar = C;
                 }
             }
-            return Return.ToString();
+            return Return.ToString().Trim();
         }
 
         private string SolveInnerParenthesis(string _ParseString, out int InnerParenthesisIndexStart, out int InnerParenthesisIndexEnd)
@@ -395,7 +395,7 @@ namespace ExpressionSolver
                     }
                 }
             }
-            return true;
+            return false;
         }
 
         private string SolveExpression(string _ParseString)
