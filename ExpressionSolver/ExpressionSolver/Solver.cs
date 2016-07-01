@@ -76,7 +76,16 @@ namespace ExpressionSolver
                 Solved = SolveInnerParenthesis(Solved, out InnerParenthesisIndexStart, out InnerParenthesisIndexEnd);
                 if (Log != null)
                     if (InnerParenthesisIndexStart > -1)
-                        Log.AppendLine("Current expression: " + Solved);
+                    {
+                        if (!IsBool(Solved) && !IsNumber(Solved))
+                        {
+                            Log.AppendLine("Current expression: " + Solved);
+                        }
+                        else
+                        {
+                            Log.AppendLine("Result: " + Solved);
+                        }
+                    }
             }
 
             while (!IsBool(Solved) && !IsNumber(Solved))

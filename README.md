@@ -19,8 +19,8 @@ string Return = Solver.Solve("TRUE AND FALSE");
 	Expression: TRUE AND FALSE
 	Return: FALSE
         Log:
-        Solving Primary Member: TRUE AND FALSE
-        Result: FALSE
+         Solving Primary Member: TRUE AND FALSE
+         Result: FALSE
          ( 0ms )
 ```
 
@@ -37,15 +37,15 @@ string Return = Solver.Solve("('My Test String'='My Test String') AND (999=999) 
 	Expression: ('My Test String'='My Test String') AND (999=999) AND TRUE
 	Return: TRUE
 	Log:
-	Solving Parenthesis ( 'My Test String'='My Test String' )
-	Solving Primary Member: 'My Test String'='My Test String'
-	Current expression: TRUE AND ( 999=999 ) AND TRUE
-	Solving Parenthesis ( 999=999 )
-	Solving Primary Member: 999=999
-	Current expression: TRUE AND TRUE AND TRUE
-	Solving Primary Member: TRUE AND TRUE
-	Solving Primary Member: TRUE AND TRUE
-	Result: TRUE
+	 Solving Parenthesis ( 'My Test String'='My Test String' )
+	 Solving Primary Member: 'My Test String'='My Test String'
+	 Current expression: TRUE AND ( 999=999 ) AND TRUE
+	 Solving Parenthesis ( 999=999 )
+	 Solving Primary Member: 999=999
+	 Current expression: TRUE AND TRUE AND TRUE
+	 Solving Primary Member: TRUE AND TRUE
+	 Solving Primary Member: TRUE AND TRUE
+	 Result: TRUE
 ```
 
 ***
@@ -61,11 +61,11 @@ string Return = Solver.Solve("(100*100)*-1");
 	Expression: (100*100)*-1
 	Return: -10000
 	Log:
-	Solving Parenthesis ( 100*100 )
-	Solving Primary Member: 100*100
-	Current expression: 10000 *-1
-	Solving Primary Member: 10000 *-1
-	Result: -10000
+	 Solving Parenthesis ( 100*100 )
+	 Solving Primary Member: 100*100
+	 Current expression: 10000 *-1
+	 Solving Primary Member: 10000 *-1
+	 Result: -10000
 ```
 
 ***
@@ -82,9 +82,9 @@ string Return = Solver.Solve("(MY_VARIABLE IN ('A','B','INSIDE','D'))",Variables
 	Expression: (MY_VARIABLE IN ('A','B','INSIDE','D'))
 	Return: TRUE
 	Log:
-	Solving Parenthesis ( MY_VARIABLE IN ( 'A','B','INSIDE','D' ) )
-	Solving Primary Member: MY_VARIABLE IN ( 'A','B','INSIDE','D' )
-	Current expression: TRUE
+	 Solving Parenthesis ( MY_VARIABLE IN ( 'A','B','INSIDE','D' ) )
+	 Solving Primary Member: MY_VARIABLE IN ( 'A','B','INSIDE','D' )
+	 Result: TRUE
 ```
 
 ***
