@@ -133,7 +133,7 @@ namespace ExpressionSolver
         /// To avoid parse problems (operators are recognitions needs space)
         /// </summary>
         /// <param name="_ParseString"></param>
-        public void PutSpaceArroundParenthesis(ref string _ParseString)
+        private void PutSpaceArroundParenthesis(ref string _ParseString)
         {
             bool IsInsideString = false;
             int SlashCounterInsideString = 0;
@@ -193,7 +193,7 @@ namespace ExpressionSolver
         /// </summary>
         /// <param name="_ParseString"></param>
         /// <returns></returns>
-        public string ReplaceSpecialChars(ref string _ParseString)
+        private string ReplaceSpecialChars(ref string _ParseString)
         {
             StringBuilder Return = new StringBuilder();
             bool IsInsideString = false;

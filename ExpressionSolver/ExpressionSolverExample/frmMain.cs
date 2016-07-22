@@ -25,21 +25,12 @@ namespace ExpressionSolverExample
             //try
             //{
             #region Parameters
-            Dictionary<string, string> Values = new Dictionary<string, string>();
-            string[] KeyValues = txtParameters.Text.Replace("\r", "").Replace("\n", "").Split(';');
-            foreach (string KeyValue in KeyValues)
-            {
-                try
-                {
-                    Values.Add(KeyValue.Split('=')[0].Trim(), KeyValue.Split('=')[1].Trim());
-                }
-                catch { }
-            }
+            Dictionary<string, string> Parameters = SolverUtil.ParseParameters(txtParameters.Text);
             #endregion
 
             DateTime Start = DateTime.Now;
             Log = new StringBuilder(15000);
-            Solver.Solve(txtExpression.Text, ref Log, Values);
+            Solver.Solve(txtExpression.Text, ref Log, Parameters);
             DateTime End = DateTime.Now;
             txtResult.Text = Log.ToString();
             TimeSpan Solving = End - Start;
