@@ -17,25 +17,6 @@ namespace ExpressionSolver
 
         public const string TRUE = "TRUE";
         public const string FALSE = "FALSE";
-        private const string OperatorEqual = "=";
-        private const string OperatorDifferent = "!=";
-        private const string OperatorAND = "AND";
-        private const string OperatorOR = "OR";
-        private const string OperatorGreater = ">";
-        private const string OperatorGreaterOrEqual = ">=";
-        private const string OperatorLess = "<";
-        private const string OperatorLessOrEqual = "<=";
-        private const string OperatorIsNull = "IS NULL";
-        private const string OperatorIsNotNull = "IS NOT NULL";
-        private const string OperatorPlus = "+";
-        private const string OperatorMinus = "-";
-        private const string OperatorMultiply = "*";
-        private const string OperatorPower = "^";
-        private const string OperatorDivide = "/";
-        private const string OperatorNotLike = "NOT LIKE";
-        private const string OperatorLike = "LIKE";
-        private const string OperatorNotIN = "NOT IN";
-        private const string OperatorIN = "IN";
 
         private Dictionary<string, string> parameters;
         public Dictionary<string, string> Parameters
@@ -51,10 +32,30 @@ namespace ExpressionSolver
 
         public Solver()
         {
-
+            #region Put the operators first chars in a char array
+            this.OperatorsFirstChars = GetOperatorsFirstChars();
+            #endregion
         }
 
-        public Solver(CultureInfo _CultureInfo)
+        private Char[] GetOperatorsFirstChars()
+        {
+            #region Put the operators first chars in a char array
+            List<Char> FirstChars = new List<Char>();
+            foreach (var field in typeof(Operators).GetFields())
+            {
+                object OperatorValueObj = field.GetValue(null);
+                string Operator = OperatorValueObj as string;
+                if (Operator != null)
+                {
+                    FirstChars.Add(Char.ToUpperInvariant(Operator[0]));
+                }
+            }
+            FirstChars = new List<Char>(FirstChars.Distinct());
+            return FirstChars.ToArray();
+            #endregion
+        }
+
+        public Solver(CultureInfo _CultureInfo): this()
         {
             this.Culture = _CultureInfo;
         }
@@ -65,7 +66,7 @@ namespace ExpressionSolver
             this.Parameters = _Parameters;
 
             PutSpaceArroundParenthesis(ref _Expression);
-            _Expression = ReplaceSpecialChars(ref _Expression);
+            _Expression = NormalizeExpression(ref _Expression);
 
             string Solved = _Expression;
             int InnerParenthesisIndexStart = 0;
@@ -77,7 +78,7 @@ namespace ExpressionSolver
                 if (Log != null)
                     if (InnerParenthesisIndexStart > -1)
                     {
-                        if (!IsBool(Solved) && !IsNumber(Solved))
+                        if (!Solved.IsBool() && !Solved.IsNumber())
                         {
                             Log.AppendLine("Current expression: " + Solved);
                         }
@@ -88,12 +89,12 @@ namespace ExpressionSolver
                     }
             }
 
-            while (!IsBool(Solved) && !IsNumber(Solved))
+            while (!Solved.IsBool() && !Solved.IsNumber())
             {
                 Solved = SolveExpression(Solved);
                 if (Log != null)
                 {
-                    if (!IsBool(Solved) && !IsNumber(Solved))
+                    if (!Solved.IsBool() && !Solved.IsNumber())
                     {
                         Log.AppendLine("Current expression: " + Solved);
                     }
@@ -105,13 +106,13 @@ namespace ExpressionSolver
             }
 
             //To maintain the upper case 'TRUE' standard
-            if (IsTrue(Solved))
+            if (Solved.IsTrue())
             {
                 Solved = TRUE;
             }
 
             //To maintain the upper case 'FALSE' standard
-            if (IsFalse(Solved))
+            if (Solved.IsFalse())
             {
                 Solved = FALSE;
             }
@@ -128,6 +129,7 @@ namespace ExpressionSolver
         {
             return Solve(_Expression, ref this.Log, this.parameters);
         }
+
 
         /// <summary>
         /// To avoid parse problems (operators are recognitions needs space)
@@ -193,7 +195,7 @@ namespace ExpressionSolver
         /// </summary>
         /// <param name="_ParseString"></param>
         /// <returns></returns>
-        private string ReplaceSpecialChars(ref string _ParseString)
+        private string NormalizeExpression(ref string _ParseString)
         {
             StringBuilder Return = new StringBuilder();
             bool IsInsideString = false;
@@ -383,7 +385,7 @@ namespace ExpressionSolver
 
         private bool IsINClauseParenthesis(string _ParseString, int _ParenthesisStartIndex)
         {
-            int ClauseIndex = OperatorIN.Length - 1;
+            int ClauseIndex = Operators.OperatorIN.Length - 1;
             if (_ParenthesisStartIndex == 0)
                 return false;
             for (int aux = _ParenthesisStartIndex - 1; aux >= 0; aux--)
@@ -391,7 +393,7 @@ namespace ExpressionSolver
                 Char C = Char.ToUpperInvariant(_ParseString[aux]);
                 if (C != ' ' && C != '\r' && C != '\n' && C != '\t')
                 {
-                    if (C != OperatorIN[ClauseIndex])
+                    if (C != Operators.OperatorIN[ClauseIndex])
                     {
                         return false;
                     }
@@ -417,7 +419,7 @@ namespace ExpressionSolver
             if (_ParseString.Trim().Equals(FALSE, StringComparison.InvariantCultureIgnoreCase))
                 return FALSE;
 
-            if (IsNumber(_ParseString.Trim()))
+            if (_ParseString.Trim().IsNumber())
                 return _ParseString;
 
             bool bLeftSide = true;
@@ -499,7 +501,7 @@ namespace ExpressionSolver
                     {
                         Operator = PossibleOperator + Char;
                         #region Handles number signs
-                        if (LeftSide.TrimStart() == "" && (Operator == OperatorMinus || Operator == OperatorPlus))
+                        if (LeftSide.TrimStart() == "" && (Operator == Operators.OperatorMinus || Operator == Operators.OperatorPlus))
                         {
                             PossibleOperator = "";
                             bPossibleAnotherOperator = false;
@@ -522,7 +524,7 @@ namespace ExpressionSolver
                         PossibleOperator += Char;
                         bPossibleAnotherOperator = false;
                         #region Handles number signs
-                        if (IsOperator(RightSide.Trim(), null) && (PossibleOperator.Trim() == OperatorMinus || PossibleOperator == OperatorPlus))
+                        if (IsOperator(RightSide.Trim(), null) && (PossibleOperator.Trim() == Operators.OperatorMinus || PossibleOperator == Operators.OperatorPlus))
                         {
                             PossibleOperator = "";
                             bPossibleAnotherOperator = false;
@@ -534,7 +536,7 @@ namespace ExpressionSolver
                         #endregion
                         RightSide += Char;
                         RightSide = RightSide.Substring(1, RightSide.Length - 1 - PossibleOperator.Length);
-                        if (IsBool(LeftSide) && IsBool(RightSide))
+                        if (LeftSide.IsBool() && RightSide.IsBool())
                         {
                             string NeedSolveToRight = _ParseString.Substring(index + 1, _ParseString.Length - index - 1);
                             return
@@ -544,7 +546,7 @@ namespace ExpressionSolver
                                     NeedSolveToRight
                                 );
                         }
-                        if (IsBool(LeftSide) && !IsBool(RightSide))
+                        if (LeftSide.IsBool() && !RightSide.IsBool())
                         {
                             string NeedSolveToRight = _ParseString.Substring(index + 1, _ParseString.Length - index - 1);
                             return SolveExpression(
@@ -552,7 +554,7 @@ namespace ExpressionSolver
                                     SolveExpression(RightSide + PossibleOperator + NeedSolveToRight)
                                 );
                         }
-                        if (!IsBool(LeftSide) && !IsBool(RightSide))
+                        if (!LeftSide.IsBool() && !RightSide.IsBool())
                         {
                             string NeedSolveToRight = _ParseString.Substring(index + 1, _ParseString.Length - index - 1);
                             return SolveExpression(
@@ -597,7 +599,7 @@ namespace ExpressionSolver
             string OperatorTrimmed = Operator.Trim();
             string RightSideTrimmed = _RightSide.Trim();
 
-            if (IsBool(LeftSideTrimmed) && IsBool(RightSideTrimmed))
+            if (LeftSideTrimmed.IsBool() && RightSideTrimmed.IsBool())
                 return SolvePrimaryMemberBool(_LeftSide, Operator, _RightSide);
 
             #region LeftSideValue
@@ -605,45 +607,45 @@ namespace ExpressionSolver
 
             if (Parameters != null)
             {
-                if (Parameters.ContainsKey(LeftSideTrimmed) && !IsNumber(LeftSideTrimmed) && !IsBool(LeftSideTrimmed) && !IsNull(LeftSideTrimmed) && !IsString(LeftSideTrimmed))
+                if (Parameters.ContainsKey(LeftSideTrimmed) && !LeftSideTrimmed.IsNumber() && !LeftSideTrimmed.IsBool() && !LeftSideTrimmed.IsNull() && !LeftSideTrimmed.IsString())
                 {
                     LeftSideValue = Parameters[LeftSideTrimmed];
                     if (LeftSideValue == null)
                         LeftSideValue = "NULL";
                 }
-                if (!Parameters.ContainsKey(LeftSideTrimmed) && !IsNumber(LeftSideTrimmed) && !IsBool(LeftSideTrimmed) && !IsNull(LeftSideTrimmed) && !IsString(LeftSideTrimmed))
+                if (!Parameters.ContainsKey(LeftSideTrimmed) && !LeftSideTrimmed.IsNumber() && !LeftSideTrimmed.IsBool() && !LeftSideTrimmed.IsNull() && !LeftSideTrimmed.IsString())
                 {
                     throw new Exception("Could not evaluate '" + LeftSideTrimmed + "'");
                 }
             }
             else
             {
-                if (!IsNumber(LeftSideTrimmed) && !IsBool(LeftSideTrimmed) && !IsNull(LeftSideTrimmed) && !IsString(LeftSideTrimmed))
+                if (!LeftSideTrimmed.IsNumber() && !LeftSideTrimmed.IsBool() && !LeftSideTrimmed.IsNull() && !LeftSideTrimmed.IsString())
                     throw new Exception("Could not evaluate '" + LeftSideTrimmed + "'");
             }
             #endregion
 
             #region RightSideValue
             string RightSideValue = RightSideTrimmed;
-            if (OperatorTrimmed.ToUpperInvariant() != OperatorIsNull &&
-                OperatorTrimmed.ToUpperInvariant() != OperatorIsNotNull)
+            if (OperatorTrimmed.ToUpperInvariant() != Operators.OperatorIsNull &&
+                OperatorTrimmed.ToUpperInvariant() != Operators.OperatorIsNotNull)
             {
                 if (Parameters != null)
                 {
-                    if (Parameters.ContainsKey(RightSideTrimmed) && !IsNumber(RightSideValue) && !IsBool(RightSideTrimmed) && !IsNull(RightSideTrimmed) && !IsString(RightSideTrimmed))
+                    if (Parameters.ContainsKey(RightSideTrimmed) && !RightSideValue.IsNumber() && !RightSideTrimmed.IsBool() && !RightSideTrimmed.IsNull() && !RightSideTrimmed.IsString())
                     {
                         RightSideValue = Parameters[RightSideTrimmed];
                         if (RightSideValue == null)
                             RightSideValue = "NULL";
                     }
-                    if (!Parameters.ContainsKey(RightSideTrimmed) && !IsNumber(RightSideValue) && !IsBool(RightSideTrimmed) && !IsNull(RightSideTrimmed) && !IsString(RightSideTrimmed) && (OperatorTrimmed.ToUpperInvariant() != OperatorIN) && (OperatorTrimmed.ToUpperInvariant() != OperatorIN) && (OperatorTrimmed.ToUpperInvariant() != OperatorNotIN))
+                    if (!Parameters.ContainsKey(RightSideTrimmed) && !RightSideValue.IsNumber() && !RightSideTrimmed.IsBool() && !RightSideTrimmed.IsNull() && !RightSideTrimmed.IsString() && (OperatorTrimmed.ToUpperInvariant() != Operators.OperatorIN) && (OperatorTrimmed.ToUpperInvariant() != Operators.OperatorIN) && (OperatorTrimmed.ToUpperInvariant() != Operators.OperatorNotIN))
                     {
                         throw new Exception("Could not evaluate '" + RightSideTrimmed + "'");
                     }
                 }
                 else
                 {
-                    if (!IsNumber(RightSideTrimmed) && !IsBool(RightSideTrimmed) && !IsNull(RightSideTrimmed) && !IsString(RightSideTrimmed))
+                    if (!RightSideTrimmed.IsNumber() && !RightSideTrimmed.IsBool() && !RightSideTrimmed.IsNull() && !RightSideTrimmed.IsString())
                         throw new Exception("Could not evaluate '" + RightSideTrimmed + "'");
                 }
             }
@@ -653,30 +655,30 @@ namespace ExpressionSolver
             }
             #endregion
 
-            if (IsNull(LeftSideValue))
+            if (LeftSideValue.IsNull())
                 LeftSideValue = "NULL";
-            if (IsNull(RightSideValue))
+            if (RightSideValue.IsNull())
                 RightSideValue = "NULL";
 
             switch (OperatorTrimmed.ToUpperInvariant())
             {
-                case OperatorAND:
+                case Operators.OperatorAND:
                     throw new Exception("Cannot resolve \"" + LeftSideValue + "\" AND \"" + _RightSide + "\"");
-                case OperatorOR:
+                case Operators.OperatorOR:
                     throw new Exception("Cannot resolve \"" + LeftSideValue + "\" OR \"" + _RightSide + "\"");
 
-                case OperatorEqual:
-                    if (IsString(LeftSideValue) && IsString(RightSideValue))
+                case Operators.OperatorEqual:
+                    if (LeftSideValue.IsString() && RightSideValue.IsString())
                     {
                         if (LeftSideValue == RightSideValue)
                             return TRUE;
                         else
                             return FALSE;
                     }
-                    if (IsNumber(LeftSideValue) && IsNumber(RightSideValue))
+                    if (LeftSideValue.IsNumber() && RightSideValue.IsNumber())
                     {
-                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), Culture);
-                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), Culture);
+                        double Number1 = Convert.ToDouble(LeftSideValue.CorrectNumber(), Culture);
+                        double Number2 = Convert.ToDouble(RightSideValue.CorrectNumber(), Culture);
                         if (Number1 == Number2)
                             return TRUE;
                         else
@@ -687,18 +689,18 @@ namespace ExpressionSolver
                     else
                         return FALSE;
 
-                case OperatorDifferent:
-                    if (IsString(LeftSideValue) && IsString(RightSideValue))
+                case Operators.OperatorDifferent:
+                    if (LeftSideValue.IsString() && RightSideValue.IsString())
                     {
                         if (LeftSideValue != RightSideValue)
                             return TRUE;
                         else
                             return FALSE;
                     }
-                    if (IsNumber(LeftSideValue) && IsNumber(RightSideValue))
+                    if (LeftSideValue.IsNumber() && RightSideValue.IsNumber())
                     {
-                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), Culture);
-                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), Culture);
+                        double Number1 = Convert.ToDouble(LeftSideValue.CorrectNumber(), Culture);
+                        double Number2 = Convert.ToDouble(RightSideValue.CorrectNumber(), Culture);
                         if (Number1 != Number2)
                             return TRUE;
                         else
@@ -709,90 +711,90 @@ namespace ExpressionSolver
                     else
                         return FALSE;
 
-                case OperatorGreater:
+                case Operators.OperatorGreater:
                     {
-                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), Culture);
-                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), Culture);
+                        double Number1 = Convert.ToDouble(LeftSideValue.CorrectNumber(), Culture);
+                        double Number2 = Convert.ToDouble(RightSideValue.CorrectNumber(), Culture);
                         if (Number1 > Number2)
                             return TRUE;
                         else
                             return FALSE;
                     }
 
-                case OperatorGreaterOrEqual:
+                case Operators.OperatorGreaterOrEqual:
                     {
-                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), Culture);
-                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), Culture);
+                        double Number1 = Convert.ToDouble(LeftSideValue.CorrectNumber(), Culture);
+                        double Number2 = Convert.ToDouble(RightSideValue.CorrectNumber(), Culture);
                         if (Number1 >= Number2)
                             return TRUE;
                         else
                             return FALSE;
                     }
 
-                case OperatorLess:
+                case Operators.OperatorLess:
                     {
-                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), Culture);
-                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), Culture);
+                        double Number1 = Convert.ToDouble(LeftSideValue.CorrectNumber(), Culture);
+                        double Number2 = Convert.ToDouble(RightSideValue.CorrectNumber(), Culture);
                         if (Number1 < Number2)
                             return TRUE;
                         else
                             return FALSE;
                     }
 
-                case OperatorLessOrEqual:
+                case Operators.OperatorLessOrEqual:
                     {
-                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), Culture);
-                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), Culture);
+                        double Number1 = Convert.ToDouble(LeftSideValue.CorrectNumber(), Culture);
+                        double Number2 = Convert.ToDouble(RightSideValue.CorrectNumber(), Culture);
                         if (Number1 <= Number2)
                             return TRUE;
                         else
                             return FALSE;
                     }
-                case OperatorPlus:
+                case Operators.OperatorPlus:
                     {
-                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), Culture);
-                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), Culture);
+                        double Number1 = Convert.ToDouble(LeftSideValue.CorrectNumber(), Culture);
+                        double Number2 = Convert.ToDouble(RightSideValue.CorrectNumber(), Culture);
                         return (Number1 + Number2).ToString(Culture);
                     }
-                case OperatorMinus:
+                case Operators.OperatorMinus:
                     {
-                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), Culture);
-                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), Culture);
+                        double Number1 = Convert.ToDouble(LeftSideValue.CorrectNumber(), Culture);
+                        double Number2 = Convert.ToDouble(RightSideValue.CorrectNumber(), Culture);
                         return (Number1 - Number2).ToString(Culture);
                     }
-                case OperatorMultiply:
+                case Operators.OperatorMultiply:
                     {
-                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), Culture);
-                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), Culture);
+                        double Number1 = Convert.ToDouble(LeftSideValue.CorrectNumber(), Culture);
+                        double Number2 = Convert.ToDouble(RightSideValue.CorrectNumber(), Culture);
                         return (Number1 * Number2).ToString(Culture);
                     }
-                case OperatorDivide:
+                case Operators.OperatorDivide:
                     {
-                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), Culture);
-                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), Culture);
+                        double Number1 = Convert.ToDouble(LeftSideValue.CorrectNumber(), Culture);
+                        double Number2 = Convert.ToDouble(RightSideValue.CorrectNumber(), Culture);
                         return (Number1 / Number2).ToString(Culture);
                     }
-                case OperatorPower:
+                case Operators.OperatorPower:
                     {
-                        double Number1 = Convert.ToDouble(CorrectNumber(LeftSideValue), Culture);
-                        double Number2 = Convert.ToDouble(CorrectNumber(RightSideValue), Culture);
+                        double Number1 = Convert.ToDouble(LeftSideValue.CorrectNumber(), Culture);
+                        double Number2 = Convert.ToDouble(RightSideValue.CorrectNumber(), Culture);
                         return Math.Pow(Number1,Number2).ToString(Culture);
                     }
-                case OperatorNotLike:
+                case Operators.OperatorNotLike:
                     {
                         if (!LeftSideValue.Like(RightSideValue))
                             return TRUE;
                         else
                             return FALSE;
                     }
-                case OperatorLike:
+                case Operators.OperatorLike:
                     {
                         if (LeftSideValue.Like(RightSideValue))
                             return TRUE;
                         else
                             return FALSE;
                     }
-                case OperatorIN:
+                case Operators.OperatorIN:
                     {
                         string[] ValuesLeft = InClauseParser(LeftSideValue).ToArray();
                         string[] ValuesRight = InClauseParser(RightSideValue).ToArray();
@@ -803,15 +805,15 @@ namespace ExpressionSolver
                             for (int aux2 = 0; aux2 < ValuesRight.Length; aux2++)
                             {
                                 string ValueRight = ValuesRight[aux2].Trim();
-                                if (IsString(ValueLeft) && IsString(ValueRight))
+                                if (ValueLeft.IsString() && ValueRight.IsString())
                                 {
                                     if (LeftSideValue == ValueRight)
                                         return TRUE;
                                 }
-                                if (IsNumber(ValueLeft) && IsNumber(ValueRight))
+                                if (ValueLeft.IsNumber() && ValueRight.IsNumber())
                                 {
-                                    double Number1 = Convert.ToDouble(CorrectNumber(ValueLeft), Culture);
-                                    double Number2 = Convert.ToDouble(CorrectNumber(ValueRight), Culture);
+                                    double Number1 = Convert.ToDouble(ValueLeft.CorrectNumber(), Culture);
+                                    double Number2 = Convert.ToDouble(ValueRight.CorrectNumber(), Culture);
                                     if (Number1 == Number2)
                                         return TRUE;
                                 }
@@ -821,7 +823,7 @@ namespace ExpressionSolver
                         }
                         return FALSE;
                     }
-                case OperatorNotIN:
+                case Operators.OperatorNotIN:
                     {
                         string[] ValuesLeft = InClauseParser(LeftSideValue).ToArray();
                         string[] ValuesRight = InClauseParser(RightSideValue).ToArray();
@@ -832,15 +834,15 @@ namespace ExpressionSolver
                             for (int aux2 = 0; aux2 < ValuesRight.Length; aux2++)
                             {
                                 string ValueRight = ValuesRight[aux2].Trim();
-                                if (IsString(ValueLeft) && IsString(ValueRight))
+                                if (ValueLeft.IsString() && ValueRight.IsString())
                                 {
                                     if (LeftSideValue == ValueRight)
                                         return FALSE;
                                 }
-                                if (IsNumber(ValueLeft) && IsNumber(ValueRight))
+                                if (ValueLeft.IsNumber() && ValueRight.IsNumber())
                                 {
-                                    double Number1 = Convert.ToDouble(CorrectNumber(ValueLeft), Culture);
-                                    double Number2 = Convert.ToDouble(CorrectNumber(ValueRight), Culture);
+                                    double Number1 = Convert.ToDouble(ValueLeft.CorrectNumber(), Culture);
+                                    double Number2 = Convert.ToDouble(ValueRight.CorrectNumber(), Culture);
                                     if (Number1 == Number2)
                                         return FALSE;
                                 }
@@ -850,13 +852,13 @@ namespace ExpressionSolver
                         }
                         return TRUE;
                     }
-                case OperatorIsNotNull:
-                    if (!IsNull(LeftSideValue))
+                case Operators.OperatorIsNotNull:
+                    if (!LeftSideValue.IsNull())
                         return TRUE;
                     else
                         return FALSE;
-                case OperatorIsNull:
-                    if (IsNull(LeftSideValue))
+                case Operators.OperatorIsNull:
+                    if (LeftSideValue.IsNull())
                         return TRUE;
                     else
                         return FALSE;
@@ -873,26 +875,24 @@ namespace ExpressionSolver
             _RightSide = _RightSide.Trim().ToUpperInvariant(); ;
             switch (Operator)
             {
-                case OperatorAND:
+                case Operators.OperatorAND:
                     if (_LeftSide == TRUE && _RightSide == TRUE)
                         return TRUE;
                     return FALSE;
-                case OperatorOR:
+                case Operators.OperatorOR:
                     if (_LeftSide == TRUE || _RightSide == TRUE)
                         return TRUE;
                     return FALSE;
-                case OperatorEqual:
+                case Operators.OperatorEqual:
                     if (_LeftSide == _RightSide)
                         return TRUE;
                     else
                         return FALSE;
-                case OperatorDifferent:
+                case Operators.OperatorDifferent:
                     if (_LeftSide != _RightSide)
                         return TRUE;
                     else
                         return FALSE;
-
-
             }
             return FALSE;
         }
@@ -953,93 +953,6 @@ namespace ExpressionSolver
                 return true;
 
             return false;
-        }
-
-        private bool IsBool(string _Value)
-        {
-            if (_Value == null)
-                return false;
-            return (
-                (_Value.Trim().Equals(TRUE, StringComparison.InvariantCultureIgnoreCase)) ||
-                (_Value.Trim().Equals(FALSE, StringComparison.InvariantCultureIgnoreCase))
-                );
-        }
-
-        private bool IsTrue(string _Value)
-        {
-            if (_Value == null)
-                return false;
-            return 
-                _Value.Trim().Equals(TRUE, StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        private bool IsFalse(string _Value)
-        {
-            if (_Value == null)
-                return false;
-            return
-                _Value.Trim().Equals(FALSE, StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        private bool IsNumber(string _Value)
-        {
-            if (_Value == null)
-                return false;
-
-            _Value = _Value.Replace("'", "");
-            string CorrectedNumber = CorrectNumber(_Value);
-            double Double = 0;
-            return Double.TryParse(CorrectedNumber, out Double);
-        }
-
-        StringBuilder CorrectedNumber = new StringBuilder();
-        /// <summary>
-        /// Removes the space between the sign and the number (because for i.e. '- 2' is not considerated a number by Convert.ToDouble)
-        /// </summary>
-        /// <param name="_Value"></param>
-        /// <returns></returns>
-        private string CorrectNumber(string _Value)
-        {
-            _Value = _Value.Replace("'", "");
-            CorrectedNumber.Clear();
-            bool NumberStarted = false;
-            foreach (Char C in _Value)
-            {
-                switch (C)
-                {
-                    case '0':
-                    case '1':
-                    case '2':
-                    case '3':
-                    case '4':
-                    case '5':
-                    case '6':
-                    case '7':
-                    case '8':
-                    case '9':
-                    case '.':
-                        NumberStarted = true;
-                        break;
-                }
-                if (!NumberStarted && C != ' ')
-                    CorrectedNumber.Append(C);
-                if (NumberStarted)
-                    CorrectedNumber.Append(C);
-            }
-            return CorrectedNumber.ToString();
-        }
-
-        private bool IsNull(string _Value)
-        {
-            if (_Value == null)
-                return false;
-            return _Value.Trim().Equals("null", StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        private bool IsString(string _Value)
-        {
-            _Value = _Value.Trim();
-            return _Value.StartsWith("'") && _Value.EndsWith("'");
         }
 
         #region IsPossibleOperator
@@ -1124,98 +1037,99 @@ namespace ExpressionSolver
 
         private bool IsPossibleDifferent(ref string _PossibleOperator)
         {
-            return IsPossibleForCompareOrMath(ref _PossibleOperator, OperatorDifferent);
+            return IsPossibleForCompareOrMath(ref _PossibleOperator, Operators.OperatorDifferent);
         }
 
         private bool IsPossibleAND(ref string _PossibleOperator)
         {
-            return IsPossileForText(ref _PossibleOperator, OperatorAND);
+            return IsPossileForText(ref _PossibleOperator, Operators.OperatorAND);
         }
 
         private bool IsPossibleOR(ref string _PossibleOperator)
         {
-            return IsPossileForText(ref _PossibleOperator, OperatorOR);
+            return IsPossileForText(ref _PossibleOperator, Operators.OperatorOR);
         }
 
         private bool IsPossibleGreater(ref string _PossibleOperator)
         {
-            return IsPossibleForCompareOrMath(ref _PossibleOperator, OperatorGreater);
+            return IsPossibleForCompareOrMath(ref _PossibleOperator, Operators.OperatorGreater);
         }
 
         private bool IsPossibleGreaterOrEqual(ref string _PossibleOperator)
         {
-            return IsPossibleForCompareOrMath(ref _PossibleOperator, OperatorGreaterOrEqual);
+            return IsPossibleForCompareOrMath(ref _PossibleOperator, Operators.OperatorGreaterOrEqual);
         }
 
         private bool IsPossibleLess(ref string _PossibleOperator)
         {
-            return IsPossibleForCompareOrMath(ref _PossibleOperator, OperatorLess);
+            return IsPossibleForCompareOrMath(ref _PossibleOperator, Operators.OperatorLess);
         }
 
         private bool IsPossibleLessOrEqual(ref string _PossibleOperator)
         {
-            return IsPossibleForCompareOrMath(ref _PossibleOperator, OperatorLessOrEqual);
+            return IsPossibleForCompareOrMath(ref _PossibleOperator, Operators.OperatorLessOrEqual);
         }
 
         private bool IsPossibleIsNull(ref string _PossibleOperator)
         {
-            return IsPossileForText(ref _PossibleOperator, OperatorIsNull);
+            return IsPossileForText(ref _PossibleOperator, Operators.OperatorIsNull);
         }
 
         private bool IsPossibleIsNotNull(ref string _PossibleOperator)
         {
-            return IsPossileForText(ref _PossibleOperator, OperatorIsNotNull);
+            return IsPossileForText(ref _PossibleOperator, Operators.OperatorIsNotNull);
         }
 
         private bool IsPossiblePlus(ref string _PossibleOperator)
         {
-            return IsPossibleForCompareOrMath(ref _PossibleOperator, OperatorPlus);
+            return IsPossibleForCompareOrMath(ref _PossibleOperator, Operators.OperatorPlus);
         }
 
         private bool IsPossibleMinus(ref string _PossibleOperator)
         {
-            return IsPossibleForCompareOrMath(ref _PossibleOperator, OperatorMinus);
+            return IsPossibleForCompareOrMath(ref _PossibleOperator, Operators.OperatorMinus);
         }
 
         private bool IsPossibleDivide(ref string _PossibleOperator)
         {
-            return IsPossibleForCompareOrMath(ref _PossibleOperator, OperatorDivide);
+            return IsPossibleForCompareOrMath(ref _PossibleOperator, Operators.OperatorDivide);
         }
 
         private bool IsPossibleMultiply(ref string _PossibleOperator)
         {
-            return IsPossibleForCompareOrMath(ref _PossibleOperator, OperatorMultiply);
+            return IsPossibleForCompareOrMath(ref _PossibleOperator, Operators.OperatorMultiply);
         }
 
         private bool IsPossiblePower(ref string _PossibleOperator)
         {
-            return IsPossibleForCompareOrMath(ref _PossibleOperator, OperatorPower);
+            return IsPossibleForCompareOrMath(ref _PossibleOperator, Operators.OperatorPower);
         }
 
         private bool IsPossibleLike(ref string _PossibleOperator)
         {
-            return IsPossileForText(ref _PossibleOperator, OperatorLike);
+            return IsPossileForText(ref _PossibleOperator, Operators.OperatorLike);
         }
 
         private bool IsPossibleNotLike(ref string _PossibleOperator)
         {
-            return IsPossileForText(ref _PossibleOperator, OperatorNotLike);
+            return IsPossileForText(ref _PossibleOperator, Operators.OperatorNotLike);
         }
 
         private bool IsPossibleIN(ref string _PossibleOperator)
         {
-            return IsPossileForText(ref _PossibleOperator, OperatorIN);
+            return IsPossileForText(ref _PossibleOperator, Operators.OperatorIN);
         }
 
         private bool IsPossibleNotIN(ref string _PossibleOperator)
         {
-            return IsPossileForText(ref _PossibleOperator, OperatorNotIN);
+            return IsPossileForText(ref _PossibleOperator, Operators.OperatorNotIN);
         }
 
         #endregion
 
         #region IsOperator
 
+        private readonly Char[] OperatorsFirstChars;
         private bool IsOperatorFirstChar(ref string _PossibleOperator)
         {
             foreach(Char c in _PossibleOperator)
@@ -1223,25 +1137,10 @@ namespace ExpressionSolver
                 Char C = char.ToUpperInvariant(c);
                 if (C == ' ')
                     continue;
-                switch(C)
+                foreach(Char FirstChar in  this.OperatorsFirstChars)
                 {
-                    case '=':
-                    case '!':
-                    case 'A':
-                    case 'O':
-                    case '>':
-                    case '<':
-                    case 'I':
-                    case '+':
-                    case '-':
-                    case '*':
-                    case '^':
-                    case '/':
-                    case 'N':
-                    case 'L':
+                    if (C == FirstChar)
                         return true;
-                    default :
-                        return false;
                 }
             }
             return true;
@@ -1416,7 +1315,7 @@ namespace ExpressionSolver
 
         private bool IsOperatorEqual(ref string _PossibleOperator)
         {
-            if (_PossibleOperator.Length < OperatorEqual.Length)
+            if (_PossibleOperator.Length < Operators.OperatorEqual.Length)
                 return false;
 
             for (int aux = 0; aux < _PossibleOperator.Length; aux++)
@@ -1434,25 +1333,25 @@ namespace ExpressionSolver
 
         private bool IsOperatorDifferent(ref string _PossibleOperator)
         {
-            return IsOperatorForCompare(ref _PossibleOperator, OperatorDifferent);
+            return IsOperatorForCompare(ref _PossibleOperator, Operators.OperatorDifferent);
         }
 
         private bool IsOperatorAND(ref string _PossibleOperator)
         {
-            return IsOperatorForText(ref _PossibleOperator, OperatorAND);
+            return IsOperatorForText(ref _PossibleOperator, Operators.OperatorAND);
         }
 
         private bool IsOperatorOR(ref string _PossibleOperator)
         {
-            return IsOperatorForText(ref _PossibleOperator, OperatorOR);
+            return IsOperatorForText(ref _PossibleOperator, Operators.OperatorOR);
         }
 
         private bool IsOperatorGreater(ref string _PossibleOperator, Char? _NextChar)
         {
-            if (_PossibleOperator.Length < OperatorGreater.Length)
+            if (_PossibleOperator.Length < Operators.OperatorGreater.Length)
                 return false;
 
-            string Operator = OperatorGreater;
+            string Operator = Operators.OperatorGreater;
             int SearchingCharIndex = 0;
             Char SearchingChar = Operator[SearchingCharIndex];
             bool Started = false;
@@ -1490,15 +1389,15 @@ namespace ExpressionSolver
 
         private bool IsOperatorGreaterOrEqual(ref string _PossibleOperator)
         {
-            return IsOperatorForCompare(ref _PossibleOperator, OperatorGreaterOrEqual);
+            return IsOperatorForCompare(ref _PossibleOperator, Operators.OperatorGreaterOrEqual);
         }
 
         private bool IsOperatorLess(ref string _PossibleOperator, Char? _NextChar)
         {
-            if (_PossibleOperator.Length < OperatorLess.Length)
+            if (_PossibleOperator.Length < Operators.OperatorLess.Length)
                 return false;
 
-            string Operator = OperatorLess;
+            string Operator = Operators.OperatorLess;
             int SearchingCharIndex = 0;
             Char SearchingChar = Operator[SearchingCharIndex];
             bool Started = false;
@@ -1536,62 +1435,62 @@ namespace ExpressionSolver
 
         private bool IsOperatorLessOrEqual(ref string _PossibleOperator)
         {
-            return IsOperatorForCompare(ref _PossibleOperator, OperatorLessOrEqual);
+            return IsOperatorForCompare(ref _PossibleOperator, Operators.OperatorLessOrEqual);
         }
 
         private bool IsOperatorIsNull(ref string _PossibleOperator)
         {
-            return IsOperatorForNullComparison(ref _PossibleOperator, OperatorIsNull);
+            return IsOperatorForNullComparison(ref _PossibleOperator, Operators.OperatorIsNull);
         }
 
         private bool IsOperatorIsNotNull(ref string _PossibleOperator)
         {
-            return IsOperatorForNullComparison(ref _PossibleOperator, OperatorIsNotNull);
+            return IsOperatorForNullComparison(ref _PossibleOperator, Operators.OperatorIsNotNull);
         }
 
         private bool IsOperatorPlus(ref string _PossibleOperator)
         {
-            return IsOperatorForMath(ref _PossibleOperator, OperatorPlus);
+            return IsOperatorForMath(ref _PossibleOperator, Operators.OperatorPlus);
         }
 
         private bool IsOperatorMinus(ref string _PossibleOperator)
         {
-            return IsOperatorForMath(ref _PossibleOperator, OperatorMinus);
+            return IsOperatorForMath(ref _PossibleOperator, Operators.OperatorMinus);
         }
 
         private bool IsOperatorDivide(ref string _PossibleOperator)
         {
-            return IsOperatorForMath(ref _PossibleOperator, OperatorDivide);
+            return IsOperatorForMath(ref _PossibleOperator, Operators.OperatorDivide);
         }
 
         private bool IsOperatorMultiply(ref string _PossibleOperator)
         {
-            return IsOperatorForMath(ref _PossibleOperator, OperatorMultiply);
+            return IsOperatorForMath(ref _PossibleOperator, Operators.OperatorMultiply);
         }
 
         private bool IsOperatorPower(ref string _PossibleOperator)
         {
-            return IsOperatorForMath(ref _PossibleOperator, OperatorPower);
+            return IsOperatorForMath(ref _PossibleOperator, Operators.OperatorPower);
         }
 
         private bool IsOperatorLike(ref string _PossibleOperator)
         {
-            return IsOperatorForText(ref _PossibleOperator, OperatorLike);
+            return IsOperatorForText(ref _PossibleOperator, Operators.OperatorLike);
         }
 
         private bool IsOperatorNotLike(ref string _PossibleOperator)
         {
-            return IsOperatorForText(ref _PossibleOperator, OperatorNotLike);
+            return IsOperatorForText(ref _PossibleOperator, Operators.OperatorNotLike);
         }
 
         private bool IsOperatorIN(ref string _PossibleOperator)
         {
-            return IsOperatorForText(ref _PossibleOperator, OperatorIN);
+            return IsOperatorForText(ref _PossibleOperator, Operators.OperatorIN);
         }
 
         private bool IsOperatorNotIN(ref string _PossibleOperator)
         {
-            return IsOperatorForText(ref _PossibleOperator, OperatorNotIN);
+            return IsOperatorForText(ref _PossibleOperator, Operators.OperatorNotIN);
         }
 
         #endregion
@@ -1652,7 +1551,7 @@ namespace ExpressionSolver
 
                 if (C == ',' && !IsInsideString)
                 {
-                    if (!IsNumber(Value) && !IsString(Value))
+                    if (!Value.IsNumber() && !Value.IsString())
                         throw new Exception("Invalid value inside 'in' clause");
                     Values.Add(Value);
                     Value = "";
@@ -1670,7 +1569,7 @@ namespace ExpressionSolver
                 if (Value.EndsWith(")"))
                     Value = Value.Substring(0, Value.Length - 1);
 
-                if (!IsNumber(Value) && !IsString(Value))
+                if (!Value.IsNumber() && !Value.IsString())
                     throw new Exception("Invalid value inside 'in' clause");
                 Values.Add(Value);
                 Value = "";
@@ -1695,170 +1594,4 @@ namespace ExpressionSolver
         }
     }
 
-    public static class StringExtensions
-    {
-        public static bool HasSpaceBeforeNonSpace(this string _string)
-        {
-            int index = -1;
-            foreach (Char C in _string)
-            {
-                index++;
-                if (C != ' ')
-                    if (index == 0)
-                    {
-                        return false;
-                    }
-                    else
-                    {
-                        if (_string[index - 1] == ' ')
-                            return true;
-                    }
-            }
-            return false;
-        }
-        public static bool Like(this string s, string _Pattern)
-        {
-            return SqlLikeStringUtilities.SqlLike(_Pattern, s);
-        }
-    }
-
-    /// <summary>
-    /// I got this code from the internet, don't know the author sorry
-    /// </summary>
-    public static class SqlLikeStringUtilities
-    {
-        public static bool SqlLike(string _Pattern, string _String)
-        {
-            bool isMatch = true,
-                isWildCardOn = false,
-                isCharWildCardOn = false,
-                isCharSetOn = false,
-                isNotCharSetOn = false,
-                endOfPattern = false;
-            int lastWildCard = -1;
-            int patternIndex = 0;
-            List<char> set = new List<char>();
-            char p = '\0';
-
-            for (int i = 0; i < _String.Length; i++)
-            {
-                char c = _String[i];
-                endOfPattern = (patternIndex >= _Pattern.Length);
-                if (!endOfPattern)
-                {
-                    p = _Pattern[patternIndex];
-
-                    if (!isWildCardOn && p == '%')
-                    {
-                        lastWildCard = patternIndex;
-                        isWildCardOn = true;
-                        while (patternIndex < _Pattern.Length &&
-                            _Pattern[patternIndex] == '%')
-                        {
-                            patternIndex++;
-                        }
-                        if (patternIndex >= _Pattern.Length) p = '\0';
-                        else p = _Pattern[patternIndex];
-                    }
-                    else if (p == '_')
-                    {
-                        isCharWildCardOn = true;
-                        patternIndex++;
-                    }
-                    else if (p == '[')
-                    {
-                        if (_Pattern[++patternIndex] == '^')
-                        {
-                            isNotCharSetOn = true;
-                            patternIndex++;
-                        }
-                        else isCharSetOn = true;
-
-                        set.Clear();
-                        if (_Pattern[patternIndex + 1] == '-' && _Pattern[patternIndex + 3] == ']')
-                        {
-                            char start = char.ToUpper(_Pattern[patternIndex]);
-                            patternIndex += 2;
-                            char end = char.ToUpper(_Pattern[patternIndex]);
-                            if (start <= end)
-                            {
-                                for (char ci = start; ci <= end; ci++)
-                                {
-                                    set.Add(ci);
-                                }
-                            }
-                            patternIndex++;
-                        }
-
-                        while (patternIndex < _Pattern.Length &&
-                            _Pattern[patternIndex] != ']')
-                        {
-                            set.Add(_Pattern[patternIndex]);
-                            patternIndex++;
-                        }
-                        patternIndex++;
-                    }
-                }
-
-                if (isWildCardOn)
-                {
-                    if (char.ToUpper(c) == char.ToUpper(p))
-                    {
-                        isWildCardOn = false;
-                        patternIndex++;
-                    }
-                }
-                else if (isCharWildCardOn)
-                {
-                    isCharWildCardOn = false;
-                }
-                else if (isCharSetOn || isNotCharSetOn)
-                {
-                    bool charMatch = (set.Contains(char.ToUpper(c)));
-                    if ((isNotCharSetOn && charMatch) || (isCharSetOn && !charMatch))
-                    {
-                        if (lastWildCard >= 0) patternIndex = lastWildCard;
-                        else
-                        {
-                            isMatch = false;
-                            break;
-                        }
-                    }
-                    isNotCharSetOn = isCharSetOn = false;
-                }
-                else
-                {
-                    if (char.ToUpper(c) == char.ToUpper(p))
-                    {
-                        patternIndex++;
-                    }
-                    else
-                    {
-                        if (lastWildCard >= 0) patternIndex = lastWildCard;
-                        else
-                        {
-                            isMatch = false;
-                            break;
-                        }
-                    }
-                }
-            }
-            endOfPattern = (patternIndex >= _Pattern.Length);
-
-            if (isMatch && !endOfPattern)
-            {
-                bool isOnlyWildCards = true;
-                for (int i = patternIndex; i < _Pattern.Length; i++)
-                {
-                    if (_Pattern[i] != '%')
-                    {
-                        isOnlyWildCards = false;
-                        break;
-                    }
-                }
-                if (isOnlyWildCards) endOfPattern = true;
-            }
-            return isMatch && endOfPattern;
-        }
-    }
 }

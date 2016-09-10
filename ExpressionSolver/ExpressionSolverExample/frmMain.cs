@@ -39,7 +39,11 @@ namespace ExpressionSolverExample
             //catch (Exception exp)
             //{
             //    MessageBox.Show(exp.ToString(), "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
+
+            foreach(var field in typeof(Operators).GetFields())
+            {
+                object a = field.GetValue(null);
+            }
         }
 
         private void btExampleEqual_Click(object sender, EventArgs e)
@@ -132,6 +136,11 @@ namespace ExpressionSolverExample
             txtExpression.Text = "MY_VARIABLE IS NOT NULL AND MY_VARIABLE_2 IS NOT NULL";
             txtResult.Text = "";
             txtParameters.Text = "MY_VARIABLE = 'this is a string';\r\nMY_VARIABLE_2 = 343;";
+        }
+
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+
         }
 
     }

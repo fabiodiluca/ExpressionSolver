@@ -12,292 +12,292 @@ namespace ExpressionSolverUnitTest
         [TestMethod]
         public void TestTRUE()
         {
-            Assert.AreEqual(Solver.Solve("TRUE"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("tRuE"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("true"), Solver.TRUE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("TRUE"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("tRuE"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("true"));
         }
 
         [TestMethod]
         public void TestFALSE()
         {
-            Assert.AreEqual(Solver.Solve("FALSE"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("fAlSe"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("falSe"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("false"), Solver.FALSE);
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("FALSE"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("fAlSe"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("falSe"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("false"));
         }
 
         [TestMethod]
         public void TestAND()
         {
-            Assert.AreEqual(Solver.Solve("TRUE AND TRUE"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("TRUE AND FALSE"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("FALSE AND TRUE"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("FALSE AND FALSE"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("TRUE AND TRUE AND TRUE"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("TrUE ANd trUE anD TRue"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("TRUE AND FALSE AND TRUE"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("TRUE AND TRUE AND FALSE"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("TRUE aND TRUE And FALSE"), Solver.FALSE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("TRUE AND TRUE"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("TRUE AND FALSE"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("FALSE AND TRUE"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("FALSE AND FALSE"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("TRUE AND TRUE AND TRUE"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("TrUE ANd trUE anD TRue"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("TRUE AND FALSE AND TRUE"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("TRUE AND TRUE AND FALSE"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("TRUE aND TRUE And FALSE"));
         }
 
         [TestMethod]
         public void TestOR()
         {
-            Assert.AreEqual(Solver.Solve("TRUE OR TRUE"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("TRUE oR TRUE"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("TRUE or TRUE"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("TRUE OR FALSE"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("FALSE OR TRUE"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("FALSE OR FALSE"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("TRUE OR TRUE OR TRUE"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("TRUE OR FALSE OR TRUE"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("TRUE OR TRUE OR FALSE"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("FALSE OR FALSE OR FALSE"), Solver.FALSE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("TRUE OR TRUE"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("TRUE oR TRUE"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("TRUE or TRUE"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("TRUE OR FALSE"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("FALSE OR TRUE"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("FALSE OR FALSE"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("TRUE OR TRUE OR TRUE"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("TRUE OR FALSE OR TRUE"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("TRUE OR TRUE OR FALSE"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("FALSE OR FALSE OR FALSE"));
         }
 
         [TestMethod]
         public void TestEqual()
         {
-            Assert.AreEqual(Solver.Solve("TRUE = TRUE"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("TRUE = FALSE"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("FALSE = TRUE"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("FALSE = FALSE"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1 = 1"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("'1' = 1"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("'1' = '1'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1 = '1'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("2 = 1"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("'1' = 2"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("'2' = '1'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1 = '2'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1 = '1'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1.0 = '1.00'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1.00 = '1.00'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1.00 = '1.000'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1.000 = '1.00'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1.000 = '1.009'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("TRUE=TRUE"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("TRUE=FALSE"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("FALSE=TRUE"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("FALSE=FALSE"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1=1"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("'1'=1"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("'1'='1'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1='1'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("2=1"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("'1'=2"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("'2'='1'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1='2'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1='1'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1.0='1.00'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1.00='1.00'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1.00='1.000'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1.000='1.00'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1.000='1.009'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("'A'='B'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("'A'='a'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("'A'='A'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("'TESTE'='TESTE'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("'TESTE'=' TESTE'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1=' TESTE'"), Solver.FALSE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("TRUE = TRUE"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("TRUE = FALSE"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("FALSE = TRUE"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("FALSE = FALSE"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1 = 1"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("'1' = 1"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("'1' = '1'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1 = '1'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("2 = 1"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("'1' = 2"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("'2' = '1'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1 = '2'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1 = '1'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1.0 = '1.00'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1.00 = '1.00'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1.00 = '1.000'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1.000 = '1.00'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1.000 = '1.009'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("TRUE=TRUE"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("TRUE=FALSE"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("FALSE=TRUE"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("FALSE=FALSE"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1=1"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("'1'=1"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("'1'='1'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1='1'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("2=1"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("'1'=2"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("'2'='1'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1='2'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1='1'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1.0='1.00'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1.00='1.00'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1.00='1.000'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1.000='1.00'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1.000='1.009'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("'A'='B'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("'A'='a'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("'A'='A'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("'TESTE'='TESTE'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("'TESTE'=' TESTE'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1=' TESTE'"));
         }
 
         [TestMethod]
         public void TestString()
         {
-            Assert.AreEqual(Solver.Solve("'A' = 'A'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("'A'='A'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("' A'='A'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("''''=''''"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("'T''E'='T''E'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("''''''=''''"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("''''''=''''''"), Solver.TRUE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("'A' = 'A'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("'A'='A'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("' A'='A'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("''''=''''"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("'T''E'='T''E'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("''''''=''''"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("''''''=''''''"));
         }
 
         [TestMethod]
         public void TestStringVersusNumber()
         {
-            Assert.AreEqual(Solver.Solve("1 = 00001"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("'1' = '00001'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1 = '00001'"), Solver.TRUE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1 = 00001"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("'1' = '00001'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1 = '00001'"));
         }
 
         [TestMethod]
         public void TestDifferent()
         {
-            Assert.AreEqual(Solver.Solve("TRUE != TRUE"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("TRUE != FALSE"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("TRUE!=FALSE"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("FALSE != TRUE"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("FALSE !=TRUE"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("FALSE!=TRUE"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("FALSE != FALSE"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1 != 1"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("'1' != 1"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("'1' != '1'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1 != '1'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("2 != 1"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("'1' != 2"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("'2' != '1'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1 != '2'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1.0 != '1.00'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1.00 != '1.00'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1.00 != '1.000'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1.000 != '1.00'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1.000 != '1.009'"), Solver.TRUE);
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("TRUE != TRUE"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("TRUE != FALSE"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("TRUE!=FALSE"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("FALSE != TRUE"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("FALSE !=TRUE"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("FALSE!=TRUE"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("FALSE != FALSE"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1 != 1"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("'1' != 1"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("'1' != '1'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1 != '1'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("2 != 1"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("'1' != 2"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("'2' != '1'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1 != '2'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1.0 != '1.00'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1.00 != '1.00'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1.00 != '1.000'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1.000 != '1.00'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1.000 != '1.009'"));
         }
 
         [TestMethod]
         public void TestGreater()
         {
-            Assert.AreEqual(Solver.Solve("1 > 1"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("'1' > 1"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("'1' > '1'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1 > '1'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("2 > 1"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("2> 1"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("2 >1"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("2>1"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("2   >  1"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("'1' > 2"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("'2' > '1'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1 > '2'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1.0 > '1.00'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1.00 > '1.00'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1.00 > '1.000'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1.000 > '1.00'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1.000 > '1.009'"), Solver.FALSE);
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1 > 1"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("'1' > 1"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("'1' > '1'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1 > '1'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("2 > 1"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("2> 1"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("2 >1"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("2>1"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("2   >  1"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("'1' > 2"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("'2' > '1'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1 > '2'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1.0 > '1.00'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1.00 > '1.00'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1.00 > '1.000'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1.000 > '1.00'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1.000 > '1.009'"));
         }
 
         [TestMethod]
         public void TestGreaterOrEqual()
         {
-            Assert.AreEqual(Solver.Solve("1 >= 1"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("'1' >= 1"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("'1' >= '1'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1 >= '1'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("2 >= 1"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("'1' >= 2"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("'2' >= '1'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1 >= '2'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1.0 >= '1.00'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1.0 >='1.00'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1.0>='1.00'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1.00 >= '1.00'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1.00 >= '1.000'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1.000 >= '1.00'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1.000 >= '1.009'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1.000 >='1.009'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1.000>='1.009'"), Solver.FALSE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1 >= 1"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("'1' >= 1"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("'1' >= '1'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1 >= '1'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("2 >= 1"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("'1' >= 2"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("'2' >= '1'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1 >= '2'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1.0 >= '1.00'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1.0 >='1.00'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1.0>='1.00'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1.00 >= '1.00'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1.00 >= '1.000'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1.000 >= '1.00'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1.000 >= '1.009'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1.000 >='1.009'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1.000>='1.009'"));
         }
 
         [TestMethod]
         public void TestLess()
         {
-            Assert.AreEqual(Solver.Solve("1 < 1"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1<1"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("'1' < 1"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("'1'< 1"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("'1' < '1'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1 < '1'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("2 < 1"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("2 <1"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("'1' < 2"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("'2' < '1'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1 < '2'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1.0 < '1.00'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1.00 < '1.00'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1.00 < '1.000'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1.000 < '1.00'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("1.000 < '1.009'"), Solver.TRUE);
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1 < 1"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1<1"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("'1' < 1"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("'1'< 1"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("'1' < '1'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1 < '1'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("2 < 1"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("2 <1"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("'1' < 2"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("'2' < '1'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1 < '2'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1.0 < '1.00'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1.00 < '1.00'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1.00 < '1.000'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1.000 < '1.00'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1.000 < '1.009'"));
         }
 
         [TestMethod]
         public void TestPlus()
         {
-            Assert.AreEqual(Solver.Solve("+1"), "+1");
-            Assert.AreEqual(Solver.Solve("1+1"), "2");
-            Assert.AreEqual(Solver.Solve("1+1+1"), "3");
-            Assert.AreEqual(Solver.Solve("1 + 2 +3+4"), "10");
-            Assert.AreEqual(Solver.Solve("(1 + 2) +3+4"), "10");
-            Assert.AreEqual(Solver.Solve("999999+1"), "1000000");
+            Assert.AreEqual("+1", Solver.Solve("+1"));
+            Assert.AreEqual("2", Solver.Solve("1+1"));
+            Assert.AreEqual("3", Solver.Solve("1+1+1"));
+            Assert.AreEqual("10", Solver.Solve("1 + 2 +3+4"));
+            Assert.AreEqual("10", Solver.Solve("(1 + 2) +3+4"));
+            Assert.AreEqual("1000000", Solver.Solve("999999+1"));
         }
 
         [TestMethod]
         public void TestMinus()
         {
-            Assert.AreEqual(Solver.Solve("-1"), "-1");
-            Assert.AreEqual(Solver.Solve("1-1"), "0");
-            Assert.AreEqual(Solver.Solve("1-1-1"), "-1");
-            Assert.AreEqual(Solver.Solve("-1 - 2 -3-4"), "-10");
-            Assert.AreEqual(Solver.Solve("(-1 - 2) -3-4"), "-10");
-            Assert.AreEqual(Solver.Solve("-999999-1"), "-1000000");
+            Assert.AreEqual("-1", Solver.Solve("-1"));
+            Assert.AreEqual("0", Solver.Solve("1-1"));
+            Assert.AreEqual("-1", Solver.Solve("1-1-1"));
+            Assert.AreEqual("-10", Solver.Solve("-1 - 2 -3-4"));
+            Assert.AreEqual("-10", Solver.Solve("(-1 - 2) -3-4"));
+            Assert.AreEqual("-1000000", Solver.Solve("-999999-1"));
         }
 
         [TestMethod]
         public void TestMultiply()
         {
-            Assert.AreEqual(Solver.Solve("1*1"), "1");
-            Assert.AreEqual(Solver.Solve("1*2"), "2");
-            Assert.AreEqual(Solver.Solve("1*1*1"), "1");
-            Assert.AreEqual(Solver.Solve("-1*2"), "-2");
-            Assert.AreEqual(Solver.Solve("-1*-2"), "2");
-            Assert.AreEqual(Solver.Solve("-(1*  2) *3*4"), "-24");
-            Assert.AreEqual(Solver.Solve("-999999*1"), "-999999");
+            Assert.AreEqual("1", Solver.Solve("1*1"));
+            Assert.AreEqual("2", Solver.Solve("1*2"));
+            Assert.AreEqual("1", Solver.Solve("1*1*1"));
+            Assert.AreEqual("-2", Solver.Solve("-1*2"));
+            Assert.AreEqual("2", Solver.Solve("-1*-2"));
+            Assert.AreEqual("-24", Solver.Solve("-(1*  2) *3*4"));
+            Assert.AreEqual("-999999", Solver.Solve("-999999*1"));
         }
 
         [TestMethod]
         public void TestDivide()
         {
-            Assert.AreEqual(Solver.Solve("1/1"), "1");
-            Assert.AreEqual(Solver.Solve("1/ 1"), "1");
-            Assert.AreEqual(Solver.Solve("1 / 1"), "1");
-            Assert.AreEqual(Solver.Solve("2/2"), "1");
-            Assert.AreEqual(Solver.Solve("9/3"), "3");
-            Assert.AreEqual(Solver.Solve("100/5"), "20");
-            Assert.AreEqual(Solver.Solve("-100/5"), "-20");
-            Assert.AreEqual(Solver.Solve("-100/-5"), "20");
-            Assert.AreEqual(Solver.Solve("-100/ -5"), "20");
-            Assert.AreEqual(Solver.Solve("-100 / -5"), "20");
+            Assert.AreEqual("1", Solver.Solve("1/1"));
+            Assert.AreEqual("1", Solver.Solve("1/ 1"));
+            Assert.AreEqual("1", Solver.Solve("1 / 1"));
+            Assert.AreEqual("1", Solver.Solve("2/2"));
+            Assert.AreEqual("3", Solver.Solve("9/3"));
+            Assert.AreEqual("20", Solver.Solve("100/5"));
+            Assert.AreEqual("-20", Solver.Solve("-100/5"));
+            Assert.AreEqual("20", Solver.Solve("-100/-5"));
+            Assert.AreEqual("20", Solver.Solve("-100/ -5"));
+            Assert.AreEqual("20", Solver.Solve("-100 / -5"));
         }
 
         [TestMethod]
         public void TestPower()
         {
-            Assert.AreEqual(Solver.Solve("1^1"), "1");
-            Assert.AreEqual(Solver.Solve("1^ 1"), "1");
-            Assert.AreEqual(Solver.Solve("1 ^ 1"), "1");
-            Assert.AreEqual(Solver.Solve("2^2"), "4");
-            Assert.AreEqual(Solver.Solve("9^3"), "729");
+            Assert.AreEqual("1", Solver.Solve("1^1"));
+            Assert.AreEqual("1", Solver.Solve("1^ 1"));
+            Assert.AreEqual("1", Solver.Solve("1 ^ 1"));
+            Assert.AreEqual("4", Solver.Solve("2^2"));
+            Assert.AreEqual("729", Solver.Solve("9^3"));
         }
 
         [TestMethod]
         public void TestMath()
         {
-            Assert.AreEqual(Solver.Solve("(((100/5)/20)*5)+10"), "15");
-            Assert.AreEqual(Solver.Solve("(((100 / 5)   /   20)   *5    )+10"), "15");
+            Assert.AreEqual("15", Solver.Solve("(((100/5)/20)*5)+10"));
+            Assert.AreEqual("15", Solver.Solve("(((100 / 5)   /   20)   *5    )+10"));
         }
 
         [TestMethod]
         public void TestNotLike()
         {
-            Assert.AreEqual(Solver.Solve("'TESTE' NOT LIKE '%EST%'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("'TESTE' nOT lIKE '%EST%'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("'TESTE' NOT LIKE 'TEST%'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("'TESTE' NOT LIKE '%TESTE%'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("'TESTE' NOT LIKE 'TTEST%'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("'TESTE' noT lIkE 'TTEST%'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("'TESTE' noT lIkE    'TTEST%'"), Solver.TRUE);
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("'TESTE' NOT LIKE '%EST%'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("'TESTE' nOT lIKE '%EST%'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("'TESTE' NOT LIKE 'TEST%'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("'TESTE' NOT LIKE '%TESTE%'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("'TESTE' NOT LIKE 'TTEST%'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("'TESTE' noT lIkE 'TTEST%'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("'TESTE' noT lIkE    'TTEST%'"));
         }
 
         [TestMethod]
         public void TestLike()
         {
-            Assert.AreEqual(Solver.Solve("'TESTE' LIKE '%EST%'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("'TESTE' LIKE 'TEST%'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("'TESTE' lIkE 'TEST%'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("'TESTE' like '%TESTE%'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("'TESTE' LIKE 'TTEST%'"), Solver.FALSE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("'TESTE' LIKE '%EST%'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("'TESTE' LIKE 'TEST%'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("'TESTE' lIkE 'TEST%'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("'TESTE' like '%TESTE%'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("'TESTE' LIKE 'TTEST%'"));
         }
 
         [TestMethod]
@@ -305,29 +305,29 @@ namespace ExpressionSolverUnitTest
         {
             Solver.Parameters.Clear();
             Solver.Parameters.Add("VARIABLE", "('TESTE')");
-            Assert.AreEqual(Solver.Solve("VARIABLE IN ('A','B','TESTE')"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("VARIABLE iN ('A','B','TESTE')"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("VARIABLE in ('A','B','TESTE')"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("VARIABLE in('A','B','TESTE')"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("VARIABLE in    ('A' ,'B' ,   'TESTE')"), Solver.TRUE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("VARIABLE IN ('A','B','TESTE')"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("VARIABLE iN ('A','B','TESTE')"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("VARIABLE in ('A','B','TESTE')"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("VARIABLE in('A','B','TESTE')"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("VARIABLE in    ('A' ,'B' ,   'TESTE')"));
 
             Solver.Parameters.Clear();
             Solver.Parameters.Add("VARIABLE", "('TESTE')");
-            Assert.AreEqual(Solver.Solve("VARIABLE IN ('A','B','C','D')"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("VARIABLE IN('A','B','C','D')"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("VARIABLE in(   'A'   ,'B','C','D')"), Solver.FALSE);
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("VARIABLE IN ('A','B','C','D')"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("VARIABLE IN('A','B','C','D')"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("VARIABLE in(   'A'   ,'B','C','D')"));
 
             Solver.Parameters.Clear();
             Solver.Parameters.Add("VARIABLE", "('A','B','TESTE')");
-            Assert.AreEqual(Solver.Solve("VARIABLE IN ('TESTE')"), Solver.TRUE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("VARIABLE IN ('TESTE')"));
 
             Solver.Parameters.Clear();
             Solver.Parameters.Add("VARIABLE", "('A','B',' AND ')");
-            Assert.AreEqual(Solver.Solve("VARIABLE IN (' AND ')"), Solver.TRUE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("VARIABLE IN (' AND ')"));
 
             Solver.Parameters.Clear();
             Solver.Parameters.Add("VARIABLE", "('A','B','B',' AND ')");
-            Assert.AreEqual(Solver.Solve("VARIABLE IN ('A','B')"), Solver.TRUE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("VARIABLE IN ('A','B')"));
         }
 
         [TestMethod]
@@ -335,29 +335,29 @@ namespace ExpressionSolverUnitTest
         {
             Solver.Parameters.Clear();
             Solver.Parameters.Add("VARIABLE", "('TESTE')");
-            Assert.AreEqual(Solver.Solve("VARIABLE NOT IN ('A','B','TESTE')"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("VARIABLE nOT iN ('A','B','TESTE')"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("VARIABLE nOT iN('A','B','TESTE')"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("VARIABLE not in    ('A','B','TESTE')"), Solver.FALSE);
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("VARIABLE NOT IN ('A','B','TESTE')"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("VARIABLE nOT iN ('A','B','TESTE')"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("VARIABLE nOT iN('A','B','TESTE')"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("VARIABLE not in    ('A','B','TESTE')"));
 
             Solver.Parameters.Clear();
             Solver.Parameters.Add("VARIABLE", "('TESTE')");
-            Assert.AreEqual(Solver.Solve("VARIABLE NOT IN ('A','B','C','D')"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("VARIABLE nOt in ('A','B','C','D')"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("VARIABLE nOt in('A','B','C','D')"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("VARIABLE nOt in('A',  'B'  ,'C','D')"), Solver.TRUE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("VARIABLE NOT IN ('A','B','C','D')"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("VARIABLE nOt in ('A','B','C','D')"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("VARIABLE nOt in('A','B','C','D')"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("VARIABLE nOt in('A',  'B'  ,'C','D')"));
 
             Solver.Parameters.Clear();
             Solver.Parameters.Add("VARIABLE", "('A','B','TESTE')");
-            Assert.AreEqual(Solver.Solve("VARIABLE NOT IN ('TESTE')"), Solver.FALSE);
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("VARIABLE NOT IN ('TESTE')"));
 
             Solver.Parameters.Clear();
             Solver.Parameters.Add("VARIABLE", "('A','B',' AND ')");
-            Assert.AreEqual(Solver.Solve("VARIABLE NOT IN (' AND ')"), Solver.FALSE);
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("VARIABLE NOT IN (' AND ')"));
 
             Solver.Parameters.Clear();
             Solver.Parameters.Add("VARIABLE", "('A','B','B',' AND ')");
-            Assert.AreEqual(Solver.Solve("VARIABLE NOT IN ('A','B')"), Solver.FALSE);
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("VARIABLE NOT IN ('A','B')"));
         }
 
         [TestMethod]
@@ -366,12 +366,12 @@ namespace ExpressionSolverUnitTest
             Solver.Parameters.Clear();
             Solver.Parameters.Add("VARIABLE", null);
             Solver.Parameters.Add("VARIABLE_2", "null");
-            Assert.AreEqual(Solver.Solve("VARIABLE IS NULL"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("VARIABLE iS nULL"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("VARIABLE    iS nULL"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("VARIABLE    is null"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("VARIABLE IS NULL AND VARIABLE_2 IS NULL"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("VARIABLE IS null   and VARIABLE_2 IS NULL"), Solver.TRUE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("VARIABLE IS NULL"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("VARIABLE iS nULL"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("VARIABLE    iS nULL"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("VARIABLE    is null"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("VARIABLE IS NULL AND VARIABLE_2 IS NULL"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("VARIABLE IS null   and VARIABLE_2 IS NULL"));
         }
 
         [TestMethod]
@@ -380,53 +380,53 @@ namespace ExpressionSolverUnitTest
             Solver.Parameters.Clear();
             Solver.Parameters.Add("VARIABLE", "'this is a string'");
             Solver.Parameters.Add("VARIABLE_2", "387");
-            Assert.AreEqual(Solver.Solve("VARIABLE IS not NULL"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("VARIABLE IS not NULL AND VARIABLE_2 IS not NULL"), Solver.TRUE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("VARIABLE IS not NULL"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("VARIABLE IS not NULL AND VARIABLE_2 IS not NULL"));
 
             Solver.Parameters.Clear();
             Solver.Parameters.Add("VARIABLE", null);
             Solver.Parameters.Add("VARIABLE_2", "387");
-            Assert.AreEqual(Solver.Solve("VARIABLE IS not NULL"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("VARIABLE IS not NULL OR VARIABLE_2 Is not NULL"), Solver.TRUE);
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("VARIABLE IS not NULL"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("VARIABLE IS not NULL OR VARIABLE_2 Is not NULL"));
 
             Solver.Parameters.Clear();
             Solver.Parameters.Add("VARIABLE", null);
             Solver.Parameters.Add("VARIABLE_2", null);
-            Assert.AreEqual(Solver.Solve("VARIABLE IS not NULL OR VARIABLE_2 iS not NULL"), Solver.FALSE);
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("VARIABLE IS not NULL OR VARIABLE_2 iS not NULL"));
         }
 
         [TestMethod]
         public void Parenthesis()
         {
-            Assert.AreEqual(Solver.Solve("(TRUE)"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("(FALSE)"), Solver.FALSE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("(TRUE)"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("(FALSE)"));
 
-            Assert.AreEqual(Solver.Solve("((TRUE))"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("(((FALSE)))"), Solver.FALSE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("((TRUE))"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("(((FALSE)))"));
 
-            Assert.AreEqual(Solver.Solve("(TRUE AND TRUE)"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("(TRUE AND TRUE) AND FALSE"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("(TRUE AND TRUE)AND FALSE"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("((TRUE AND TRUE) AND FALSE)"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("((TRUE AND TRUE)AND FALSE)"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("(TRUE AND TRUE AND FALSE)"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("(TRUE AND (TRUE AND (FALSE)))"), Solver.FALSE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("(TRUE AND TRUE)"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("(TRUE AND TRUE) AND FALSE"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("(TRUE AND TRUE)AND FALSE"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("((TRUE AND TRUE) AND FALSE)"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("((TRUE AND TRUE)AND FALSE)"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("(TRUE AND TRUE AND FALSE)"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("(TRUE AND (TRUE AND (FALSE)))"));
 
-            Assert.AreEqual(Solver.Solve("(TRUE OR TRUE) AND FALSE"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("(TRUE OR TRUE) AND TRUE"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("(TRUE OR TRUE) AND (TRUE)"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("((TRUE OR TRUE) AND (TRUE))"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("(((TRUE OR TRUE) AND (TRUE)))"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("(((FALSE OR TRUE) AND (TRUE)))"), Solver.TRUE);
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("(TRUE OR TRUE) AND FALSE"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("(TRUE OR TRUE) AND TRUE"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("(TRUE OR TRUE) AND (TRUE)"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("((TRUE OR TRUE) AND (TRUE))"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("(((TRUE OR TRUE) AND (TRUE)))"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("(((FALSE OR TRUE) AND (TRUE)))"));
         }
 
         [TestMethod]
         public void ComplexLogic()
         {
-            Assert.AreEqual(Solver.Solve("(TRUE AND ((TRUE OR FALSE) OR TRUE)) AND FALSE"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("(TRUE AND ((TRUE OR FALSE) OR TRUE)) AND ((102+1) = (103))"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("(TRUE AND ((TRUE OR FALSE) OR TRUE)) AND ((102+1) = (103+1))"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("(TRUE AND ((TRUE OR FALSE) OR TRUE)) AND ((102+1) = (103+1-1))"), Solver.TRUE);
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("(TRUE AND ((TRUE OR FALSE) OR TRUE)) AND FALSE"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("(TRUE AND ((TRUE OR FALSE) OR TRUE)) AND ((102+1) = (103))"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("(TRUE AND ((TRUE OR FALSE) OR TRUE)) AND ((102+1) = (103+1))"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("(TRUE AND ((TRUE OR FALSE) OR TRUE)) AND ((102+1) = (103+1-1))"));
         }
 
         [TestMethod]
@@ -434,77 +434,77 @@ namespace ExpressionSolverUnitTest
         {
             Solver.Parameters.Clear();
             Solver.Parameters.Add("VARIABLE", "'TEST'");
-            Assert.AreEqual(Solver.Solve("VARIABLE = 'TEST'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("VARIABLE != 'TEST'"), Solver.FALSE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("VARIABLE = 'TEST'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("VARIABLE != 'TEST'"));
 
             //Null parameters comparison
             Solver.Parameters.Add("VARIABLE_NULL", null);
-            Assert.AreEqual(Solver.Solve("VARIABLE_NULL = NULL"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("VARIABLE_NULL != NULL"), Solver.FALSE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("VARIABLE_NULL = NULL"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("VARIABLE_NULL != NULL"));
 
             Solver.Parameters.Add("x", "2");
-            Assert.AreEqual(Solver.Solve("(x*x)/2"), "2");
+            Assert.AreEqual("2", Solver.Solve("(x*x)/2"));
         }
 
         [TestMethod]
         public void Multiline()
         {
-            Assert.AreEqual(Solver.Solve("\rTRUE\n"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("tRuE\r\n"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("true\t\t\t"), Solver.TRUE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("\rTRUE\n"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("tRuE\r\n"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("true\t\t\t"));
 
-            Assert.AreEqual(Solver.Solve("TrUE\rANd\n\ttrUE\ranD TRue"), Solver.TRUE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("TrUE\rANd\n\ttrUE\ranD TRue"));
 
-            Assert.AreEqual(Solver.Solve("\r\nTRUE\rOR\r\n\r\nFALSE\tOR\tTRUE"), Solver.TRUE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("\r\nTRUE\rOR\r\n\r\nFALSE\tOR\tTRUE"));
 
-            Assert.AreEqual(Solver.Solve("'2'\r\n=\r\n\t'1'"), Solver.FALSE);
-            Assert.AreEqual(Solver.Solve("\r\n'TESTE'\r\n=\r\n'TESTE'"), Solver.TRUE);
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("'2'\r\n=\r\n\t'1'"));
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("\r\n'TESTE'\r\n=\r\n'TESTE'"));
 
-            Assert.AreEqual(Solver.Solve("\r\n''''''\t=\r\n''''''\r\n"), Solver.TRUE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("\r\n''''''\t=\r\n''''''\r\n"));
 
-            Assert.AreEqual(Solver.Solve("1\r=\n\r\t00001\r"), Solver.TRUE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1\r=\n\r\t00001\r"));
 
-            Assert.AreEqual(Solver.Solve("\r\nTRUE\n\n!=\r\tTRUE"), Solver.FALSE);
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("\r\nTRUE\n\n!=\r\tTRUE"));
 
-            Assert.AreEqual(Solver.Solve("2\r\n>\t\t\t\r\n1"), Solver.TRUE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("2\r\n>\t\t\t\r\n1"));
 
-            Assert.AreEqual(Solver.Solve("1.000\t\t\r\n>\r\n\t\t\t'1.009'"), Solver.FALSE);
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1.000\t\t\r\n>\r\n\t\t\t'1.009'"));
 
-            Assert.AreEqual(Solver.Solve("\t\t\r\n1.0\n >=\r\n'1.00'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("1.000\r\n>=\t\t\r\n'1.009'"), Solver.FALSE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("\t\t\r\n1.0\n >=\r\n'1.00'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1.000\r\n>=\t\t\r\n'1.009'"));
 
-            Assert.AreEqual(Solver.Solve("1.0\r\n\t\r\n<\n\n\n'1.00'\t\t\t"), Solver.FALSE);
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("1.0\r\n\t\r\n<\n\n\n'1.00'\t\t\t"));
 
-            Assert.AreEqual(Solver.Solve("1\r\n\n\r<\t\n\r'2'"), Solver.TRUE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("1\r\n\n\r<\t\n\r'2'"));
 
-            Assert.AreEqual(Solver.Solve("\t(1\r\n+\t2)\r+\n\n3+\t4"), "10");
+            Assert.AreEqual("10", Solver.Solve("\t(1\r\n+\t2)\r+\n\n3+\t4"));
 
-            Assert.AreEqual(Solver.Solve("\t\t\t\r\n(\t\t\r\n-1-\r\n2)\t\n\r-\r3-\n\n4"), "-10");
+            Assert.AreEqual("-10", Solver.Solve("\t\t\t\r\n(\t\t\r\n-1-\r\n2)\t\n\r-\r3-\n\n4"));
 
-            Assert.AreEqual(Solver.Solve("-\r\n(\n\n1\r\n*\r\n\n2)\r*3\n\r*\r\n4\t\t"), "-24");
+            Assert.AreEqual("-24", Solver.Solve("-\r\n(\n\n1\r\n*\r\n\n2)\r*3\n\r*\r\n4\t\t"));
 
-            Assert.AreEqual(Solver.Solve("-\n\n\r\t100\r\n/\t\t-5\n\r"), "20");
+            Assert.AreEqual("20", Solver.Solve("-\n\n\r\t100\r\n/\t\t-5\n\r"));
 
-            Assert.AreEqual(Solver.Solve("\r\n9^\r\n3\r\n"), "729");
+            Assert.AreEqual("729", Solver.Solve("\r\n9^\r\n3\r\n"));
 
-            Assert.AreEqual(Solver.Solve("\n\n(\r\n(\t\t(\n\r\t100\n/   5)   /\r\n20  )\r\n*5\r\n)\t\t+\t10"), "15");
+            Assert.AreEqual("15", Solver.Solve("\n\n(\r\n(\t\t(\n\r\t100\n/   5)   /\r\n20  )\r\n*5\r\n)\t\t+\t10"));
 
-            Assert.AreEqual(Solver.Solve("\r\n\t'\rTESTE'\t\r\nNOT LIKE\r\n'\rTTEST%'"), Solver.TRUE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("\r\n\t'\rTESTE'\t\r\nNOT LIKE\r\n'\rTTEST%'"));
 
-            Assert.AreEqual(Solver.Solve("\r\t\n(TRUE\nAND\r\n((TRUE\r\n\tOR\tFALSE\r\n)\r\nOR    TRUE))\nAND   ((102+  1) = (103))"), Solver.TRUE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("\r\t\n(TRUE\nAND\r\n((TRUE\r\n\tOR\tFALSE\r\n)\r\nOR    TRUE))\nAND   ((102+  1) = (103))"));
 
             Solver.Parameters.Clear();
             Solver.Parameters.Add("VARIABLE", "'TEST'");
-            Assert.AreEqual(Solver.Solve("VARIABLE =\r\n\t 'TEST'"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("VARIABLE\r\n !=\t 'TEST'"), Solver.FALSE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("VARIABLE =\r\n\t 'TEST'"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("VARIABLE\r\n !=\t 'TEST'"));
 
             //Null parameters comparison
             Solver.Parameters.Add("VARIABLE_NULL", null);
-            Assert.AreEqual(Solver.Solve("VARIABLE_NULL = NULL"), Solver.TRUE);
-            Assert.AreEqual(Solver.Solve("VARIABLE_NULL != NULL"), Solver.FALSE);
+            Assert.AreEqual(Solver.TRUE, Solver.Solve("VARIABLE_NULL = NULL"));
+            Assert.AreEqual(Solver.FALSE, Solver.Solve("VARIABLE_NULL != NULL"));
 
             Solver.Parameters.Add("x", "2");
-            Assert.AreEqual(Solver.Solve("(x*x)/2"), "2");
+            Assert.AreEqual("2", Solver.Solve("(x*x)/2"));
         }
     }
 }
