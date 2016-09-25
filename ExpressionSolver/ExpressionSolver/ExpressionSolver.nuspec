@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>ExpressionSolver</id>
+    <version>0.1.0</version>
+    <title>ExpressionSolver</title>
+    <authors>Fábio Di Luca</authors>
+    <owners>Fábio Di Luca</owners>
+    <licenseUrl>https://github.com/fabiodiluca/ExpressionSolver</licenseUrl>
+    <projectUrl>http://fabiodiluca.com.br/ExpressionSolver</projectUrl>
+    <iconUrl>https://github.com/fabiodiluca/ExpressionSolver</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Solve expressions with SQL like syntax</description>
+    <releaseNotes>First release, enjoy!</releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags>Expression Solver SQL like syntax Boolean Equation</tags>
+  </metadata>
+  <files>
+    <file src="bin\Release\ExpressionSolver.dll" target="lib\net40\ExpressionSolver.dll" />
+  </files>
+</package>
