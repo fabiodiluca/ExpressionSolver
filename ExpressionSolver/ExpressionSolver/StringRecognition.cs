@@ -12,8 +12,8 @@ namespace ExpressionSolver
             if (_Value == null)
                 return false;
             return (
-                (_Value.Trim().Equals(Solver.TRUE, StringComparison.InvariantCultureIgnoreCase)) ||
-                (_Value.Trim().Equals(Solver.FALSE, StringComparison.InvariantCultureIgnoreCase))
+                (_Value.Trim().Equals(TokenValueConstants.TRUE, StringComparison.InvariantCultureIgnoreCase)) ||
+                (_Value.Trim().Equals(TokenValueConstants.FALSE, StringComparison.InvariantCultureIgnoreCase))
                 );
         }
 
@@ -22,7 +22,7 @@ namespace ExpressionSolver
             if (_Value == null)
                 return false;
             return
-                _Value.Trim().Equals(Solver.TRUE, StringComparison.InvariantCultureIgnoreCase);
+                _Value.Trim().Equals(TokenValueConstants.TRUE, StringComparison.InvariantCultureIgnoreCase);
         }
 
         public static bool IsFalse(this string _Value)
@@ -30,7 +30,7 @@ namespace ExpressionSolver
             if (_Value == null)
                 return false;
             return
-                _Value.Trim().Equals(Solver.FALSE, StringComparison.InvariantCultureIgnoreCase);
+                _Value.Trim().Equals(TokenValueConstants.FALSE, StringComparison.InvariantCultureIgnoreCase);
         }
 
         public static bool IsNumber(this string _Value)

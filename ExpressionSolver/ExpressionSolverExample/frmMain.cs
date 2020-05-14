@@ -17,7 +17,7 @@ namespace ExpressionSolverExample
             InitializeComponent();
         }
 
-        Solver Solver = new Solver();
+        ExpressionSolver.Solver Solver = new ExpressionSolver.Solver();
         StringBuilder Log = new StringBuilder();
 
         private void btSolve_Click(object sender, EventArgs e)
@@ -140,7 +140,36 @@ namespace ExpressionSolverExample
 
         private void frmMain_Load(object sender, EventArgs e)
         {
+            ExpressionSolver.Solver a = new ExpressionSolver.Solver();
+            
 
+            var log = new StringBuilder();
+            //try
+            //{
+                var b = a.Solve("(10 > (((2*2*2)+2-2)*1)) AND (TRUE OR FALSE) AND ('TEST'='TEST') OR (1000 <= 1000)", ref log);
+                //var b = a.Solve("1>=+1 AND  -234.2*--154>23421142   OR FALSE OR   TRUE", ref log);
+                //var b = a.Solve("4.251- + 3++-  +4*  1    +4/4.5+25--1", ref log);
+                //var b = a.Solve("+++1+1---+1+-1+1*-58 * 55/-4556", ref log);
+                //var b = a.Solve("((10 )-(10)*10)", ref log);
+                //var b = a.Solve("1+5+4*5+8+6*10000", ref log);
+                //var b = a.Solve("'AAA'='AAA'", ref log);
+                //var b = a.Solve("('My String'!='My Test String') AND (999!=999.1)", ref log);
+                //var b = a.Solve("(TRUE AND ((TRUE OR FALSE) OR TRUE)) AND ((102+1) = (103+1-1))", ref log);
+                //var Parameters = new Dictionary<string, string>();
+                //Parameters.Add("MY_VARIABLE", "'A'");
+                //var b = a.Solve("(MY_VARIABLE IN ('A','B','INSIDE','D'))", ref log, Parameters);
+                //var Parameters = new Dictionary<string, string>();
+                //Parameters.Add("x", "3");
+                //var b = a.Solve("x+(x+3)", ref log, Parameters);
+            //}
+            //catch (Exception exp)
+            //{
+            //    MessageBox.Show(exp.ToString());
+            //}
+            //finally
+            //{
+            //    MessageBox.Show(log.ToString());
+            //}
         }
 
     }

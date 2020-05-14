@@ -30,5 +30,14 @@ namespace ExpressionSolver
         {
             return SqlLikeStringUtilities.SqlLike(_Pattern, s);
         }
+        public static bool NextTextIs(this string s, int index, string text)
+        {
+            if (index + text.Length > s.Length - 1)
+            {
+                return false;
+            }
+            else
+                return s.Substring(index + 1, text.Length).Equals(text, StringComparison.InvariantCultureIgnoreCase);
+        }
     }
 }
