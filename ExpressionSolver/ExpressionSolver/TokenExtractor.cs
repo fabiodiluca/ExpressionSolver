@@ -170,9 +170,9 @@ namespace ExpressionSolver
                 return true;
             if (currentTokenNomarlized.Equals(Operators.OperatorEqual))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.OperatorGreater))
+            if (currentTokenNomarlized.Equals(Operators.OperatorGreater) && (!nextChar.HasValue || nextChar.Value != '='))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.OperatorGreaterOrEqual) && (!nextChar.HasValue || nextChar.Value != '='))
+            if (currentTokenNomarlized.Equals(Operators.OperatorGreaterOrEqual))
                 return true;
             if (currentTokenNomarlized.Equals(Operators.OperatorIN) && IsCharTokenSeparator(nextChar))
                 return true;
