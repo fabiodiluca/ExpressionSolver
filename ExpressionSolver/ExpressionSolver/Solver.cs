@@ -73,14 +73,10 @@ namespace ExpressionSolver
         {
             int returnIndex = -1;
 
-            var tokenParenthesisStart = tokens
-                        .Select((v, i) => new { Index = i, Value = v })
-                        .Where(x => x.Value.Type == eTokenType.ParenthesisStart)
-                        .OrderByDescending(x => x.Index)
-                        .FirstOrDefault();
+            var tokenParenthesisStart = GetPriorityParenthesisIndex(tokens);
 
             //Higher Parenthesis priority
-            int tokenIndexStart = (tokenParenthesisStart != null ? tokenParenthesisStart.Index: 0);
+            int tokenIndexStart = (tokenParenthesisStart.HasValue ? tokenParenthesisStart.Value: 0);
 
             var tokenParenthesisEnd = tokens.Select((v, i) => new { Index = i, Value = v })
                 .Where(x => x.Index > tokenIndexStart && x.Value.Type == eTokenType.ParenthesisEnd)
@@ -150,6 +146,30 @@ namespace ExpressionSolver
             }
 
             return returnIndex;
+        }
+
+        private int? GetPriorityParenthesisIndex(List<Token> tokens)
+        {
+            int parenthesisCounter = 0;
+            int maxParenthesisOpened = 0;
+            int? index = null;
+            for (int i = 0; i < tokens.Count(); i++)
+            {
+                if (tokens[i].Type == eTokenType.ParenthesisStart)
+                {
+                    parenthesisCounter++;
+                    if (parenthesisCounter >= maxParenthesisOpened)
+                    {
+                        maxParenthesisOpened = parenthesisCounter;
+                        index = i;
+                    }
+                } 
+                else if (tokens[i].Type == eTokenType.ParenthesisEnd)
+                {
+                    parenthesisCounter--;
+                }
+            }
+            return index;
         }
 
         private List<Token> RemoveSolvedParenthesis(ref List<Token> tokens)

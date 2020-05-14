@@ -170,9 +170,9 @@ namespace ExpressionSolver
                 return true;
             if (currentTokenNomarlized.Equals(Operators.OperatorEqual))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.OperatorGreater) && (!nextChar.HasValue || nextChar.Value != '='))
+            if (currentTokenNomarlized.Equals(Operators.OperatorGreater))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.OperatorGreaterOrEqual))
+            if (currentTokenNomarlized.Equals(Operators.OperatorGreaterOrEqual) && (!nextChar.HasValue || nextChar.Value != '='))
                 return true;
             if (currentTokenNomarlized.Equals(Operators.OperatorIN) && IsCharTokenSeparator(nextChar))
                 return true;
@@ -180,9 +180,9 @@ namespace ExpressionSolver
                 return true;
             if (currentTokenNomarlized.Equals(Operators.OperatorIs) && !expression.NextTextIs(currentCharIndex, " NOT"))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.OperatorLess))
+            if (currentTokenNomarlized.Equals(Operators.OperatorLess) && (!nextChar.HasValue || nextChar.Value != '='))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.OperatorLessOrEqual) && (!nextChar.HasValue || nextChar.Value != '='))
+            if (currentTokenNomarlized.Equals(Operators.OperatorLessOrEqual))
                 return true;
             if (currentTokenNomarlized.Equals(Operators.OperatorLike) && IsCharTokenSeparator(nextChar))
                 return true;

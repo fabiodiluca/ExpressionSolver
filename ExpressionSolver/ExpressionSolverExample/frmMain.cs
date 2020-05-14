@@ -144,9 +144,10 @@ namespace ExpressionSolverExample
             
 
             var log = new StringBuilder();
-            //try
-            //{
+            try
+            {
                 var b = a.Solve("(10 > (((2*2*2)+2-2)*1)) AND (TRUE OR FALSE) AND ('TEST'='TEST') OR (1000 <= 1000)", ref log);
+                //MessageBox.Show(log.ToString());
                 //var b = a.Solve("1>=+1 AND  -234.2*--154>23421142   OR FALSE OR   TRUE", ref log);
                 //var b = a.Solve("4.251- + 3++-  +4*  1    +4/4.5+25--1", ref log);
                 //var b = a.Solve("+++1+1---+1+-1+1*-58 * 55/-4556", ref log);
@@ -161,15 +162,15 @@ namespace ExpressionSolverExample
                 //var Parameters = new Dictionary<string, string>();
                 //Parameters.Add("x", "3");
                 //var b = a.Solve("x+(x+3)", ref log, Parameters);
-            //}
-            //catch (Exception exp)
-            //{
-            //    MessageBox.Show(exp.ToString());
-            //}
-            //finally
-            //{
-            //    MessageBox.Show(log.ToString());
-            //}
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.ToString());
+            }
+            finally
+            {
+                MessageBox.Show(log.ToString());
+            }
         }
 
     }
