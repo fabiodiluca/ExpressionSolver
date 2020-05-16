@@ -8,9 +8,6 @@ namespace ExpressionSolver
 {
     public class OperationSolver
     {
-        public const string TRUE = "TRUE";
-        public const string FALSE = "FALSE";
-
         private OperatorInParser _operatorInParser;
         public OperationSolver() { }
 

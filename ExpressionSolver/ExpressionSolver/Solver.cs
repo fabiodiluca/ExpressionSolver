@@ -7,7 +7,7 @@ namespace ExpressionSolver
 {
     public class Solver
     {
-        private readonly TokenExtractor _tokenExtractor;
+        private readonly TokenReader _tokenExtractor;
         private readonly OperationSolver _operationSolver;
         private readonly TokenMathSimplify _tokenMathSimplify;
         private StringBuilder _log = null;
@@ -19,7 +19,7 @@ namespace ExpressionSolver
         {
             _operationSolver = new OperationSolver();
             _tokenMathSimplify = new TokenMathSimplify();
-            _tokenExtractor = new TokenExtractor();
+            _tokenExtractor = new TokenReader();
         }
 
         public string Solve(string expression, ref StringBuilder log, Dictionary<string, string> parameters) 

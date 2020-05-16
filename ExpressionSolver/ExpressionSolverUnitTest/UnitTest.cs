@@ -1,7 +1,6 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ExpressionSolver;
-using System.Globalization;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ExpressionSolverUnitTest
 {

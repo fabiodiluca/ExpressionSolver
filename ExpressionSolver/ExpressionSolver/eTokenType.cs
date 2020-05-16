@@ -10,11 +10,10 @@ namespace ExpressionSolver
         Operator = 1,
         Number = 2,
         Boolean = 3,
-        InputVariable = 4,
-        ParenthesisStart = 5,
-        ParenthesisEnd = 6,
-        String = 7,
-        InValues = 8,
-        Null = 9
+        ParenthesisStart = 4,
+        ParenthesisEnd = 5,
+        String = 6,
+        InValues = 7,
+        Null = 8
     }
 }

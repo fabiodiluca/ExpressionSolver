@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ExpressionSolver
 {
-    public class TokenExtractor
+    public class TokenReader
     {
         public List<Token> ExtractToken(string expression, Dictionary<string, string> parameters)
         {
