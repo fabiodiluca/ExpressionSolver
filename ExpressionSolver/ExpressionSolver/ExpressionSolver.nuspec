@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>ExpressionSolver</id>
-    <version>1.0.0</version>
+    <version>2.0.0</version>
     <title>ExpressionSolver</title>
     <authors>Fábio Di Luca</authors>
     <owners>Fábio Di Luca</owners>
