@@ -15,15 +15,11 @@ namespace ExpressionSolver
             bool currentTokenIsString = false;
             bool currentTokenIsInOrNotInValues = false;
             bool insideStringInOrNotInValues = false;
-            for (int c = 0; c < expression.Length; c++)
+            for (int i = 0; i < expression.Length; i++)
             {
-                char currentChar = expression[c];
-                char? nextChar = null;
-                if (c < expression.Length - 1)
-                    nextChar = expression[c + 1];
-                char? previousChar = null;
-                if (c > 0) 
-                    previousChar = expression[c - 1];
+                char currentChar = expression[i];
+                char? nextChar = expression.NextChar(i);
+                char? previousChar = expression.PreviousChar(i);
 
                 #region currentTokenIsString
                 if (string.IsNullOrWhiteSpace(currentToken) && currentChar == '\'' 
@@ -34,7 +30,7 @@ namespace ExpressionSolver
                     continue;
                 }
                 else if (!string.IsNullOrWhiteSpace(currentToken) && currentChar == '\'' && currentTokenIsString && !currentTokenIsInOrNotInValues 
-                    && (!nextChar.HasValue || (nextChar.HasValue && nextChar.Value != '\''))
+                    && (!nextChar.HasValue || (nextChar != '\''))
                     && (currentToken.Where(x => x == '\'').Count() % 2 == 1) &&
                     !IsLastOperatorIn(tokens))
                 {
@@ -110,7 +106,7 @@ namespace ExpressionSolver
                     currentToken += currentChar;
                 }
 
-                if (IsOperator(currentToken, expression, c))
+                if (IsOperator(currentToken, expression, i))
                 {
                     tokens.Add(new Token(eTokenType.Operator, currentToken));
                     currentToken = "";
