@@ -153,7 +153,7 @@ namespace ExpressionSolverExample
                 //var b = a.Solve("+++1+1---+1+-1+1*-58 * 55/-4556", ref log);
                 //var b = a.Solve("((10 )-(10)*10)", ref log);
                 //var b = a.Solve("1+5+4*5+8+6*10000", ref log);
-                //var b = a.Solve("'AAA'='AAA'", ref log);
+                var b = a.Solve("'AAA'='AAA'", ref log);
                 //var b = a.Solve("('My String'!='My Test String') AND (999!=999.1)", ref log);
                 //var b = a.Solve("(TRUE AND ((TRUE OR FALSE) OR TRUE)) AND ((102+1) = (103+1-1))", ref log);
                 //var Parameters = new Dictionary<string, string>();

@@ -8,7 +8,7 @@
         public Token(eTokenType type, string value)
         {
             this.Type = type;
-            this.Value = value.Trim();
+            this.Value = value;
         }
     }
 }
