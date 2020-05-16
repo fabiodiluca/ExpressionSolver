@@ -29,7 +29,7 @@ namespace ExpressionSolver
                 return false;
             }
             else
-                return s.Substring(index + 1, text.Length).Equals(text, StringComparison.InvariantCultureIgnoreCase);
+                return s.Substring(index + 1, text.Length).ToUpperInvariant().Equals(text);
         }
 
         public static bool Like(this string s, string pattern)

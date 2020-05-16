@@ -10,8 +10,8 @@ namespace ExpressionSolver
             if (value == null)
                 return false;
             return (
-                (value.Equals(TokenValueConstants.TRUE, StringComparison.InvariantCultureIgnoreCase)) ||
-                (value.Equals(TokenValueConstants.FALSE, StringComparison.InvariantCultureIgnoreCase))
+                value.ToUpperInvariant().Equals(TokenValueConstants.TRUE) ||
+                (value.ToUpperInvariant().Equals(TokenValueConstants.FALSE))
                 );
         }
 
@@ -20,7 +20,7 @@ namespace ExpressionSolver
             if (value == null)
                 return false;
             return
-                value.Equals(TokenValueConstants.TRUE, StringComparison.InvariantCultureIgnoreCase);
+                value.ToUpperInvariant().Equals(TokenValueConstants.TRUE);
         }
 
         public static bool IsFalse(this string value)
@@ -28,7 +28,7 @@ namespace ExpressionSolver
             if (value == null)
                 return false;
             return
-                value.Equals(TokenValueConstants.FALSE, StringComparison.InvariantCultureIgnoreCase);
+                value.ToUpperInvariant().Equals(TokenValueConstants.FALSE);
         }
 
         public static bool IsNumber(this string value)
@@ -83,7 +83,7 @@ namespace ExpressionSolver
         {
             if (value == null)
                 return false;
-            return value.Equals("null", StringComparison.InvariantCultureIgnoreCase);
+            return value.ToUpperInvariant().Equals(TokenValueConstants.NULL);
         }
 
         public static bool IsString(this string value)

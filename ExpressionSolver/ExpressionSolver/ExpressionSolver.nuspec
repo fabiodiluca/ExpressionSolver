@@ -2,20 +2,49 @@
 <package >
   <metadata>
     <id>ExpressionSolver</id>
-    <version>0.1.0</version>
+    <version>1.0.0</version>
     <title>ExpressionSolver</title>
-    <authors>Fábio Di Luca</authors>
-    <owners>Fábio Di Luca</owners>
+    <authors>FÃ¡bio Di Luca</authors>
+    <owners>FÃ¡bio Di Luca</owners>
     <licenseUrl>https://github.com/fabiodiluca/ExpressionSolver</licenseUrl>
     <projectUrl>http://fabiodiluca.com.br/ExpressionSolver</projectUrl>
     <iconUrl>https://github.com/fabiodiluca/ExpressionSolver</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Solve expressions with SQL like syntax</description>
-    <releaseNotes>First release, enjoy!</releaseNotes>
-    <copyright>Copyright 2016</copyright>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2016-2020</copyright>
     <tags>Expression Solver SQL like syntax Boolean Equation</tags>
+      <dependencies>
+      <group targetFramework=".NETFramework4.0" />
+      <group targetFramework=".NETFramework4.5" />
+      <group targetFramework=".NETFramework4.6.1" />
+      <group targetFramework=".NETStandard1.2">
+        <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard1.3">
+        <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard1.4">
+        <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard1.5">
+        <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard1.6">
+        <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.0" />
+    </dependencies>
   </metadata>
   <files>
-    <file src="bin\Release\ExpressionSolver.dll" target="lib\net40\ExpressionSolver.dll" />
+    <file src="bin\Release\net40\ExpressionSolver.dll" target="lib\net40\ExpressionSolver.dll" />
+    <file src="bin\Release\net45\ExpressionSolver.dll" target="lib\net45\ExpressionSolver.dll" />
+    <file src="bin\Release\net461\ExpressionSolver.dll" target="lib\net461\ExpressionSolver.dll" />
+    <file src="bin\Release\netstandard1.2\ExpressionSolver.dll" target="lib\netstandard1.2\ExpressionSolver.dll" />
+    <file src="bin\Release\netstandard1.3\ExpressionSolver.dll" target="lib\netstandard1.3\ExpressionSolver.dll" />
+    <file src="bin\Release\netstandard1.4\ExpressionSolver.dll" target="lib\netstandard1.4\ExpressionSolver.dll" />
+    <file src="bin\Release\netstandard1.5\ExpressionSolver.dll" target="lib\netstandard1.5\ExpressionSolver.dll" />
+    <file src="bin\Release\netstandard1.6\ExpressionSolver.dll" target="lib\netstandard1.6\ExpressionSolver.dll" />
+    <file src="bin\Release\netstandard2.0\ExpressionSolver.dll" target="lib\netstandard2.0\ExpressionSolver.dll" />
   </files>
 </package>
