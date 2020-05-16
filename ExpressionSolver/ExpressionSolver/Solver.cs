@@ -23,17 +23,19 @@ namespace ExpressionSolver
 
         public string Solve(string expression, ref StringBuilder log, Dictionary<string, string> parameters) 
         {
+            this._log = log;
             this.Parameters = parameters;
             var tokens = _tokenExtractor.ReadExpression(expression, Parameters);
 
             tokens = _tokenMathSimplify.MathSimplify(ref tokens);
             tokens = RemoveSolvedParenthesis(ref tokens);
 
+            this.Log(tokens);
+
             int tokenOperatorIndex = GetTokenIndexOperatorByPriority(tokens);
             while (tokenOperatorIndex != -1)
             {
-                if (log != null)
-                    log.AppendLine(string.Join(" ", tokens.Select(x => x.Value)));
+
 
                 Token SolvedOperation = _operationSolver.Solve(
                     tokens[tokenOperatorIndex-1],
@@ -44,6 +46,9 @@ namespace ExpressionSolver
                 tokens.Insert(tokenOperatorIndex-1, SolvedOperation);
                 tokens = _tokenMathSimplify.MathAssignSignToNumber(ref tokens);
                 tokens = RemoveSolvedParenthesis(ref tokens);
+
+                this.Log(tokens);
+
                 tokenOperatorIndex = GetTokenIndexOperatorByPriority(tokens);
             }
             if (tokenOperatorIndex == -1 && tokens.Count > 1)
@@ -52,8 +57,6 @@ namespace ExpressionSolver
             }
             else 
             {
-                if (log != null)
-                    log.AppendLine(string.Join(" ", tokens.Select(x => x.Value)));
                 return tokens[0].Value;
             }
         }
@@ -197,6 +200,12 @@ namespace ExpressionSolver
                 }
             }
             return tokens;
+        }
+
+        protected void Log(List<Token> tokens)
+        {
+            if (_log != null)
+                _log.AppendLine(string.Join(" ", tokens.Select(x => x.Value)));
         }
     }
 }
