@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ExpressionSolver
+﻿namespace ExpressionSolver
 {
     public class Operators
     {
@@ -15,8 +10,8 @@ namespace ExpressionSolver
         public const string OperatorGreaterOrEqual = ">=";
         public const string OperatorLess = "<";
         public const string OperatorLessOrEqual = "<=";
-        public const string OperatorIsNull = "IS NULL";
-        public const string OperatorIsNotNull = "IS NOT NULL";
+        public const string OperatorIs = "IS";
+        public const string OperatorIsNot = "IS NOT";
         public const string OperatorPlus = "+";
         public const string OperatorMinus = "-";
         public const string OperatorMultiply = "*";

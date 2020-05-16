@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ExpressionSolver
 {
     public class SolverUtil
     {
-        public static Dictionary<string, string> ParseParameters(string _ToParse)
+        public static Dictionary<string, string> ParseParameters(string toParse)
         {
             Dictionary<string, string> Parameters = new Dictionary<string, string>();
 
@@ -17,16 +15,16 @@ namespace ExpressionSolver
             bool ParsingVariableValue = !ParsingVariableName;
             string VariableName = "";
             string VariableValue = "";
-            for (int aux = 0; aux < _ToParse.Length; aux++)
+            for (int aux = 0; aux < toParse.Length; aux++)
             {
-                Char C = _ToParse[aux];
+                Char C = toParse[aux];
                 Char? NextChar = null;
-                if (aux < _ToParse.Length - 1)
-                    NextChar = _ToParse[aux + 1];
+                if (aux < toParse.Length - 1)
+                    NextChar = toParse[aux + 1];
 
                 Char? PreviousChar = null;
                 if (aux != 0)
-                    PreviousChar = _ToParse[aux - 1];
+                    PreviousChar = toParse[aux - 1];
 
                 #region Inside string detection
                 if (C == '\'' && IsInsideString)

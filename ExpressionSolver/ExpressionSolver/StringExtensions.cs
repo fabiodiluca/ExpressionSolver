@@ -1,34 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ExpressionSolver
 {
     public static class StringExtensions
     {
-        public static bool HasSpaceBeforeNonSpace(this string _string)
+        public static char? NextChar(this string s, int index)
         {
-            int index = -1;
-            foreach (Char C in _string)
-            {
-                index++;
-                if (C != ' ')
-                    if (index == 0)
-                    {
-                        return false;
-                    }
-                    else
-                    {
-                        if (_string[index - 1] == ' ')
-                            return true;
-                    }
-            }
-            return false;
+                char? nextChar = null;
+                if (index < s.Length - 1)
+                    nextChar = s[index + 1];
+
+                return nextChar;
         }
-        public static bool Like(this string s, string _Pattern)
+
+        public static char? PreviousChar(this string s, int index)
         {
-            return SqlLikeStringUtilities.SqlLike(_Pattern, s);
+            char? previousChar = null;
+            if (index > 0)
+                previousChar = s[index - 1];
+
+            return previousChar;
+        }
+
+        public static bool NextTextIs(this string s, int index, string text)
+        {
+            if (index + text.Length > s.Length - 1)
+            {
+                return false;
+            }
+            else
+                return s.Substring(index + 1, text.Length).ToUpperInvariant().Equals(text);
+        }
+
+        public static bool Like(this string s, string pattern)
+        {
+            return SqlLikeStringUtilities.SqlLike(pattern, s);
         }
     }
 }

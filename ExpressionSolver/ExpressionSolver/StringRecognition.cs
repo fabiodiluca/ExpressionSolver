@@ -1,45 +1,43 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace ExpressionSolver
 {
     public static class StringRecognitionExtensions
     {
-        public static bool IsBool(this string _Value)
+        public static bool IsBool(this string value)
         {
-            if (_Value == null)
+            if (value == null)
                 return false;
             return (
-                (_Value.Trim().Equals(Solver.TRUE, StringComparison.InvariantCultureIgnoreCase)) ||
-                (_Value.Trim().Equals(Solver.FALSE, StringComparison.InvariantCultureIgnoreCase))
+                value.ToUpperInvariant().Equals(TokenValueConstants.TRUE) ||
+                (value.ToUpperInvariant().Equals(TokenValueConstants.FALSE))
                 );
         }
 
-        public static bool IsTrue(this string _Value)
+        public static bool IsTrue(this string value)
         {
-            if (_Value == null)
+            if (value == null)
                 return false;
             return
-                _Value.Trim().Equals(Solver.TRUE, StringComparison.InvariantCultureIgnoreCase);
+                value.ToUpperInvariant().Equals(TokenValueConstants.TRUE);
         }
 
-        public static bool IsFalse(this string _Value)
+        public static bool IsFalse(this string value)
         {
-            if (_Value == null)
+            if (value == null)
                 return false;
             return
-                _Value.Trim().Equals(Solver.FALSE, StringComparison.InvariantCultureIgnoreCase);
+                value.ToUpperInvariant().Equals(TokenValueConstants.FALSE);
         }
 
-        public static bool IsNumber(this string _Value)
+        public static bool IsNumber(this string value)
         {
-            if (_Value == null)
+            if (value == null)
                 return false;
 
-            _Value = _Value.Replace("'", "");
-            string CorrectedNumber = CorrectNumber(_Value);
+            value = value.Replace("'", "");
+            string CorrectedNumber = CorrectNumber(value);
             double Double = 0;
             return Double.TryParse(CorrectedNumber, out Double);
         }
@@ -48,14 +46,14 @@ namespace ExpressionSolver
         /// <summary>
         /// Removes the space between the sign and the number (because for i.e. '- 2' is not considerated a number by Convert.ToDouble)
         /// </summary>
-        /// <param name="_Value"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public static string CorrectNumber(this string _Value)
+        public static string CorrectNumber(this string value)
         {
-            _Value = _Value.Replace("'", "");
+            value = value.Replace("'", "");
             CorrectedNumber.Clear();
             bool NumberStarted = false;
-            foreach (Char C in _Value)
+            foreach (Char C in value)
             {
                 switch (C)
                 {
@@ -81,17 +79,18 @@ namespace ExpressionSolver
             return CorrectedNumber.ToString();
         }
 
-        public static bool IsNull(this string _Value)
+        public static bool IsNull(this string value)
         {
-            if (_Value == null)
+            if (value == null)
                 return false;
-            return _Value.Trim().Equals("null", StringComparison.InvariantCultureIgnoreCase);
+            return value.ToUpperInvariant().Equals(TokenValueConstants.NULL);
         }
 
-        public static bool IsString(this string _Value)
+        public static bool IsString(this string value)
         {
-            _Value = _Value.Trim();
-            return _Value.StartsWith("'") && _Value.EndsWith("'");
+            if (value == null || value.Length < 2)
+                return false;
+            return (value[0] == '\'') && (value[value.Length-1] == '\'');
         }
     }
 }
