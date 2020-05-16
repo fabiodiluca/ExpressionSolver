@@ -7,18 +7,17 @@ namespace ExpressionSolver
 {
     public class Solver
     {
-        private readonly TokenReader _tokenExtractor;
-        private readonly OperationSolver _operationSolver;
-        private readonly TokenMathSimplify _tokenMathSimplify;
-        private StringBuilder _log = null;
+        protected readonly TokenReader _tokenExtractor;
+        protected readonly OperationSolver _operationSolver;
+        protected readonly TokenExpressionMathSimplify _tokenMathSimplify;
+        protected StringBuilder _log = null;
 
-        //TODO
         public Dictionary<string, string> Parameters = new Dictionary<string,string>();
 
         public Solver() 
         {
             _operationSolver = new OperationSolver();
-            _tokenMathSimplify = new TokenMathSimplify();
+            _tokenMathSimplify = new TokenExpressionMathSimplify();
             _tokenExtractor = new TokenReader();
         }
 
@@ -34,7 +33,7 @@ namespace ExpressionSolver
             while (tokenOperatorIndex != -1)
             {
                 if (log != null)
-                    log.AppendLine("Current expression: " + string.Join(" ", tokens.Select(x => x.Value)));
+                    log.AppendLine(string.Join(" ", tokens.Select(x => x.Value)));
 
                 Token SolvedOperation = _operationSolver.Solve(
                     tokens[tokenOperatorIndex-1],
@@ -54,7 +53,7 @@ namespace ExpressionSolver
             else 
             {
                 if (log != null)
-                    log.AppendLine("Current expression: " + string.Join(" ", tokens.Select(x => x.Value)));
+                    log.AppendLine(string.Join(" ", tokens.Select(x => x.Value)));
                 return tokens[0].Value;
             }
         }
@@ -69,7 +68,7 @@ namespace ExpressionSolver
             return Solve(expression, ref _log);
         }
 
-        private int GetTokenIndexOperatorByPriority(List<Token> tokens)
+        protected int GetTokenIndexOperatorByPriority(List<Token> tokens)
         {
             int returnIndex = -1;
 
@@ -148,7 +147,7 @@ namespace ExpressionSolver
             return returnIndex;
         }
 
-        private int? GetPriorityParenthesisIndex(List<Token> tokens)
+        protected int? GetPriorityParenthesisIndex(List<Token> tokens)
         {
             int parenthesisCounter = 0;
             int maxParenthesisOpened = 0;
@@ -172,7 +171,7 @@ namespace ExpressionSolver
             return index;
         }
 
-        private List<Token> RemoveSolvedParenthesis(ref List<Token> tokens)
+        protected List<Token> RemoveSolvedParenthesis(ref List<Token> tokens)
         {
             for(int i = 0; i< tokens.Count(); i++)
             {

@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ExpressionSolver
 {
     public static class StringExtensions
     {
-        public static bool HasSpaceBeforeNonSpace(this string _string)
+        public static bool HasSpaceBeforeNonSpace(this string value)
         {
             int index = -1;
-            foreach (Char C in _string)
+            foreach (Char C in value)
             {
                 index++;
                 if (C != ' ')
@@ -20,15 +17,15 @@ namespace ExpressionSolver
                     }
                     else
                     {
-                        if (_string[index - 1] == ' ')
+                        if (value[index - 1] == ' ')
                             return true;
                     }
             }
             return false;
         }
-        public static bool Like(this string s, string _Pattern)
+        public static bool Like(this string s, string pattern)
         {
-            return SqlLikeStringUtilities.SqlLike(_Pattern, s);
+            return SqlLikeStringUtilities.SqlLike(pattern, s);
         }
         public static bool NextTextIs(this string s, int index, string text)
         {

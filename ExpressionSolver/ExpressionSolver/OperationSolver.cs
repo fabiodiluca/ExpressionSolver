@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text;
 
 namespace ExpressionSolver
 {
     public class OperationSolver
     {
-        private OperatorInParser _operatorInParser;
+        protected OperatorInParser _operatorInParser;
         public OperationSolver() { }
 
         public Token Solve(Token Left, Token Operator, Token Right)
@@ -202,7 +200,7 @@ namespace ExpressionSolver
             throw new Exception("Operator not recognized");
         }
 
-        private string SolveBool(string _LeftSide, string Operator, string _RightSide)
+        protected string SolveBool(string _LeftSide, string Operator, string _RightSide)
         {
             _LeftSide = _LeftSide.Trim().ToUpperInvariant(); ;
             Operator = Operator.Trim().ToUpperInvariant(); ;
@@ -232,7 +230,7 @@ namespace ExpressionSolver
             return TokenValueConstants.FALSE;
         }
 
-        private bool TokensAreString(Token Left, Token Right)
+        protected bool TokensAreString(Token Left, Token Right)
         {
             return Left.Type == eTokenType.String || Right.Type == eTokenType.String;
         }

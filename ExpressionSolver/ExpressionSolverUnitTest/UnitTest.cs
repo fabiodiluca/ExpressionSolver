@@ -7,9 +7,7 @@ namespace ExpressionSolverUnitTest
     [TestClass]
     public class UnitTest
     {
-        //Solver Solver = new Solver(new CultureInfo("en-US"));
-
-        ExpressionSolver.Solver Solver = new ExpressionSolver.Solver();
+        Solver Solver = new Solver();
         [TestMethod]
         public void TestTRUE()
         {
@@ -438,10 +436,10 @@ namespace ExpressionSolverUnitTest
             Assert.AreEqual(TokenValueConstants.TRUE, Solver.Solve("VARIABLE = 'TEST'"));
             Assert.AreEqual(TokenValueConstants.FALSE, Solver.Solve("VARIABLE != 'TEST'"));
 
-            ////Null parameters comparison
-            //Solver.Parameters.Add("VARIABLE_NULL", null);
-            //Assert.AreEqual(TokenValueConstants.TRUE, Solver.Solve("VARIABLE_NULL = NULL"));
-            //Assert.AreEqual(TokenValueConstants.FALSE, Solver.Solve("VARIABLE_NULL != NULL"));
+            //Null parameters comparison
+            Solver.Parameters.Add("VARIABLE_NULL", null);
+            Assert.AreEqual(TokenValueConstants.TRUE, Solver.Solve("VARIABLE_NULL = NULL"));
+            Assert.AreEqual(TokenValueConstants.FALSE, Solver.Solve("VARIABLE_NULL != NULL"));
 
             Solver.Parameters.Add("x", "2");
             Assert.AreEqual("2", Solver.Solve("(x*x)/2"));

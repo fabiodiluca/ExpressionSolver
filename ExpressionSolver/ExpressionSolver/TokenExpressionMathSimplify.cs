@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace ExpressionSolver
 {
-    public class TokenMathSimplify
+    public class TokenExpressionMathSimplify
     {
         public List<Token> MathSimplify(ref List<Token> tokens)
         {
