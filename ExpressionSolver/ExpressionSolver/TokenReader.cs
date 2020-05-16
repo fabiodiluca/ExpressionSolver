@@ -7,13 +7,14 @@ namespace ExpressionSolver
 {
     public class TokenReader
     {
-        public List<Token> ExtractToken(string expression, Dictionary<string, string> parameters)
+        public List<Token> ReadExpression(string expression, Dictionary<string, string> parameters)
         {
             var tokens = new List<Token>();
             
             string currentToken = "";
             bool currentTokenIsString = false;
             bool currentTokenIsInOrNotInValues = false;
+            bool insideStringInOrNotInValues = false;
             for (int c = 0; c < expression.Length; c++)
             {
                 char currentChar = expression[c];
@@ -70,8 +71,7 @@ namespace ExpressionSolver
                     currentToken += currentChar;
                     currentTokenIsInOrNotInValues = true;
                     continue;
-                }
-                if (!string.IsNullOrEmpty(currentToken) && (currentChar == ')') && (IsLastOperatorIn(tokens)) && currentTokenIsInOrNotInValues)
+                } else if (!string.IsNullOrEmpty(currentToken) && (currentChar == ')') && (IsLastOperatorIn(tokens)) && currentTokenIsInOrNotInValues && !insideStringInOrNotInValues)
                 {
                     currentToken += currentChar;
                     currentTokenIsInOrNotInValues = false;
@@ -79,7 +79,21 @@ namespace ExpressionSolver
                     currentToken = "";
                     continue;
                 }
-                if (currentTokenIsInOrNotInValues)
+                else if (currentChar == '\'' && currentTokenIsInOrNotInValues && !insideStringInOrNotInValues)
+                {
+                    currentToken += currentChar;
+                    insideStringInOrNotInValues = true;
+                    continue;
+                }
+                else if (currentChar == '\'' && currentTokenIsInOrNotInValues && insideStringInOrNotInValues 
+                    && (currentToken.Where(x => x == '\'').Count() % 2 == 1)
+                    && (!nextChar.HasValue || (nextChar.HasValue && nextChar.Value != '\'')))
+                {
+                    currentToken += currentChar;
+                    insideStringInOrNotInValues = false;
+                    continue;
+                }
+                else if (currentTokenIsInOrNotInValues)
                 {
                     currentToken += currentChar;
                     continue;

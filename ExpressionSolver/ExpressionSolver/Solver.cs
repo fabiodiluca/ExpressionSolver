@@ -25,7 +25,7 @@ namespace ExpressionSolver
         public string Solve(string expression, ref StringBuilder log, Dictionary<string, string> parameters) 
         {
             this.Parameters = parameters;
-            var tokens = _tokenExtractor.ExtractToken(expression, Parameters);
+            var tokens = _tokenExtractor.ReadExpression(expression, Parameters);
 
             tokens = _tokenMathSimplify.MathSimplify(ref tokens);
             tokens = RemoveSolvedParenthesis(ref tokens);
