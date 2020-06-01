@@ -36,5 +36,10 @@ namespace ExpressionSolver
         {
             return SqlLikeStringUtilities.SqlLike(pattern, s);
         }
+
+        public static string TrimToUpperInvariant(this string s)
+        {
+            return s.Trim().ToUpperInvariant();
+        }
     }
 }

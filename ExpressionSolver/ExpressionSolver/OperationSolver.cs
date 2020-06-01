@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ExpressionSolver.Operations;
+using ExpressionSolver.Operations.Math;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,84 +20,30 @@ namespace ExpressionSolver
             switch (OperatorString)
             {
                 case Operators.OperatorEqual:
-                    if (LeftValueString.IsNumber() && RightValueString.IsNumber())
-                    {
-                        double LeftNumber = Convert.ToDouble(LeftValueString.CorrectNumber(), Culture.CultureUS);
-                        double RightNumber = Convert.ToDouble(RightValueString.CorrectNumber(), Culture.CultureUS);
-                        if (LeftNumber == RightNumber)
-                            return new Token(eTokenType.Boolean, TokenValueConstants.TRUE);
-                        else
-                            return new Token(eTokenType.Boolean, TokenValueConstants.FALSE);
-                    }
-                    else if (TokensAreString(Left, Right))
-                    {
-                        if (Left.Value == Right.Value)
-                            return new Token(eTokenType.Boolean, TokenValueConstants.TRUE);
-                        else
-                            return new Token(eTokenType.Boolean, TokenValueConstants.FALSE);
-                    }
-                    else 
-                    {
-                        return new Token(eTokenType.Boolean, SolveBool(LeftValueString, OperatorString, RightValueString));
-                    }
+                    return new EqualityOperation(Left, Right).Evaluate();
                 case Operators.OperatorDifferent:
-                    if (LeftValueString.IsNumber() && RightValueString.IsNumber())
-                    {
-                        double LeftNumber = Convert.ToDouble(LeftValueString.CorrectNumber(), Culture.CultureUS);
-                        double RightNumber = Convert.ToDouble(RightValueString.CorrectNumber(), Culture.CultureUS);
-                        if (LeftNumber != RightNumber)
-                            return new Token(eTokenType.Boolean, TokenValueConstants.TRUE);
-                        else
-                            return new Token(eTokenType.Boolean, TokenValueConstants.FALSE);
-                    }
-                    else if (TokensAreString(Left, Right))
-                    {
-                        if (Left.Value != Right.Value)
-                            return new Token(eTokenType.Boolean, TokenValueConstants.TRUE);
-                        else
-                            return new Token(eTokenType.Boolean, TokenValueConstants.FALSE);
-                    }
-                    else
-                    {
-                        return new Token(eTokenType.Boolean, SolveBool(LeftValueString, OperatorString, RightValueString));
-                    }
-
+                    return new DifferenceOperation(Left, Right).Evaluate();
                 case Operators.OperatorAND:
                 case Operators.OperatorOR:
                     return new Token(eTokenType.Boolean, SolveBool(LeftValueString, OperatorString, RightValueString));
-
                 case Operators.OperatorPlus:
-                    return new Token(eTokenType.Number, (Convert.ToDouble(LeftValueString.CorrectNumber(), Culture.CultureUS) + Convert.ToDouble(RightValueString.CorrectNumber(), Culture.CultureUS)).ToString(Culture.CultureUS));
+                    return new AdditionOperation(Left, Right).Evaluate();
                 case Operators.OperatorMinus:
-                    return new Token(eTokenType.Number, (Convert.ToDouble(LeftValueString.CorrectNumber(), Culture.CultureUS) - Convert.ToDouble(RightValueString.CorrectNumber(), Culture.CultureUS)).ToString(Culture.CultureUS));
+                    return new SubtractionOperation(Left, Right).Evaluate();
                 case Operators.OperatorMultiply:
-                    return new Token(eTokenType.Number, (Convert.ToDouble(LeftValueString.CorrectNumber(), Culture.CultureUS) * Convert.ToDouble(RightValueString.CorrectNumber(), Culture.CultureUS)).ToString(Culture.CultureUS));
+                    return new MultiplicationOperation(Left, Right).Evaluate();
                 case Operators.OperatorDivide:
-                    return new Token(eTokenType.Number, (Convert.ToDouble(LeftValueString.CorrectNumber(), Culture.CultureUS) / Convert.ToDouble(RightValueString.CorrectNumber(), Culture.CultureUS)).ToString(Culture.CultureUS));
+                    return new DivisionOperation(Left, Right).Evaluate();
                 case Operators.OperatorGreater:
-                    return new Token(eTokenType.Boolean, 
-                        Converter.Convert(
-                            Convert.ToDouble(LeftValueString.CorrectNumber(), Culture.CultureUS) > Convert.ToDouble(RightValueString.CorrectNumber(), Culture.CultureUS)
-                        ));
+                    return new GreaterThanOperation(Left, Right).Evaluate();
                 case Operators.OperatorGreaterOrEqual:
-                    return new Token(eTokenType.Boolean, 
-                        Converter.Convert(
-                            Convert.ToDouble(LeftValueString.CorrectNumber(), Culture.CultureUS) >= Convert.ToDouble(RightValueString.CorrectNumber(), Culture.CultureUS)
-                        ));
+                    return new GreaterOrEqualThanOperation(Left, Right).Evaluate();
                 case Operators.OperatorLess:
-                    return new Token(eTokenType.Boolean, 
-                        Converter.Convert(
-                            Convert.ToDouble(LeftValueString.CorrectNumber(), Culture.CultureUS) < Convert.ToDouble(RightValueString.CorrectNumber(), Culture.CultureUS)
-                        ));
+                    return new LessThanOperation(Left, Right).Evaluate();
                 case Operators.OperatorLessOrEqual:
-                    return new Token(eTokenType.Boolean, 
-                        Converter.Convert(
-                            Convert.ToDouble(LeftValueString.CorrectNumber(), Culture.CultureUS) <= Convert.ToDouble(RightValueString.CorrectNumber(), Culture.CultureUS)
-                        ));
-
+                    return new LessOrEqualThanOperation(Left, Right).Evaluate();
                 case Operators.OperatorPower:
-                    return new Token(eTokenType.Number, (Math.Pow(Convert.ToDouble(LeftValueString.CorrectNumber(), Culture.CultureUS), Convert.ToDouble(RightValueString.CorrectNumber(), Culture.CultureUS))).ToString(Culture.CultureUS));
-
+                    return new PowerOperation(Left, Right).Evaluate();
                 case Operators.OperatorNotLike:
                     {
                         if (!LeftValueString.Like(RightValueString))

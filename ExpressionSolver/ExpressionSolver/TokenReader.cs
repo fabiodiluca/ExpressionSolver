@@ -155,7 +155,8 @@ namespace ExpressionSolver
                     !string.IsNullOrEmpty(currentToken) 
                     && (nextChar == ' ' || nextChar == null)
                     && !CanBeOperator(currentToken, nextChar)
-                    && !currentToken.IsNumber())
+                    && !currentToken.IsNumber()
+                    )
                 {
                     throw new Exception("Token not recognized:" + currentToken);
                 }
