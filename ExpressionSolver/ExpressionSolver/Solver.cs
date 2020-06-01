@@ -40,7 +40,8 @@ namespace ExpressionSolver
                 Token SolvedOperation = _operationSolver.Solve(
                     tokens[tokenOperatorIndex-1],
                     tokens[tokenOperatorIndex],
-                    tokens[tokenOperatorIndex+1]
+                    tokens[tokenOperatorIndex+1],
+                    this.Parameters
                 );
                 tokens.RemoveRange(tokenOperatorIndex-1,3);
                 tokens.Insert(tokenOperatorIndex-1, SolvedOperation);

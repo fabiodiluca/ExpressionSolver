@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ExpressionSolver
 {
@@ -11,9 +9,9 @@ namespace ExpressionSolver
         /// Expecting a string with format: (..,..,..)  example: ('mytext',test','test3') 
         /// </summary>
         /// <returns></returns>
-        public List<string> GetValues(string valuesString)
+        public List<Token> GetValues(string valuesString)
         {
-            var Values = new List<string>();
+            var Values = new List<Token>();
 
             bool IsInsideString = false;
             string Value = "";
@@ -65,7 +63,7 @@ namespace ExpressionSolver
                 {
                     if (!Value.IsNumber() && !Value.IsString())
                         throw new Exception("Invalid value inside 'in' clause");
-                    Values.Add(Value);
+                    Values.Add(new Token(eTokenType.String, Value));
                     Value = "";
                     continue;
                 }
@@ -83,7 +81,7 @@ namespace ExpressionSolver
 
                 if (!Value.IsNumber() && !Value.IsString())
                     throw new Exception("Invalid value inside 'in' clause");
-                Values.Add(Value);
+                Values.Add(new Token(eTokenType.String, Value));
                 Value = "";
             }
             #endregion

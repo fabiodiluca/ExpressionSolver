@@ -11,7 +11,7 @@ namespace ExpressionSolver
         protected OperatorInParser _operatorInParser;
         public OperationSolver() { }
 
-        public Token Solve(Token Left, Token Operator, Token Right)
+        public Token Solve(Token Left, Token Operator, Token Right, Dictionary<string, string> Parameters)
         {
             string LeftValueString = Left.Value.Trim().ToUpperInvariant();
             string RightValueString = Right.Value.Trim().ToUpperInvariant();
@@ -60,77 +60,11 @@ namespace ExpressionSolver
                     }
                 case Operators.OperatorIN:
                     {
-                        if (_operatorInParser == null)
-                            _operatorInParser = new OperatorInParser();
-                        string[] ValuesLeft = _operatorInParser.GetValues(LeftValueString).ToArray();
-                        string[] ValuesRight = _operatorInParser.GetValues(RightValueString).ToArray();
-
-                        var valuesLeftArePresent = new Dictionary<int, bool>();
-
-                        for (int aux = 0; aux < ValuesLeft.Length; aux++)
-                        {
-                            string ValueLeft = ValuesLeft[aux].Trim();
-                            valuesLeftArePresent.Add(aux, false);
-                            for (int aux2 = 0; aux2 < ValuesRight.Length; aux2++)
-                            {
-                                string ValueRight = ValuesRight[aux2].Trim();
-                                if (ValueLeft.IsString() && ValueRight.IsString())
-                                {
-                                    if (ValueLeft == ValueRight)
-                                        valuesLeftArePresent[aux] = true;
-                                }
-                                else if (ValueLeft.IsNumber() && ValueRight.IsNumber())
-                                {
-                                    double Number1 = Convert.ToDouble(ValueLeft.Replace("'", ""), Culture.CultureUS);
-                                    double Number2 = Convert.ToDouble(ValueRight.Replace("'", ""), Culture.CultureUS);
-                                    if (Number1 == Number2)
-                                        valuesLeftArePresent[aux] = true;
-                                }
-                                else if (ValueLeft == ValueRight)
-                                {
-                                    valuesLeftArePresent[aux] = true;
-                                }
-                            }
-                        }
-                        if (valuesLeftArePresent.Where(x => x.Value == true).Count() == ValuesLeft.Length)
-                        {
-                            return new Token(eTokenType.Boolean, TokenValueConstants.TRUE);
-                        }
-                        else
-                        {
-                            return new Token(eTokenType.Boolean, TokenValueConstants.FALSE);
-                        }
+                        return new InOperation(Left, Right, Parameters).Evaluate();
                     }
                 case Operators.OperatorNotIN:
                     {
-                        if (_operatorInParser == null)
-                            _operatorInParser = new OperatorInParser();
-                        string[] ValuesLeft = _operatorInParser.GetValues(LeftValueString).ToArray();
-                        string[] ValuesRight = _operatorInParser.GetValues(RightValueString).ToArray();
-
-                        for (int aux = 0; aux < ValuesLeft.Length; aux++)
-                        {
-                            string ValueLeft = ValuesLeft[aux].Trim();
-                            for (int aux2 = 0; aux2 < ValuesRight.Length; aux2++)
-                            {
-                                string ValueRight = ValuesRight[aux2].Trim();
-                                if (ValueLeft.IsString() && ValueRight.IsString())
-                                {
-                                    if (ValueLeft == ValueRight)
-                                        return new Token(eTokenType.Boolean, TokenValueConstants.FALSE);
-                                }
-                                if (ValueLeft.IsNumber() && ValueRight.IsNumber())
-                                {
-                                    double Number1 = Convert.ToDouble(ValueLeft.Replace("'", ""), Culture.CultureUS);
-                                    double Number2 = Convert.ToDouble(ValueRight.Replace("'", ""), Culture.CultureUS);
-                                    if (Number1 == Number2)
-                                        return new Token(eTokenType.Boolean, TokenValueConstants.FALSE);
-                                }
-                                if (ValueLeft == ValueRight)
-                                    return new Token(eTokenType.Boolean, TokenValueConstants.FALSE);
-                            }
-                        }
-                        return new Token(eTokenType.Boolean, TokenValueConstants.TRUE);
+                        return new NotInOperation(Left, Right, Parameters).Evaluate();
                     }
                 case Operators.OperatorIs:
                     if (LeftValueString == RightValueString)
