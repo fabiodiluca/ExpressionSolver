@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ExpressionSolver
 {
@@ -10,7 +7,7 @@ namespace ExpressionSolver
     /// </summary>
     public static class SqlLikeStringUtilities
     {
-        public static bool SqlLike(string _Pattern, string _String)
+        public static bool SqlLike(string pattern, string value)
         {
             bool isMatch = true,
                 isWildCardOn = false,
@@ -23,25 +20,25 @@ namespace ExpressionSolver
             List<char> set = new List<char>();
             char p = '\0';
 
-            for (int i = 0; i < _String.Length; i++)
+            for (int i = 0; i < value.Length; i++)
             {
-                char c = _String[i];
-                endOfPattern = (patternIndex >= _Pattern.Length);
+                char c = value[i];
+                endOfPattern = (patternIndex >= pattern.Length);
                 if (!endOfPattern)
                 {
-                    p = _Pattern[patternIndex];
+                    p = pattern[patternIndex];
 
                     if (!isWildCardOn && p == '%')
                     {
                         lastWildCard = patternIndex;
                         isWildCardOn = true;
-                        while (patternIndex < _Pattern.Length &&
-                            _Pattern[patternIndex] == '%')
+                        while (patternIndex < pattern.Length &&
+                            pattern[patternIndex] == '%')
                         {
                             patternIndex++;
                         }
-                        if (patternIndex >= _Pattern.Length) p = '\0';
-                        else p = _Pattern[patternIndex];
+                        if (patternIndex >= pattern.Length) p = '\0';
+                        else p = pattern[patternIndex];
                     }
                     else if (p == '_')
                     {
@@ -50,7 +47,7 @@ namespace ExpressionSolver
                     }
                     else if (p == '[')
                     {
-                        if (_Pattern[++patternIndex] == '^')
+                        if (pattern[++patternIndex] == '^')
                         {
                             isNotCharSetOn = true;
                             patternIndex++;
@@ -58,11 +55,11 @@ namespace ExpressionSolver
                         else isCharSetOn = true;
 
                         set.Clear();
-                        if (_Pattern[patternIndex + 1] == '-' && _Pattern[patternIndex + 3] == ']')
+                        if (pattern[patternIndex + 1] == '-' && pattern[patternIndex + 3] == ']')
                         {
-                            char start = char.ToUpper(_Pattern[patternIndex]);
+                            char start = char.ToUpper(pattern[patternIndex]);
                             patternIndex += 2;
-                            char end = char.ToUpper(_Pattern[patternIndex]);
+                            char end = char.ToUpper(pattern[patternIndex]);
                             if (start <= end)
                             {
                                 for (char ci = start; ci <= end; ci++)
@@ -73,10 +70,10 @@ namespace ExpressionSolver
                             patternIndex++;
                         }
 
-                        while (patternIndex < _Pattern.Length &&
-                            _Pattern[patternIndex] != ']')
+                        while (patternIndex < pattern.Length &&
+                            pattern[patternIndex] != ']')
                         {
-                            set.Add(_Pattern[patternIndex]);
+                            set.Add(pattern[patternIndex]);
                             patternIndex++;
                         }
                         patternIndex++;
@@ -126,14 +123,14 @@ namespace ExpressionSolver
                     }
                 }
             }
-            endOfPattern = (patternIndex >= _Pattern.Length);
+            endOfPattern = (patternIndex >= pattern.Length);
 
             if (isMatch && !endOfPattern)
             {
                 bool isOnlyWildCards = true;
-                for (int i = patternIndex; i < _Pattern.Length; i++)
+                for (int i = patternIndex; i < pattern.Length; i++)
                 {
-                    if (_Pattern[i] != '%')
+                    if (pattern[i] != '%')
                     {
                         isOnlyWildCards = false;
                         break;

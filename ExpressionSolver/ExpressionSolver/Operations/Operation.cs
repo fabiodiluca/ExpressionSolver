@@ -14,10 +14,5 @@ namespace ExpressionSolver
         }
 
         public abstract Token Evaluate();
-
-        protected double ToDouble(string value)
-        {
-            return Convert.ToDouble(value.TrimToUpperInvariant().CorrectNumber(), Culture.CultureUS);
-        }
     }
 }

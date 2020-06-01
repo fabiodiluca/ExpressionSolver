@@ -8,10 +8,10 @@
 
         public override Token Evaluate()
         {
-            return new Token(
-                eTokenType.Boolean,
-                Converter.ToBooleanString((ToDouble(_Left.Value) >= ToDouble(_Right.Value)))
-            );
+            if (_Left.Value.ToDouble() >= _Right.Value.ToDouble())
+                return Token.From(true);
+            else
+                return Token.From(false);
         }
     }
 }

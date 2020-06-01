@@ -22,9 +22,7 @@
 
             if (this.Value.IsNumber() && token.Value.IsNumber())
             {
-                double LeftNumber = Converter.ToDouble(this.Value);
-                double RightNumber = Converter.ToDouble(token.Value);
-                if (LeftNumber == RightNumber)
+                if (this.Value.ToDouble() == token.Value.ToDouble())
                     return true;
                 else
                     return false;

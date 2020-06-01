@@ -92,5 +92,10 @@ namespace ExpressionSolver
                 return false;
             return (value[0] == '\'') && (value[value.Length-1] == '\'');
         }
+
+        public static double ToDouble(this string s)
+        {
+            return System.Convert.ToDouble(s.TrimToUpperInvariant().CorrectNumber(), Culture.CultureUS);
+        }
     }
 }

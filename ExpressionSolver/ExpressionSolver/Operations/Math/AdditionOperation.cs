@@ -12,7 +12,7 @@ namespace ExpressionSolver.Operations.Math
         {
             return new Token(
                 eTokenType.Number, 
-                (ToDouble(_Left.Value) + ToDouble(_Right.Value)).ToString(Culture.CultureUS)
+                (_Left.Value.ToDouble() + _Right.Value.ToDouble()).ToString(Culture.CultureUS)
             );
         }
     }
