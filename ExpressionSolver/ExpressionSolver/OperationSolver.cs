@@ -14,43 +14,43 @@ namespace ExpressionSolver
         {
             switch (Operator.Value.TrimToUpperInvariant())
             {
-                case Operators.OperatorEqual:
+                case Operators.Equal:
                     return new EqualityOperation(Left, Right).Evaluate();
-                case Operators.OperatorDifferent:
+                case Operators.Different:
                     return new DifferenceOperation(Left, Right).Evaluate();
-                case Operators.OperatorAND:
+                case Operators.And:
                     return new AndOperation(Left, Right).Evaluate();
-                case Operators.OperatorOR:
+                case Operators.Or:
                     return new OrOperation(Left, Right).Evaluate();
-                case Operators.OperatorPlus:
+                case Operators.Plus:
                     return new AdditionOperation(Left, Right).Evaluate();
-                case Operators.OperatorMinus:
+                case Operators.Minus:
                     return new SubtractionOperation(Left, Right).Evaluate();
-                case Operators.OperatorMultiply:
+                case Operators.Multiply:
                     return new MultiplicationOperation(Left, Right).Evaluate();
-                case Operators.OperatorDivide:
+                case Operators.Divide:
                     return new DivisionOperation(Left, Right).Evaluate();
-                case Operators.OperatorGreater:
+                case Operators.Greater:
                     return new GreaterThanOperation(Left, Right).Evaluate();
-                case Operators.OperatorGreaterOrEqual:
+                case Operators.GreaterOrEqual:
                     return new GreaterOrEqualThanOperation(Left, Right).Evaluate();
-                case Operators.OperatorLess:
+                case Operators.Less:
                     return new LessThanOperation(Left, Right).Evaluate();
-                case Operators.OperatorLessOrEqual:
+                case Operators.LessOrEqual:
                     return new LessOrEqualThanOperation(Left, Right).Evaluate();
-                case Operators.OperatorPower:
+                case Operators.Power:
                     return new PowerOperation(Left, Right).Evaluate();
-                case Operators.OperatorNotLike:
+                case Operators.NotLike:
                     return new NotLikeOperation(Left, Right).Evaluate();
-                case Operators.OperatorLike:
+                case Operators.Like:
                     return new LikeOperation(Left, Right).Evaluate();
-                case Operators.OperatorIN:
+                case Operators.In:
                     return new InOperation(Left, Right, Parameters).Evaluate();
-                case Operators.OperatorNotIN:
+                case Operators.NotIn:
                     return new NotInOperation(Left, Right, Parameters).Evaluate();
-                case Operators.OperatorIs:
+                case Operators.Is:
                     return new IsOperation(Left, Right).Evaluate();
-                case Operators.OperatorIsNot:
+                case Operators.IsNot:
                     return new IsNotOperation(Left, Right).Evaluate();
 
             }

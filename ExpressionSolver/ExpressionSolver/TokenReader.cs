@@ -173,43 +173,43 @@ namespace ExpressionSolver
 
             string currentTokenNomarlized = currentToken.ToUpperInvariant();
 
-            if (currentTokenNomarlized.Equals(Operators.OperatorAND) && IsCharTokenSeparator(nextChar))
+            if (currentTokenNomarlized.Equals(Operators.And) && IsCharTokenSeparator(nextChar))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.OperatorDifferent))
+            if (currentTokenNomarlized.Equals(Operators.Different))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.OperatorDivide))
+            if (currentTokenNomarlized.Equals(Operators.Divide))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.OperatorEqual))
+            if (currentTokenNomarlized.Equals(Operators.Equal))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.OperatorGreater) && (!nextChar.HasValue || nextChar.Value != '='))
+            if (currentTokenNomarlized.Equals(Operators.Greater) && (!nextChar.HasValue || nextChar.Value != '='))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.OperatorGreaterOrEqual))
+            if (currentTokenNomarlized.Equals(Operators.GreaterOrEqual))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.OperatorIN) && IsCharTokenSeparator(nextChar))
+            if (currentTokenNomarlized.Equals(Operators.In) && IsCharTokenSeparator(nextChar))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.OperatorIsNot))
+            if (currentTokenNomarlized.Equals(Operators.IsNot))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.OperatorIs) && !expression.NextTextIs(currentCharIndex, " NOT"))
+            if (currentTokenNomarlized.Equals(Operators.Is) && !expression.NextTextIs(currentCharIndex, " NOT"))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.OperatorLess) && (!nextChar.HasValue || nextChar.Value != '='))
+            if (currentTokenNomarlized.Equals(Operators.Less) && (!nextChar.HasValue || nextChar.Value != '='))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.OperatorLessOrEqual))
+            if (currentTokenNomarlized.Equals(Operators.LessOrEqual))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.OperatorLike) && IsCharTokenSeparator(nextChar))
+            if (currentTokenNomarlized.Equals(Operators.Like) && IsCharTokenSeparator(nextChar))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.OperatorMinus))
+            if (currentTokenNomarlized.Equals(Operators.Minus))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.OperatorMultiply))
+            if (currentTokenNomarlized.Equals(Operators.Multiply))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.OperatorNotIN) && IsCharTokenSeparator(nextChar))
+            if (currentTokenNomarlized.Equals(Operators.NotIn) && IsCharTokenSeparator(nextChar))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.OperatorNotLike))
+            if (currentTokenNomarlized.Equals(Operators.NotLike))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.OperatorOR) && IsCharTokenSeparator(nextChar))
+            if (currentTokenNomarlized.Equals(Operators.Or) && IsCharTokenSeparator(nextChar))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.OperatorPlus))
+            if (currentTokenNomarlized.Equals(Operators.Plus))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.OperatorPower))
+            if (currentTokenNomarlized.Equals(Operators.Power))
                 return true;
 
             return false;
@@ -221,43 +221,43 @@ namespace ExpressionSolver
             if (nextChar.HasValue)
                 currentTokenNomarlized += Char.ToUpperInvariant(nextChar.Value);
 
-            if (Operators.OperatorAND.StartsWith(currentTokenNomarlized))
+            if (Operators.And.StartsWith(currentTokenNomarlized))
                 return true;
-            if (Operators.OperatorDifferent.StartsWith(currentTokenNomarlized))
+            if (Operators.Different.StartsWith(currentTokenNomarlized))
                 return true;
-            if (Operators.OperatorDivide.StartsWith(currentTokenNomarlized))
+            if (Operators.Divide.StartsWith(currentTokenNomarlized))
                 return true;
-            if (Operators.OperatorEqual.StartsWith(currentTokenNomarlized))
+            if (Operators.Equal.StartsWith(currentTokenNomarlized))
                 return true;
-            if (Operators.OperatorGreater.StartsWith(currentTokenNomarlized))
+            if (Operators.Greater.StartsWith(currentTokenNomarlized))
                 return true;
-            if (Operators.OperatorGreaterOrEqual.StartsWith(currentTokenNomarlized))
+            if (Operators.GreaterOrEqual.StartsWith(currentTokenNomarlized))
                 return true;
-            if (Operators.OperatorIN.StartsWith(currentTokenNomarlized))
+            if (Operators.In.StartsWith(currentTokenNomarlized))
                 return true;
-            if (Operators.OperatorIsNot.StartsWith(currentTokenNomarlized))
+            if (Operators.IsNot.StartsWith(currentTokenNomarlized))
                 return true;
-            if (Operators.OperatorIs.StartsWith(currentTokenNomarlized))
+            if (Operators.Is.StartsWith(currentTokenNomarlized))
                 return true;
-            if (Operators.OperatorLess.StartsWith(currentTokenNomarlized))
+            if (Operators.Less.StartsWith(currentTokenNomarlized))
                 return true;
-            if (Operators.OperatorLessOrEqual.StartsWith(currentTokenNomarlized))
+            if (Operators.LessOrEqual.StartsWith(currentTokenNomarlized))
                 return true;
-            if (Operators.OperatorLike.StartsWith(currentTokenNomarlized))
+            if (Operators.Like.StartsWith(currentTokenNomarlized))
                 return true;
-            if (Operators.OperatorMinus.StartsWith(currentTokenNomarlized))
+            if (Operators.Minus.StartsWith(currentTokenNomarlized))
                 return true;
-            if (Operators.OperatorMultiply.StartsWith(currentTokenNomarlized))
+            if (Operators.Multiply.StartsWith(currentTokenNomarlized))
                 return true;
-            if (Operators.OperatorNotIN.StartsWith(currentTokenNomarlized))
+            if (Operators.NotIn.StartsWith(currentTokenNomarlized))
                 return true;
-            if (Operators.OperatorNotLike.StartsWith(currentTokenNomarlized))
+            if (Operators.NotLike.StartsWith(currentTokenNomarlized))
                 return true;
-            if (Operators.OperatorOR.StartsWith(currentTokenNomarlized))
+            if (Operators.Or.StartsWith(currentTokenNomarlized))
                 return true;
-            if (Operators.OperatorPlus.StartsWith(currentTokenNomarlized))
+            if (Operators.Plus.StartsWith(currentTokenNomarlized))
                 return true;
-            if (Operators.OperatorPower.StartsWith(currentTokenNomarlized))
+            if (Operators.Power.StartsWith(currentTokenNomarlized))
                 return true;
             return false;
         }
@@ -266,29 +266,29 @@ namespace ExpressionSolver
         {
             startCharOperator = Char.ToUpperInvariant(startCharOperator);
 
-            if (Operators.OperatorAND[0] == startCharOperator)
+            if (Operators.And[0] == startCharOperator)
                 return true;
-            if (Operators.OperatorDifferent[0] == startCharOperator)
+            if (Operators.Different[0] == startCharOperator)
                 return true;
-            if (Operators.OperatorDivide[0] == startCharOperator)
+            if (Operators.Divide[0] == startCharOperator)
                 return true;
-            if (Operators.OperatorEqual[0] == startCharOperator)
+            if (Operators.Equal[0] == startCharOperator)
                 return true;
-            if (Operators.OperatorGreater[0] == startCharOperator)
+            if (Operators.Greater[0] == startCharOperator)
                 return true;
-            if (Operators.OperatorGreaterOrEqual[0] == startCharOperator)
+            if (Operators.GreaterOrEqual[0] == startCharOperator)
                 return true;
-            if (Operators.OperatorLess[0] == startCharOperator)
+            if (Operators.Less[0] == startCharOperator)
                 return true;
-            if (Operators.OperatorLessOrEqual[0] == startCharOperator)
+            if (Operators.LessOrEqual[0] == startCharOperator)
                 return true;
-            if (Operators.OperatorMinus[0] == startCharOperator)
+            if (Operators.Minus[0] == startCharOperator)
                 return true;
-            if (Operators.OperatorMultiply[0] == startCharOperator)
+            if (Operators.Multiply[0] == startCharOperator)
                 return true;
-            if (Operators.OperatorPlus[0] == startCharOperator)
+            if (Operators.Plus[0] == startCharOperator)
                 return true;
-            if (Operators.OperatorPower[0] == startCharOperator)
+            if (Operators.Power[0] == startCharOperator)
                 return true;
             return false;
         }
@@ -323,7 +323,7 @@ namespace ExpressionSolver
         {
             if (tokens.Any())
             {
-                return tokens.Last().Value.ToUpperInvariant() == Operators.OperatorIN || tokens.Last().Value.ToUpperInvariant() == Operators.OperatorNotIN;
+                return tokens.Last().Value.ToUpperInvariant() == Operators.In || tokens.Last().Value.ToUpperInvariant() == Operators.NotIn;
             }
             else
             {

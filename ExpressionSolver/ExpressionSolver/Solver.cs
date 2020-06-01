@@ -103,22 +103,22 @@ namespace ExpressionSolver
                 //Do all math operations first
                 if (tokens[i].Type == eTokenType.Operator &&
                         (
-                        tokens[i].Value.Equals(Operators.OperatorPlus) || 
-                        tokens[i].Value.Equals(Operators.OperatorMinus) || 
-                        tokens[i].Value.Equals(Operators.OperatorMultiply) || 
-                        tokens[i].Value.Equals(Operators.OperatorDivide) ||
-                        tokens[i].Value.Equals(Operators.OperatorGreater) ||
-                        tokens[i].Value.Equals(Operators.OperatorGreaterOrEqual) ||
-                        tokens[i].Value.Equals(Operators.OperatorLess) ||
-                        tokens[i].Value.Equals(Operators.OperatorLessOrEqual)
+                        tokens[i].Value.Equals(Operators.Plus) || 
+                        tokens[i].Value.Equals(Operators.Minus) || 
+                        tokens[i].Value.Equals(Operators.Multiply) || 
+                        tokens[i].Value.Equals(Operators.Divide) ||
+                        tokens[i].Value.Equals(Operators.Greater) ||
+                        tokens[i].Value.Equals(Operators.GreaterOrEqual) ||
+                        tokens[i].Value.Equals(Operators.Less) ||
+                        tokens[i].Value.Equals(Operators.LessOrEqual)
                         ) 
                         && (previousToken != null  && previousToken.Type == eTokenType.Number)
                         && (nextToken != null && nextToken.Type == eTokenType.Number)
                     )
                 {
-                    if (tokens[i].Value == Operators.OperatorDivide)
+                    if (tokens[i].Value == Operators.Divide)
                         return i;
-                    else if (tokens[i].Value == Operators.OperatorMultiply)
+                    else if (tokens[i].Value == Operators.Multiply)
                         return i;
                     else if (returnIndex == -1)
                         returnIndex = i;

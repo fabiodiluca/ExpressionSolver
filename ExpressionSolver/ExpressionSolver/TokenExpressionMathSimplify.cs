@@ -25,28 +25,28 @@ namespace ExpressionSolver
                 if (token.Type == eTokenType.Operator && nextToken != null && nextToken.Type == eTokenType.Operator)
                 {
                     //++=+
-                    if (token.Value == Operators.OperatorPlus && nextToken.Value == Operators.OperatorPlus)
+                    if (token.Value == Operators.Plus && nextToken.Value == Operators.Plus)
                     {
                         tokens.RemoveRange(i, 2);
-                        tokens.Insert(i, new Token(eTokenType.Operator, Operators.OperatorPlus));
+                        tokens.Insert(i, new Token(eTokenType.Operator, Operators.Plus));
                         continue;
                     } //+-=+
-                    else if (token.Value == Operators.OperatorPlus && nextToken.Value == Operators.OperatorMinus)
+                    else if (token.Value == Operators.Plus && nextToken.Value == Operators.Minus)
                     {
                         tokens.RemoveRange(i, 2);
-                        tokens.Insert(i, new Token(eTokenType.Operator, Operators.OperatorMinus));
+                        tokens.Insert(i, new Token(eTokenType.Operator, Operators.Minus));
                         continue;
                     } //-+=-
-                    else if (token.Value == Operators.OperatorMinus && nextToken.Value == Operators.OperatorPlus)
+                    else if (token.Value == Operators.Minus && nextToken.Value == Operators.Plus)
                     {
                         tokens.RemoveRange(i, 2);
-                        tokens.Insert(i, new Token(eTokenType.Operator, Operators.OperatorMinus));
+                        tokens.Insert(i, new Token(eTokenType.Operator, Operators.Minus));
                         continue;
                     } //--=-
-                    else if (token.Value == Operators.OperatorMinus && nextToken.Value == Operators.OperatorMinus)
+                    else if (token.Value == Operators.Minus && nextToken.Value == Operators.Minus)
                     {
                         tokens.RemoveRange(i, 2);
-                        tokens.Insert(i, new Token(eTokenType.Operator, Operators.OperatorPlus));
+                        tokens.Insert(i, new Token(eTokenType.Operator, Operators.Plus));
                         continue;
                     }
                 }
@@ -73,12 +73,12 @@ namespace ExpressionSolver
                 #region If a sign is the first token, assign the sign to number next it
                 if (i == 0 && token.Type == eTokenType.Operator && nextToken.Type == eTokenType.Number)
                 {
-                    if (token.Value == Operators.OperatorPlus)
+                    if (token.Value == Operators.Plus)
                     {
                         tokens.RemoveRange(i, 1);
                         continue;
                     }
-                    else if (token.Value == Operators.OperatorMinus)
+                    else if (token.Value == Operators.Minus)
                     {
                         tokens[i + 1].Value = "-" + tokens[i + 1].Value;
                         tokens.RemoveRange(i, 1);
@@ -89,11 +89,11 @@ namespace ExpressionSolver
 
                 if ( 
                     token.Type == eTokenType.Number && 
-                    (previousToken != null && (previousToken.Value == Operators.OperatorPlus || previousToken.Value == Operators.OperatorMinus)) &&
+                    (previousToken != null && (previousToken.Value == Operators.Plus || previousToken.Value == Operators.Minus)) &&
                     (previousPreviousToken != null && (previousPreviousToken.Type != eTokenType.Number) && (previousPreviousToken.Type != eTokenType.ParenthesisEnd))
                     )
                 {
-                    if (previousToken.Value == Operators.OperatorMinus)
+                    if (previousToken.Value == Operators.Minus)
                         tokens[i].Value = "-" + tokens[i].Value;
                     tokens.RemoveRange(i-1, 1);
                 }
