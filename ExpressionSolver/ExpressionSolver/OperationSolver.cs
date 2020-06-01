@@ -24,8 +24,9 @@ namespace ExpressionSolver
                 case Operators.OperatorDifferent:
                     return new DifferenceOperation(Left, Right).Evaluate();
                 case Operators.OperatorAND:
+                    return new AndOperation(Left, Right).Evaluate();
                 case Operators.OperatorOR:
-                    return new Token(eTokenType.Boolean, SolveBool(LeftValueString, OperatorString, RightValueString));
+                    return new OrOperation(Left, Right).Evaluate();
                 case Operators.OperatorPlus:
                     return new AdditionOperation(Left, Right).Evaluate();
                 case Operators.OperatorMinus:
@@ -80,41 +81,6 @@ namespace ExpressionSolver
             }
 
             throw new Exception("Operator not recognized");
-        }
-
-        protected string SolveBool(string _LeftSide, string Operator, string _RightSide)
-        {
-            _LeftSide = _LeftSide.Trim().ToUpperInvariant(); ;
-            Operator = Operator.Trim().ToUpperInvariant(); ;
-            _RightSide = _RightSide.Trim().ToUpperInvariant(); ;
-            switch (Operator)
-            {
-                case Operators.OperatorAND:
-                    if (_LeftSide == TokenValueConstants.TRUE && _RightSide == TokenValueConstants.TRUE)
-                        return TokenValueConstants.TRUE;
-                    return TokenValueConstants.FALSE;
-                case Operators.OperatorOR:
-                    if (_LeftSide == TokenValueConstants.TRUE || _RightSide == TokenValueConstants.TRUE)
-                        return TokenValueConstants.TRUE;
-                    return TokenValueConstants.FALSE;
-                case Operators.OperatorEqual:
-
-                    if (_LeftSide == _RightSide)
-                        return TokenValueConstants.TRUE;
-                    else
-                        return TokenValueConstants.FALSE;
-                case Operators.OperatorDifferent:
-                    if (_LeftSide != _RightSide)
-                        return TokenValueConstants.TRUE;
-                    else
-                        return TokenValueConstants.FALSE;
-            }
-            return TokenValueConstants.FALSE;
-        }
-
-        protected bool TokensAreString(Token Left, Token Right)
-        {
-            return Left.Type == eTokenType.String || Right.Type == eTokenType.String;
         }
     }
 }
