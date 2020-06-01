@@ -42,7 +42,6 @@ namespace ExpressionSolver
             return Double.TryParse(CorrectedNumber, out Double);
         }
 
-        private static StringBuilder CorrectedNumber = new StringBuilder();
         /// <summary>
         /// Removes the space between the sign and the number (because for i.e. '- 2' is not considerated a number by Convert.ToDouble)
         /// </summary>
@@ -50,6 +49,7 @@ namespace ExpressionSolver
         /// <returns></returns>
         public static string CorrectNumber(this string value)
         {
+            var CorrectedNumber = new StringBuilder();
             value = value.Replace("'", "");
             CorrectedNumber.Clear();
             bool NumberStarted = false;

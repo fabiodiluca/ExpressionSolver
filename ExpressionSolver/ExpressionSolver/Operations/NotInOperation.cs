@@ -15,9 +15,9 @@ namespace ExpressionSolver.Operations
 
         public override Token Evaluate()
         {
-            var _operatorInParser = new OperatorInParser();
-            var ValuesLeft = _operatorInParser.GetValues(_Left.Value);
-            var ValuesRight = _operatorInParser.GetValues(_Right.Value);
+            var _operatorInParser = new TokenInOperationReader();
+            var ValuesLeft = _operatorInParser.ReadExpression(_Left.Value);
+            var ValuesRight = _operatorInParser.ReadExpression(_Right.Value);
 
             for (int aux = 0; aux < ValuesLeft.Count(); aux++)
             {

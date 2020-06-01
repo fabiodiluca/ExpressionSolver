@@ -7,7 +7,7 @@ namespace ExpressionSolver
 {
     public class OperationSolver
     {
-        protected OperatorInParser _operatorInParser;
+        protected TokenInOperationReader _operatorInParser;
         public OperationSolver() { }
 
         public Token Solve(Token Left, Token Operator, Token Right, Dictionary<string, string> Parameters)

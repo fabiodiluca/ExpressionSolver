@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace ExpressionSolver
 {
-    public class OperatorInParser
+    public class TokenInOperationReader
     {
         /// <summary>
         /// Expecting a string with format: (..,..,..)  example: ('mytext',test','test3') 
         /// </summary>
         /// <returns></returns>
-        public List<Token> GetValues(string valuesString)
+        public List<Token> ReadExpression(string expression)
         {
             var Values = new List<Token>();
 
@@ -18,16 +18,16 @@ namespace ExpressionSolver
 
             bool Started = false;
             int SlashCounterInsideString = 0;
-            for (int aux = 0; aux < valuesString.Length; aux++)
+            for (int aux = 0; aux < expression.Length; aux++)
             {
-                Char C = valuesString[aux];
+                Char C = expression[aux];
                 Char? NextChar = null;
-                if (aux < valuesString.Length - 1)
-                    NextChar = valuesString[aux + 1];
+                if (aux < expression.Length - 1)
+                    NextChar = expression[aux + 1];
 
                 Char? PreviousChar = null;
                 if (aux != 0)
-                    PreviousChar = valuesString[aux - 1];
+                    PreviousChar = expression[aux - 1];
 
                 #region Inside string detection
                 if (C == '\'' && IsInsideString)
