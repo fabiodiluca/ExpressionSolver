@@ -29,11 +29,11 @@ namespace ExpressionSolver.Operations
             }
             if (valuesLeftArePresent.Where(x => x.Value == true).Count() == ValuesLeft.Count)
             {
-                return new Token(eTokenType.Boolean, TokenValueConstants.TRUE);
+                return Token.From(true);
             }
             else
             {
-                return new Token(eTokenType.Boolean, TokenValueConstants.FALSE);
+                return Token.From(false);
             }
         }
 

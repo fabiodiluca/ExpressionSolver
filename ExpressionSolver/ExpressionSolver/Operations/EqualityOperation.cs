@@ -10,10 +10,10 @@
         {
             if (_Left.Equals(_Right))
             {
-                return new Token(eTokenType.Boolean, TokenValueConstants.TRUE);
+                return Token.From(true);
             } else
             {
-                return new Token(eTokenType.Boolean, TokenValueConstants.FALSE);
+                return Token.From(false);
             }
         }
     }

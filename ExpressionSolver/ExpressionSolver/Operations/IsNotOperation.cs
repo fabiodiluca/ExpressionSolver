@@ -9,9 +9,9 @@
         public override Token Evaluate()
         {
             if (_Left.Value.TrimToUpperInvariant() != _Right.Value.TrimToUpperInvariant())
-                return new Token(eTokenType.Boolean, TokenValueConstants.TRUE);
+                return Token.From(true);
             else
-                return new Token(eTokenType.Boolean, TokenValueConstants.FALSE);
+                return Token.From(false);
         }
     }
 }

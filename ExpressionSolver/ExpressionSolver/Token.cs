@@ -44,5 +44,17 @@
                     return false;
             }
         }
+
+        public static Token From(bool value)
+        {
+            if (value)
+            {
+                return new Token(eTokenType.Boolean, TokenValueConstants.TRUE);
+            }
+            else
+            {
+                return new Token(eTokenType.Boolean, TokenValueConstants.FALSE);
+            }        
+        }
     }
 }

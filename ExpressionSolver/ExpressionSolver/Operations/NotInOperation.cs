@@ -24,10 +24,10 @@ namespace ExpressionSolver.Operations
                 var ValueLeft = ValuesLeft[aux];
                 if (ExistToken(ValuesRight, ValueLeft))
                 {
-                    return new Token(eTokenType.Boolean, TokenValueConstants.FALSE);
+                    return Token.From(false);
                 }
             }
-            return new Token(eTokenType.Boolean, TokenValueConstants.TRUE);
+            return Token.From(true);
         }
 
         protected bool ExistToken(List<Token> list, Token token)
