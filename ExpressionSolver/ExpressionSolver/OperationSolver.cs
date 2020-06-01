@@ -2,7 +2,6 @@
 using ExpressionSolver.Operations.Math;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ExpressionSolver
 {
@@ -13,11 +12,7 @@ namespace ExpressionSolver
 
         public Token Solve(Token Left, Token Operator, Token Right, Dictionary<string, string> Parameters)
         {
-            string LeftValueString = Left.Value.Trim().ToUpperInvariant();
-            string RightValueString = Right.Value.Trim().ToUpperInvariant();
-            string OperatorString =  Operator.Value.Trim().ToUpperInvariant();
-
-            switch (OperatorString)
+            switch (Operator.Value.TrimToUpperInvariant())
             {
                 case Operators.OperatorEqual:
                     return new EqualityOperation(Left, Right).Evaluate();
@@ -46,37 +41,17 @@ namespace ExpressionSolver
                 case Operators.OperatorPower:
                     return new PowerOperation(Left, Right).Evaluate();
                 case Operators.OperatorNotLike:
-                    {
-                        if (!LeftValueString.Like(RightValueString))
-                            return new Token(eTokenType.Boolean, TokenValueConstants.TRUE);
-                        else
-                            return new Token(eTokenType.Boolean, TokenValueConstants.FALSE);
-                    }
+                    return new NotLikeOperation(Left, Right).Evaluate();
                 case Operators.OperatorLike:
-                    {
-                        if (LeftValueString.Like(RightValueString))
-                            return new Token(eTokenType.Boolean, TokenValueConstants.TRUE);
-                        else
-                            return new Token(eTokenType.Boolean, TokenValueConstants.FALSE);
-                    }
+                    return new LikeOperation(Left, Right).Evaluate();
                 case Operators.OperatorIN:
-                    {
-                        return new InOperation(Left, Right, Parameters).Evaluate();
-                    }
+                    return new InOperation(Left, Right, Parameters).Evaluate();
                 case Operators.OperatorNotIN:
-                    {
-                        return new NotInOperation(Left, Right, Parameters).Evaluate();
-                    }
+                    return new NotInOperation(Left, Right, Parameters).Evaluate();
                 case Operators.OperatorIs:
-                    if (LeftValueString == RightValueString)
-                        return new Token(eTokenType.Boolean, TokenValueConstants.TRUE);
-                    else
-                        return new Token(eTokenType.Boolean, TokenValueConstants.FALSE);
+                    return new IsOperation(Left, Right).Evaluate();
                 case Operators.OperatorIsNot:
-                    if (LeftValueString != RightValueString)
-                        return new Token(eTokenType.Boolean, TokenValueConstants.TRUE);
-                    else
-                        return new Token(eTokenType.Boolean, TokenValueConstants.FALSE);
+                    return new IsNotOperation(Left, Right).Evaluate();
 
             }
 
