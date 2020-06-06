@@ -22,23 +22,13 @@ namespace ExpressionSolver
             this.Parameters = parameters;
             var tokenExpression = _tokenExtractor.ReadExpression(expression, Parameters);
 
-            tokenExpression.MathSimplify();
-            tokenExpression.RemoveSolvedParenthesis();
             this.Log(tokenExpression);
 
-            int tokenOperatorIndex = tokenExpression.GetTokenIndexOperatorByPriority();
-            while (tokenOperatorIndex != -1)
+            while (tokenExpression.Solve(this.Parameters))
             {
-                if (tokenExpression.Count >= 3)
-                    tokenExpression.SolveSingleOperation(tokenOperatorIndex, this.Parameters);
-
-                tokenExpression.MathSimplify();
-                tokenExpression.RemoveSolvedParenthesis();
                 this.Log(tokenExpression);
-
-                tokenOperatorIndex = tokenExpression.GetTokenIndexOperatorByPriority();
             }
-            if (tokenOperatorIndex == -1 && tokenExpression.Count > 1)
+            if (tokenExpression.Count > 1)
             {
                 throw new Exception("Missing operator");
             }

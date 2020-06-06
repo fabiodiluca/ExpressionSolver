@@ -6,26 +6,48 @@ namespace ExpressionSolver
 {
     public class TokenExpression: List<Token>
     {
+        private bool SolveFirstCall = true;
+
         public override string ToString()
         {
             return string.Join(" ", this.Select(x => x.Value));
         }
 
-        public void SolveSingleOperation(
-                                        int operatorIndex,
-                                        Dictionary<string, string> parameters)
+        public bool Solve(Dictionary<string, string> parameters)
         {
-            Token SolvedOperation = OperationSolver.Solve(
-                this[operatorIndex - 1],
-                this[operatorIndex],
-                this[operatorIndex + 1],
-                parameters
-            );
-            this.RemoveRange(operatorIndex - 1, 3);
-            this.Insert(operatorIndex - 1, SolvedOperation);
+            if (SolveFirstCall)
+            {
+                MathSimplify();
+                RemoveSolvedParenthesis();
+            } else
+            {
+                SolveFirstCall = false;
+            }
+
+            int operatorIndex = GetTokenIndexOperatorByPriority();
+
+            if (operatorIndex == -1)
+                return false;
+
+            if (this.Count >= 3)
+            {
+                Token SolvedOperation = OperationSolver.Solve(
+                    this[operatorIndex - 1],
+                    this[operatorIndex],
+                    this[operatorIndex + 1],
+                    parameters
+                );
+
+                RemoveRange(operatorIndex - 1, 3);
+                Insert(operatorIndex - 1, SolvedOperation);
+            }
+
+            MathSimplify();
+            RemoveSolvedParenthesis();
+            return GetTokenIndexOperatorByPriority() != -1;
         }
 
-        public void MathSimplify()
+        private void MathSimplify()
         {
             //Orders of simplification matters
             MathSimplifyPlusMinus();
