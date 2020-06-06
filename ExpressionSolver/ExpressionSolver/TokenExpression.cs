@@ -215,19 +215,14 @@ namespace ExpressionSolver
             //Math will be priority
             for (int i = tokenIndexStart; i < tokenIndexEnd; i++)
             {
-
-                Token previousToken = null;
-                if (i > 0)
-                    previousToken = this[i - 1];
-                Token nextToken = null;
-                if (i < this.Count - 1)
-                    nextToken = this[i + 1];
+                var previousToken = PreviousToken(i);
+                var nextToken = NextToken(i);
 
                 //Do all math operations first
-                if (this[i].Type == eTokenType.Operator &&
+                if (    this[i].Type == eTokenType.Operator &&
+                        (previousToken?.Type == eTokenType.Number) &&
+                        (nextToken?.Type == eTokenType.Number) &&
                         Operators.IsMathOperator(this[i].Value)
-                        && (previousToken?.Type == eTokenType.Number)
-                        && (nextToken?.Type == eTokenType.Number)
                     )
                 {
                     if (this[i].Value == Operators.Divide)
@@ -239,16 +234,14 @@ namespace ExpressionSolver
                 }
             }
 
+            if (returnIndex != -1)
+                return returnIndex;
 
             //All others operators
             for (int i = tokenIndexStart; i < tokenIndexEnd; i++)
             {
-                Token previousToken = null;
-                if (i > 0)
-                    previousToken = this[i - 1];
-                Token nextToken = null;
-                if (i < this.Count - 1)
-                    nextToken = this[i + 1];
+                var previousToken = PreviousToken(i);
+                var nextToken = NextToken(i);
 
                 if (
                     (this[i].Type == eTokenType.Operator) &&
@@ -258,13 +251,26 @@ namespace ExpressionSolver
                     )
                    )
                 {
-                    if (returnIndex == -1)
-                        returnIndex = i;
+                    returnIndex = i;
                 }
             }
 
             return returnIndex;
         }
 
+        private Token PreviousToken(int index)
+        {
+            if (index > 0)
+                return this[index - 1];
+            else
+                return null;
+        }
+
+        private Token NextToken(int index)
+        {
+            if (index < this.Count - 1)
+                return this[index + 1];
+            else return null;
+        }
     }
 }
