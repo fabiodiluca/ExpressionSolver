@@ -417,6 +417,8 @@ namespace ExpressionSolverUnitTest
             Assert.AreEqual(TokenValueConstants.TRUE, Solver.Solve("((TRUE OR TRUE) AND (TRUE))"));
             Assert.AreEqual(TokenValueConstants.TRUE, Solver.Solve("(((TRUE OR TRUE) AND (TRUE)))"));
             Assert.AreEqual(TokenValueConstants.TRUE, Solver.Solve("(((FALSE OR TRUE) AND (TRUE)))"));
+
+            Assert.AreEqual(TokenValueConstants.TRUE, Solver.Solve("(TRUE)AND(TRUE)AND(TRUE) AND TRUE"));
         }
 
         [TestMethod]

@@ -75,22 +75,15 @@ namespace ExpressionSolver
         protected int GetTokenIndexOperatorByPriority(List<Token> tokens)
         {
             int returnIndex = -1;
-
-            var tokenParenthesisStart = GetPriorityParenthesisIndex(tokens);
-
+            
             //Higher Parenthesis priority
-            int tokenIndexStart = (tokenParenthesisStart.HasValue ? tokenParenthesisStart.Value: 0);
-
-            var tokenParenthesisEnd = tokens.Select((v, i) => new { Index = i, Value = v })
-                .Where(x => x.Index > tokenIndexStart && x.Value.Type == eTokenType.ParenthesisEnd)
-                .OrderBy(x => x.Index)
-                .FirstOrDefault();
-
-            int tokenIndexEnd = (tokenParenthesisEnd != null ? tokenParenthesisEnd.Index : tokens.Count() -1);
-
+            var tokenParenthesisIndexes = GetInnerParenthesisIndexes(tokens);
+            
+            int tokenIndexStart = (tokenParenthesisIndexes != null ? tokenParenthesisIndexes.IndexStart: 0);
+            int tokenIndexEnd = (tokenParenthesisIndexes != null ? tokenParenthesisIndexes.IndexEnd : tokens.Count() -1);
 
             //Math will be priority
-            for (int i = tokenIndexStart; i <= tokenIndexEnd; i++)
+            for (int i = tokenIndexStart; i < tokenIndexEnd; i++)
             {
 
                 Token previousToken = null;
@@ -102,18 +95,9 @@ namespace ExpressionSolver
 
                 //Do all math operations first
                 if (tokens[i].Type == eTokenType.Operator &&
-                        (
-                        tokens[i].Value.Equals(Operators.Plus) || 
-                        tokens[i].Value.Equals(Operators.Minus) || 
-                        tokens[i].Value.Equals(Operators.Multiply) || 
-                        tokens[i].Value.Equals(Operators.Divide) ||
-                        tokens[i].Value.Equals(Operators.Greater) ||
-                        tokens[i].Value.Equals(Operators.GreaterOrEqual) ||
-                        tokens[i].Value.Equals(Operators.Less) ||
-                        tokens[i].Value.Equals(Operators.LessOrEqual)
-                        ) 
-                        && (previousToken != null  && previousToken.Type == eTokenType.Number)
-                        && (nextToken != null && nextToken.Type == eTokenType.Number)
+                        IsOperatorMath(tokens[i].Value)
+                        && (previousToken?.Type == eTokenType.Number)
+                        && (nextToken?.Type == eTokenType.Number)
                     )
                 {
                     if (tokens[i].Value == Operators.Divide)
@@ -125,8 +109,9 @@ namespace ExpressionSolver
                 }
             }
 
+
             //All others operators
-            for (int i = tokenIndexStart; i <= tokenIndexEnd; i++)
+            for (int i = tokenIndexStart; i < tokenIndexEnd; i++)
             {
                 Token previousToken = null;
                 if (i > 0)
@@ -138,8 +123,8 @@ namespace ExpressionSolver
                 if (
                     (tokens[i].Type == eTokenType.Operator) &&
                     ( 
-                        (previousToken != null && previousToken.Type != eTokenType.ParenthesisStart && previousToken.Type != eTokenType.ParenthesisEnd)
-                        && (nextToken != null && previousToken.Type != eTokenType.ParenthesisStart && previousToken.Type != eTokenType.ParenthesisEnd)
+                        (previousToken?.Type != eTokenType.ParenthesisStart && previousToken?.Type != eTokenType.ParenthesisEnd)
+                        && (nextToken?.Type != eTokenType.ParenthesisStart && nextToken?.Type != eTokenType.ParenthesisEnd)
                     )
                    )
                 {
@@ -151,11 +136,24 @@ namespace ExpressionSolver
             return returnIndex;
         }
 
-        protected int? GetPriorityParenthesisIndex(List<Token> tokens)
+        protected bool IsOperatorMath(string tokenValueOperator)
+        {
+            return tokenValueOperator.Equals(Operators.Plus) ||
+                    tokenValueOperator.Equals(Operators.Minus) ||
+                    tokenValueOperator.Equals(Operators.Multiply) ||
+                    tokenValueOperator.Equals(Operators.Divide) ||
+                    tokenValueOperator.Equals(Operators.Greater) ||
+                    tokenValueOperator.Equals(Operators.GreaterOrEqual) ||
+                    tokenValueOperator.Equals(Operators.Less) ||
+                    tokenValueOperator.Equals(Operators.LessOrEqual) ||
+                    tokenValueOperator.Equals(Operators.Power);
+        }
+
+        protected ParenthesisIndexes GetInnerParenthesisIndexes(List<Token> tokens)
         {
             int parenthesisCounter = 0;
             int maxParenthesisOpened = 0;
-            int? index = null;
+            int? indexStart = null;
             for (int i = 0; i < tokens.Count(); i++)
             {
                 if (tokens[i].Type == eTokenType.ParenthesisStart)
@@ -164,7 +162,7 @@ namespace ExpressionSolver
                     if (parenthesisCounter >= maxParenthesisOpened)
                     {
                         maxParenthesisOpened = parenthesisCounter;
-                        index = i;
+                        indexStart = i;
                     }
                 } 
                 else if (tokens[i].Type == eTokenType.ParenthesisEnd)
@@ -172,7 +170,21 @@ namespace ExpressionSolver
                     parenthesisCounter--;
                 }
             }
-            return index;
+
+            if (!indexStart.HasValue)
+                return null;
+
+            var tokenParenthesisEnd = tokens.Select((v, i) => new { Index = i, Value = v })
+            .Where(x => x.Index > indexStart.Value && x.Value.Type == eTokenType.ParenthesisEnd)
+            .OrderBy(x => x.Index)
+            .FirstOrDefault();
+
+            if (tokenParenthesisEnd == null)
+                throw new Exception("Missing close parenthesis");
+
+
+
+            return new ParenthesisIndexes(indexStart.Value, tokenParenthesisEnd.Index);
         }
 
         protected List<Token> RemoveSolvedParenthesis(ref List<Token> tokens)
@@ -188,11 +200,9 @@ namespace ExpressionSolver
                     nextNextToken = tokens[i + 2];
 
                 if (token.Type == eTokenType.ParenthesisStart && 
-                    nextToken != null &&
-                    nextToken.Type != eTokenType.ParenthesisStart &&
-                    nextToken.Type != eTokenType.ParenthesisEnd &&
-                    nextNextToken != null && 
-                    nextNextToken.Type == eTokenType.ParenthesisEnd)
+                    nextToken?.Type != eTokenType.ParenthesisStart &&
+                    nextToken?.Type != eTokenType.ParenthesisEnd &&
+                    nextNextToken?.Type == eTokenType.ParenthesisEnd)
                 {
                     tokens.RemoveAt(i + 2);
                     tokens.RemoveAt(i);
