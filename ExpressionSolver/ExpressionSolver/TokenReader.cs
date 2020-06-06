@@ -111,11 +111,6 @@ namespace ExpressionSolver
                     tokens.Add(new Token(eTokenType.Operator, currentToken));
                     currentToken = "";
                 }
-                else if (IsNumberIdentified(currentToken, nextChar))
-                {
-                    tokens.Add(new Token(eTokenType.Number, currentToken));
-                    currentToken = "";
-                }
                 else if (IsBooleanIdentified(currentToken, nextChar))
                 {
                     tokens.Add(new Token(eTokenType.Boolean, currentToken.ToUpperInvariant()));
@@ -124,6 +119,11 @@ namespace ExpressionSolver
                 else if (IsNullIdentified(currentToken, nextChar))
                 {
                     tokens.Add(new Token(eTokenType.Null, TokenValueConstants.NULL));
+                    currentToken = "";
+                }
+                else if (IsNumberIdentified(currentToken, nextChar))
+                {
+                    tokens.Add(new Token(eTokenType.Number, currentToken));
                     currentToken = "";
                 }
                 else if (parameters != null && parameters.Any() && parameters.ContainsKey(currentToken) &&
@@ -296,10 +296,9 @@ namespace ExpressionSolver
         private bool IsNumberIdentified(string currentToken, char? nextChar)
         {
             return
-                currentToken.IsNumber() && 
                 (IsCharTokenSeparator(nextChar) || 
                  (nextChar.HasValue && CanBeMathOperator(nextChar.Value))
-                );
+                ) && currentToken.IsNumber();
         }
 
         private bool IsBooleanIdentified(string currentToken, char? nextChar)

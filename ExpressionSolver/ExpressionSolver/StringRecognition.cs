@@ -36,7 +36,6 @@ namespace ExpressionSolver
             if (value == null)
                 return false;
 
-            value = value.Replace("'", "");
             string CorrectedNumber = CorrectNumber(value);
             double Double = 0;
             return Double.TryParse(CorrectedNumber, out Double);
@@ -49,9 +48,8 @@ namespace ExpressionSolver
         /// <returns></returns>
         public static string CorrectNumber(this string value)
         {
-            var CorrectedNumber = new StringBuilder();
+            var CorrectedNumber = "";
             value = value.Replace("'", "");
-            CorrectedNumber.Clear();
             bool NumberStarted = false;
             foreach (Char C in value)
             {
@@ -72,11 +70,11 @@ namespace ExpressionSolver
                         break;
                 }
                 if (!NumberStarted && C != ' ')
-                    CorrectedNumber.Append(C);
+                    CorrectedNumber += C;
                 if (NumberStarted)
-                    CorrectedNumber.Append(C);
+                    CorrectedNumber += C;
             }
-            return CorrectedNumber.ToString();
+            return CorrectedNumber;
         }
 
         public static bool IsNull(this string value)
