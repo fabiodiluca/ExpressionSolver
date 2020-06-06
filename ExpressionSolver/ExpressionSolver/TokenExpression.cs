@@ -164,7 +164,7 @@ namespace ExpressionSolver
             }
         }
 
-        public ParenthesisIndexes GetInnerParenthesisIndexes()
+        private ParenthesisIndexes GetInnerParenthesisIndexes()
         {
             int parenthesisCounter = 0;
             int maxParenthesisOpened = 0;
@@ -202,7 +202,7 @@ namespace ExpressionSolver
             return new ParenthesisIndexes(indexStart.Value, tokenParenthesisEnd.Index);
         }
 
-        public int GetTokenIndexOperatorByPriority()
+        private int GetTokenIndexOperatorByPriority()
         {
             int returnIndex = -1;
 
