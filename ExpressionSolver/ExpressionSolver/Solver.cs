@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace ExpressionSolver
@@ -8,16 +7,12 @@ namespace ExpressionSolver
     public class Solver
     {
         protected readonly TokenReader _tokenExtractor;
-        protected readonly OperationSolver _operationSolver;
-        protected readonly TokenExpressionMathSimplify _tokenMathSimplify;
         protected StringBuilder _log = null;
 
         public Dictionary<string, string> Parameters = new Dictionary<string,string>();
 
         public Solver() 
         {
-            _operationSolver = new OperationSolver();
-            _tokenMathSimplify = new TokenExpressionMathSimplify();
             _tokenExtractor = new TokenReader();
         }
 
@@ -27,21 +22,21 @@ namespace ExpressionSolver
             this.Parameters = parameters;
             var tokenExpression = _tokenExtractor.ReadExpression(expression, Parameters);
 
-            tokenExpression = _tokenMathSimplify.MathSimplify(ref tokenExpression);
-            tokenExpression = RemoveSolvedParenthesis(ref tokenExpression);
+            tokenExpression.MathSimplify();
+            tokenExpression.RemoveSolvedParenthesis();
             this.Log(tokenExpression);
 
-            int tokenOperatorIndex = GetTokenIndexOperatorByPriority(tokenExpression);
+            int tokenOperatorIndex = tokenExpression.GetTokenIndexOperatorByPriority();
             while (tokenOperatorIndex != -1)
             {
                 if (tokenExpression.Count >= 3)
-                    tokenExpression = this.SolveSingleOperation(ref tokenExpression, tokenOperatorIndex, this.Parameters);
+                    tokenExpression.SolveSingleOperation(tokenOperatorIndex, this.Parameters);
 
-                tokenExpression = _tokenMathSimplify.MathSimplify(ref tokenExpression);
-                tokenExpression = RemoveSolvedParenthesis(ref tokenExpression);
+                tokenExpression.MathSimplify();
+                tokenExpression.RemoveSolvedParenthesis();
                 this.Log(tokenExpression);
 
-                tokenOperatorIndex = GetTokenIndexOperatorByPriority(tokenExpression);
+                tokenOperatorIndex = tokenExpression.GetTokenIndexOperatorByPriority();
             }
             if (tokenOperatorIndex == -1 && tokenExpression.Count > 1)
             {
@@ -61,150 +56,6 @@ namespace ExpressionSolver
         public string Solve(string expression)
         {
             return Solve(expression, ref _log);
-        }
-
-        protected TokenExpression SolveSingleOperation(ref TokenExpression expression, 
-                                                int operatorIndex, 
-                                                Dictionary<string, string> parameters)
-        {
-            Token SolvedOperation = _operationSolver.Solve(
-                expression[operatorIndex - 1],
-                expression[operatorIndex],
-                expression[operatorIndex + 1],
-                parameters
-            );
-            expression.RemoveRange(operatorIndex - 1, 3);
-            expression.Insert(operatorIndex - 1, SolvedOperation);
-
-            return expression;
-        }
-
-        protected int GetTokenIndexOperatorByPriority(TokenExpression tokens)
-        {
-            int returnIndex = -1;
-            
-            //Higher Parenthesis priority
-            var tokenParenthesisIndexes = GetInnerParenthesisIndexes(tokens);
-            
-            int tokenIndexStart = (tokenParenthesisIndexes != null ? tokenParenthesisIndexes.IndexStart: 0);
-            int tokenIndexEnd = (tokenParenthesisIndexes != null ? tokenParenthesisIndexes.IndexEnd : tokens.Count() -1);
-
-            //Math will be priority
-            for (int i = tokenIndexStart; i < tokenIndexEnd; i++)
-            {
-
-                Token previousToken = null;
-                if (i > 0)
-                    previousToken = tokens[i - 1];
-                Token nextToken = null;
-                if (i < tokens.Count - 1)
-                    nextToken = tokens[i + 1];
-
-                //Do all math operations first
-                if (tokens[i].Type == eTokenType.Operator &&
-                        Operators.IsMathOperator(tokens[i].Value)
-                        && (previousToken?.Type == eTokenType.Number)
-                        && (nextToken?.Type == eTokenType.Number)
-                    )
-                {
-                    if (tokens[i].Value == Operators.Divide)
-                        return i;
-                    else if (tokens[i].Value == Operators.Multiply)
-                        return i;
-                    else if (returnIndex == -1)
-                        returnIndex = i;
-                }
-            }
-
-
-            //All others operators
-            for (int i = tokenIndexStart; i < tokenIndexEnd; i++)
-            {
-                Token previousToken = null;
-                if (i > 0)
-                    previousToken = tokens[i - 1];
-                Token nextToken = null;
-                if (i < tokens.Count - 1)
-                    nextToken = tokens[i + 1];
-
-                if (
-                    (tokens[i].Type == eTokenType.Operator) &&
-                    ( 
-                        (previousToken?.Type != eTokenType.ParenthesisStart && previousToken?.Type != eTokenType.ParenthesisEnd)
-                        && (nextToken?.Type != eTokenType.ParenthesisStart && nextToken?.Type != eTokenType.ParenthesisEnd)
-                    )
-                   )
-                {
-                    if (returnIndex == -1)
-                        returnIndex = i;
-                }
-            }
-
-            return returnIndex;
-        }
-
-        protected ParenthesisIndexes GetInnerParenthesisIndexes(TokenExpression tokens)
-        {
-            int parenthesisCounter = 0;
-            int maxParenthesisOpened = 0;
-            int? indexStart = null;
-            for (int i = 0; i < tokens.Count(); i++)
-            {
-                if (tokens[i].Type == eTokenType.ParenthesisStart)
-                {
-                    parenthesisCounter++;
-                    if (parenthesisCounter >= maxParenthesisOpened)
-                    {
-                        maxParenthesisOpened = parenthesisCounter;
-                        indexStart = i;
-                    }
-                } 
-                else if (tokens[i].Type == eTokenType.ParenthesisEnd)
-                {
-                    parenthesisCounter--;
-                }
-            }
-
-            if (!indexStart.HasValue)
-                return null;
-
-            var tokenParenthesisEnd = tokens.Select((v, i) => new { Index = i, Value = v })
-            .Where(x => x.Index > indexStart.Value && x.Value.Type == eTokenType.ParenthesisEnd)
-            .OrderBy(x => x.Index)
-            .FirstOrDefault();
-
-            if (tokenParenthesisEnd == null)
-                throw new Exception("Missing close parenthesis");
-
-
-
-            return new ParenthesisIndexes(indexStart.Value, tokenParenthesisEnd.Index);
-        }
-
-        protected TokenExpression RemoveSolvedParenthesis(ref TokenExpression tokens)
-        {
-            for(int i = 0; i< tokens.Count(); i++)
-            {
-                var token = tokens[i];
-                Token nextToken = null;
-                if (i < tokens.Count - 1)
-                    nextToken = tokens[i + 1];
-                Token nextNextToken = null;
-                if (i < tokens.Count - 2)
-                    nextNextToken = tokens[i + 2];
-
-                if (token.Type == eTokenType.ParenthesisStart && 
-                    nextToken?.Type != eTokenType.ParenthesisStart &&
-                    nextToken?.Type != eTokenType.ParenthesisEnd &&
-                    nextNextToken?.Type == eTokenType.ParenthesisEnd)
-                {
-                    tokens.RemoveAt(i + 2);
-                    tokens.RemoveAt(i);
-                    i = -1;
-                    continue;
-                }
-            }
-            return tokens;
         }
 
         protected void Log(TokenExpression tokens)

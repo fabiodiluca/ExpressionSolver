@@ -5,12 +5,9 @@ using System.Collections.Generic;
 
 namespace ExpressionSolver
 {
-    public class OperationSolver
+    public static class OperationSolver
     {
-        protected TokenInOperationReader _operatorInParser;
-        public OperationSolver() { }
-
-        public Token Solve(Token Left, Token Operator, Token Right, Dictionary<string, string> Parameters)
+        public static Token Solve(Token Left, Token Operator, Token Right, Dictionary<string, string> Parameters)
         {
             switch (Operator.Value.TrimToUpperInvariant())
             {
