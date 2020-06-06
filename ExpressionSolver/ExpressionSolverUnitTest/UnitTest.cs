@@ -428,6 +428,7 @@ namespace ExpressionSolverUnitTest
             Assert.AreEqual(TokenValueConstants.TRUE, Solver.Solve("(TRUE AND ((TRUE OR FALSE) OR TRUE)) AND ((102+1) = (103))"));
             Assert.AreEqual(TokenValueConstants.FALSE, Solver.Solve("(TRUE AND ((TRUE OR FALSE) OR TRUE)) AND ((102+1) = (103+1))"));
             Assert.AreEqual(TokenValueConstants.TRUE, Solver.Solve("(TRUE AND ((TRUE OR FALSE) OR TRUE)) AND ((102+1) = (103+1-1))"));
+            Assert.AreEqual("3", Solver.Solve("+-+-(--3)"));
         }
 
         [TestMethod]

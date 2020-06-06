@@ -25,40 +25,31 @@ namespace ExpressionSolver
         {
             this._log = log;
             this.Parameters = parameters;
-            var tokens = _tokenExtractor.ReadExpression(expression, Parameters);
+            var tokenExpression = _tokenExtractor.ReadExpression(expression, Parameters);
 
-            tokens = _tokenMathSimplify.MathSimplify(ref tokens);
-            tokens = RemoveSolvedParenthesis(ref tokens);
+            tokenExpression = _tokenMathSimplify.MathSimplify(ref tokenExpression);
+            tokenExpression = RemoveSolvedParenthesis(ref tokenExpression);
+            this.Log(tokenExpression);
 
-            this.Log(tokens);
-
-            int tokenOperatorIndex = GetTokenIndexOperatorByPriority(tokens);
+            int tokenOperatorIndex = GetTokenIndexOperatorByPriority(tokenExpression);
             while (tokenOperatorIndex != -1)
             {
+                if (tokenExpression.Count >= 3)
+                    tokenExpression = this.SolveSingleOperation(ref tokenExpression, tokenOperatorIndex, this.Parameters);
 
+                tokenExpression = _tokenMathSimplify.MathSimplify(ref tokenExpression);
+                tokenExpression = RemoveSolvedParenthesis(ref tokenExpression);
+                this.Log(tokenExpression);
 
-                Token SolvedOperation = _operationSolver.Solve(
-                    tokens[tokenOperatorIndex-1],
-                    tokens[tokenOperatorIndex],
-                    tokens[tokenOperatorIndex+1],
-                    this.Parameters
-                );
-                tokens.RemoveRange(tokenOperatorIndex-1,3);
-                tokens.Insert(tokenOperatorIndex-1, SolvedOperation);
-                tokens = _tokenMathSimplify.MathAssignSignToNumber(ref tokens);
-                tokens = RemoveSolvedParenthesis(ref tokens);
-
-                this.Log(tokens);
-
-                tokenOperatorIndex = GetTokenIndexOperatorByPriority(tokens);
+                tokenOperatorIndex = GetTokenIndexOperatorByPriority(tokenExpression);
             }
-            if (tokenOperatorIndex == -1 && tokens.Count > 1)
+            if (tokenOperatorIndex == -1 && tokenExpression.Count > 1)
             {
                 throw new Exception("Missing operator");
             }
             else 
             {
-                return tokens[0].Value;
+                return tokenExpression[0].Value;
             }
         }
 
@@ -72,7 +63,23 @@ namespace ExpressionSolver
             return Solve(expression, ref _log);
         }
 
-        protected int GetTokenIndexOperatorByPriority(List<Token> tokens)
+        protected TokenExpression SolveSingleOperation(ref TokenExpression expression, 
+                                                int operatorIndex, 
+                                                Dictionary<string, string> parameters)
+        {
+            Token SolvedOperation = _operationSolver.Solve(
+                expression[operatorIndex - 1],
+                expression[operatorIndex],
+                expression[operatorIndex + 1],
+                parameters
+            );
+            expression.RemoveRange(operatorIndex - 1, 3);
+            expression.Insert(operatorIndex - 1, SolvedOperation);
+
+            return expression;
+        }
+
+        protected int GetTokenIndexOperatorByPriority(TokenExpression tokens)
         {
             int returnIndex = -1;
             
@@ -95,7 +102,7 @@ namespace ExpressionSolver
 
                 //Do all math operations first
                 if (tokens[i].Type == eTokenType.Operator &&
-                        IsOperatorMath(tokens[i].Value)
+                        Operators.IsMathOperator(tokens[i].Value)
                         && (previousToken?.Type == eTokenType.Number)
                         && (nextToken?.Type == eTokenType.Number)
                     )
@@ -136,20 +143,7 @@ namespace ExpressionSolver
             return returnIndex;
         }
 
-        protected bool IsOperatorMath(string tokenValueOperator)
-        {
-            return tokenValueOperator.Equals(Operators.Plus) ||
-                    tokenValueOperator.Equals(Operators.Minus) ||
-                    tokenValueOperator.Equals(Operators.Multiply) ||
-                    tokenValueOperator.Equals(Operators.Divide) ||
-                    tokenValueOperator.Equals(Operators.Greater) ||
-                    tokenValueOperator.Equals(Operators.GreaterOrEqual) ||
-                    tokenValueOperator.Equals(Operators.Less) ||
-                    tokenValueOperator.Equals(Operators.LessOrEqual) ||
-                    tokenValueOperator.Equals(Operators.Power);
-        }
-
-        protected ParenthesisIndexes GetInnerParenthesisIndexes(List<Token> tokens)
+        protected ParenthesisIndexes GetInnerParenthesisIndexes(TokenExpression tokens)
         {
             int parenthesisCounter = 0;
             int maxParenthesisOpened = 0;
@@ -187,7 +181,7 @@ namespace ExpressionSolver
             return new ParenthesisIndexes(indexStart.Value, tokenParenthesisEnd.Index);
         }
 
-        protected List<Token> RemoveSolvedParenthesis(ref List<Token> tokens)
+        protected TokenExpression RemoveSolvedParenthesis(ref TokenExpression tokens)
         {
             for(int i = 0; i< tokens.Count(); i++)
             {
@@ -213,10 +207,10 @@ namespace ExpressionSolver
             return tokens;
         }
 
-        protected void Log(List<Token> tokens)
+        protected void Log(TokenExpression tokens)
         {
             if (_log != null)
-                _log.AppendLine(string.Join(" ", tokens.Select(x => x.Value)));
+                _log.AppendLine(tokens.ToString());
         }
     }
 }

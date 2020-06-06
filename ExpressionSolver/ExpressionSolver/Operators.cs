@@ -21,5 +21,18 @@
         public const string Like = "LIKE";
         public const string NotIn = "NOT IN";
         public const string In = "IN";
+
+        public static bool IsMathOperator(string operatorValue)
+        {
+            return operatorValue.Equals(Operators.Plus) ||
+                    operatorValue.Equals(Operators.Minus) ||
+                    operatorValue.Equals(Operators.Multiply) ||
+                    operatorValue.Equals(Operators.Divide) ||
+                    operatorValue.Equals(Operators.Greater) ||
+                    operatorValue.Equals(Operators.GreaterOrEqual) ||
+                    operatorValue.Equals(Operators.Less) ||
+                    operatorValue.Equals(Operators.LessOrEqual) ||
+                    operatorValue.Equals(Operators.Power);
+        }
     }
 }

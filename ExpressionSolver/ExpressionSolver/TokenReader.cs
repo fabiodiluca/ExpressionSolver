@@ -7,9 +7,9 @@ namespace ExpressionSolver
 {
     public class TokenReader
     {
-        public List<Token> ReadExpression(string expression, Dictionary<string, string> parameters)
+        public TokenExpression ReadExpression(string expression, Dictionary<string, string> parameters)
         {
-            var tokens = new List<Token>();
+            var tokens = new TokenExpression();
             
             string currentToken = "";
             bool currentTokenIsString = false;

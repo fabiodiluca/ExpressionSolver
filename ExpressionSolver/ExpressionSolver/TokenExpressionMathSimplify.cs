@@ -5,14 +5,14 @@ namespace ExpressionSolver
 {
     public class TokenExpressionMathSimplify
     {
-        public List<Token> MathSimplify(ref List<Token> tokens)
+        public TokenExpression MathSimplify(ref TokenExpression tokens)
         {
             //Orders of simplification matters
             MathSimplifyPlusMinus(ref tokens);
             return MathAssignSignToNumber(ref tokens);
         }
 
-        private List<Token> MathSimplifyPlusMinus(ref List<Token> tokens)
+        private TokenExpression MathSimplifyPlusMinus(ref TokenExpression tokens)
         {
             for (int i = 0; i < tokens.Count(); )
             {
@@ -21,41 +21,37 @@ namespace ExpressionSolver
                 if (i < tokens.Count() - 1)
                     nextToken = tokens[i + 1];
 
-
-                if (token.Type == eTokenType.Operator && nextToken != null && nextToken.Type == eTokenType.Operator)
+                //++=+
+                if (token.Value == Operators.Plus && nextToken?.Value == Operators.Plus)
                 {
-                    //++=+
-                    if (token.Value == Operators.Plus && nextToken.Value == Operators.Plus)
-                    {
-                        tokens.RemoveRange(i, 2);
-                        tokens.Insert(i, new Token(eTokenType.Operator, Operators.Plus));
-                        continue;
-                    } //+-=+
-                    else if (token.Value == Operators.Plus && nextToken.Value == Operators.Minus)
-                    {
-                        tokens.RemoveRange(i, 2);
-                        tokens.Insert(i, new Token(eTokenType.Operator, Operators.Minus));
-                        continue;
-                    } //-+=-
-                    else if (token.Value == Operators.Minus && nextToken.Value == Operators.Plus)
-                    {
-                        tokens.RemoveRange(i, 2);
-                        tokens.Insert(i, new Token(eTokenType.Operator, Operators.Minus));
-                        continue;
-                    } //--=-
-                    else if (token.Value == Operators.Minus && nextToken.Value == Operators.Minus)
-                    {
-                        tokens.RemoveRange(i, 2);
-                        tokens.Insert(i, new Token(eTokenType.Operator, Operators.Plus));
-                        continue;
-                    }
+                    tokens.RemoveRange(i, 2);
+                    tokens.Insert(i, new Token(eTokenType.Operator, Operators.Plus));
+                    continue;
+                } //+-=+
+                else if (token.Value == Operators.Plus && nextToken?.Value == Operators.Minus)
+                {
+                    tokens.RemoveRange(i, 2);
+                    tokens.Insert(i, new Token(eTokenType.Operator, Operators.Minus));
+                    continue;
+                } //-+=-
+                else if (token.Value == Operators.Minus && nextToken?.Value == Operators.Plus)
+                {
+                    tokens.RemoveRange(i, 2);
+                    tokens.Insert(i, new Token(eTokenType.Operator, Operators.Minus));
+                    continue;
+                } //--=-
+                else if (token.Value == Operators.Minus && nextToken?.Value == Operators.Minus)
+                {
+                    tokens.RemoveRange(i, 2);
+                    tokens.Insert(i, new Token(eTokenType.Operator, Operators.Plus));
+                    continue;
                 }
                 i++;
             }
             return tokens;
         }
 
-        public List<Token> MathAssignSignToNumber(ref List<Token> tokens)
+        public TokenExpression MathAssignSignToNumber(ref TokenExpression tokens)
         {
             for (int i = 0; i < tokens.Count(); )
             {
@@ -89,8 +85,8 @@ namespace ExpressionSolver
 
                 if ( 
                     token.Type == eTokenType.Number && 
-                    (previousToken != null && (previousToken.Value == Operators.Plus || previousToken.Value == Operators.Minus)) &&
-                    (previousPreviousToken != null && (previousPreviousToken.Type != eTokenType.Number) && (previousPreviousToken.Type != eTokenType.ParenthesisEnd))
+                    (previousToken?.Value == Operators.Plus || previousToken?.Value == Operators.Minus) &&
+                    ((previousPreviousToken?.Type != eTokenType.Number) && (previousPreviousToken?.Type != eTokenType.ParenthesisEnd))
                     )
                 {
                     if (previousToken.Value == Operators.Minus)
