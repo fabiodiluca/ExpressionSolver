@@ -13,6 +13,7 @@ namespace ExpressionSolver
             return string.Join(" ", this.Select(x => x.Value));
         }
 
+        private int? _nextOperatorIndex = null; //Performance greatly improved with this variable
         public bool Solve(Dictionary<string, string> parameters)
         {
             if (SolveFirstCall)
@@ -22,7 +23,14 @@ namespace ExpressionSolver
                 SolveFirstCall = false;
             }
 
-            int operatorIndex = GetTokenIndexOperatorByPriority();
+            int operatorIndex = -99;
+            if (_nextOperatorIndex.HasValue)
+            {
+                operatorIndex = _nextOperatorIndex.Value;
+            } else
+            {
+                operatorIndex = GetTokenIndexOperatorByPriority();
+            }                
 
             if (operatorIndex == -1)
                 return false;
@@ -42,7 +50,8 @@ namespace ExpressionSolver
 
             MathSimplify();
             RemoveSolvedParenthesis();
-            return GetTokenIndexOperatorByPriority() != -1;
+            _nextOperatorIndex = GetTokenIndexOperatorByPriority();
+            return _nextOperatorIndex != -1;
         }
 
         private void MathSimplify()
