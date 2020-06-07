@@ -307,8 +307,14 @@ namespace ExpressionSolver
         {
             if (expression.Any())
             {
-                return expression.Last().Value.ToUpperInvariant() == Operators.In || 
-                       expression.Last().Value.ToUpperInvariant() == Operators.NotIn;
+                var last = expression.Last();
+
+                return
+                       (last.Value.Length == Operators.In.Length || last.Value.Length == Operators.NotIn.Length) &&
+                       (
+                        expression.Last().Value.ToUpperInvariant() == Operators.In || 
+                        expression.Last().Value.ToUpperInvariant() == Operators.NotIn
+                       );
             }
             else
             {

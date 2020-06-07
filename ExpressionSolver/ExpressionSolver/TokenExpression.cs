@@ -204,8 +204,6 @@ namespace ExpressionSolver
             if (tokenParenthesisEnd == null)
                 throw new Exception("Missing close parenthesis");
 
-
-
             return new ParenthesisIndexes(indexStart.Value, tokenParenthesisEnd.Index);
         }
 
