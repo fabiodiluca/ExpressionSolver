@@ -6,7 +6,7 @@ namespace ExpressionSolver.Operations
     public class InOperation : Operation
     {
         protected Dictionary<string, string> _Parameters;
-        protected TokenReader _TokenReader = new TokenReader();
+        protected TokenExpressionReader _TokenReader = new TokenExpressionReader();
 
         public InOperation(Token Left, Token Right, Dictionary<string, string> Parameters) : base(Left, Right)
         {
@@ -21,7 +21,7 @@ namespace ExpressionSolver.Operations
 
             var valuesLeftArePresent = new Dictionary<int, bool>();
 
-            for (int aux = 0; aux < ValuesLeft.Count(); aux++)
+            for (int aux = 0; aux < ValuesLeft.Count; aux++)
             {
                 var ValueLeft = ValuesLeft[aux];
                 valuesLeftArePresent.Add(aux, false);

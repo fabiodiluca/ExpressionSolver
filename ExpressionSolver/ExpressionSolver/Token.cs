@@ -54,5 +54,29 @@
                 return new Token(eTokenType.Boolean, TokenValueConstants.FALSE);
             }        
         }
+
+        public static Token FromParameterString(string value)
+        {
+            if (value == null)
+            {
+                return new Token(eTokenType.Null, TokenValueConstants.NULL);
+            }
+            else if (value.IsBool())
+            {
+                return new Token(eTokenType.Boolean, value);
+            }
+            else if (value.IsString())
+            {
+                return new Token(eTokenType.String, value);
+            }
+            else if (value.IsNumber())
+            {
+                return new Token(eTokenType.Number, value);
+            }
+            else
+            {
+                return new Token(eTokenType.String, value);
+            }
+        }
     }
 }

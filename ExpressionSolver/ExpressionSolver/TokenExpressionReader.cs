@@ -5,9 +5,9 @@ using System.Text;
 
 namespace ExpressionSolver
 {
-    public class TokenReader
+    public class TokenExpressionReader
     {
-        public TokenExpression ReadExpression(string expression, Dictionary<string, string> parameters)
+        public TokenExpression Read(string expression, Dictionary<string, string> parameters)
         {
             var tokens = new TokenExpression();
             
@@ -22,14 +22,14 @@ namespace ExpressionSolver
                 char? previousChar = expression.PreviousChar(i);
 
                 #region currentTokenIsString
-                if (string.IsNullOrWhiteSpace(currentToken) && currentChar == '\'' 
+                if (string.IsNullOrEmpty(currentToken) && currentChar == '\'' 
                     && !currentTokenIsString && !currentTokenIsInOrNotInValues && !IsLastOperatorIn(tokens))
                 {
                     currentTokenIsString = true;
                     currentToken += currentChar;
                     continue;
                 }
-                else if (!string.IsNullOrWhiteSpace(currentToken) && currentChar == '\'' && currentTokenIsString && !currentTokenIsInOrNotInValues 
+                else if (!string.IsNullOrEmpty(currentToken) && currentChar == '\'' && currentTokenIsString && !currentTokenIsInOrNotInValues 
                     && (!nextChar.HasValue || (nextChar != '\''))
                     && (currentToken.Where(x => x == '\'').Count() % 2 == 1) &&
                     !IsLastOperatorIn(tokens))
@@ -46,7 +46,6 @@ namespace ExpressionSolver
                     continue;
                 }
                 #endregion
-
 
                 #region Parenthesis
                 if (string.IsNullOrEmpty(currentToken) && (currentChar == '(') && !IsLastOperatorIn(tokens))
@@ -96,12 +95,11 @@ namespace ExpressionSolver
                 }
                 #endregion
 
-                //Ignore space
-                if (string.IsNullOrEmpty(currentToken) && !IsCharTokenSeparator(currentChar) && !currentTokenIsString && !currentTokenIsInOrNotInValues)
-                {
-                    currentToken += currentChar;
-                }
-                else if (!string.IsNullOrEmpty(currentToken))
+                if (
+                     !string.IsNullOrEmpty(currentToken) ||
+                     (string.IsNullOrEmpty(currentToken) &&
+                     !IsCharTokenSeparator(currentChar))
+                     )
                 {
                     currentToken += currentChar;
                 }
@@ -126,29 +124,13 @@ namespace ExpressionSolver
                     tokens.Add(new Token(eTokenType.Number, currentToken));
                     currentToken = "";
                 }
-                else if (parameters != null && parameters.Any() && parameters.ContainsKey(currentToken) &&
-                    (IsCharTokenSeparator(nextChar) || CanBeMathOperator(nextChar.Value)))
+                else if (parameters != null && 
+                         parameters.Any() && 
+                         parameters.ContainsKey(currentToken) &&
+                         (IsCharTokenSeparator(nextChar) || CanBeMathOperatorFirstChar(nextChar.Value))
+                        )
                 {
-                    if (parameters[currentToken] == null)
-                    {
-                        tokens.Add(new Token(eTokenType.Null, "NULL"));
-                    }
-                    else if (parameters[currentToken].IsBool())
-                    {
-                        tokens.Add(new Token(eTokenType.Boolean, parameters[currentToken]));
-                    }
-                    else if (parameters[currentToken].IsString()) 
-                    {
-                        tokens.Add(new Token(eTokenType.String, parameters[currentToken]));
-                    }
-                    else if (parameters[currentToken].IsNumber())
-                    {
-                        tokens.Add(new Token(eTokenType.Number, parameters[currentToken]));
-                    }
-                    else
-                    {
-                        tokens.Add(new Token(eTokenType.String, parameters[currentToken]));
-                    }
+                    tokens.Add(Token.FromParameterString(parameters[currentToken]));
                     currentToken = "";
                 }
                 else if (
@@ -167,23 +149,35 @@ namespace ExpressionSolver
 
         private bool IsOperator(string currentToken, string expression, int currentCharIndex)
         {
-            char? nextChar = null;
-            if (currentCharIndex < expression.Length - 1)
-                nextChar = expression[currentCharIndex + 1];
+            char? nextChar = expression.NextChar(currentCharIndex);
+
+            if (currentToken.Equals(Operators.Different))
+                return true;
+            if (currentToken.Equals(Operators.Divide))
+                return true;
+            if (currentToken.Equals(Operators.Equal))
+                return true;
+            if (currentToken.Equals(Operators.Greater) && (!nextChar.HasValue || nextChar.Value != '='))
+                return true;
+            if (currentToken.Equals(Operators.GreaterOrEqual))
+                return true;
+            if (currentToken.Equals(Operators.Less) && (!nextChar.HasValue || nextChar.Value != '='))
+                return true;
+            if (currentToken.Equals(Operators.LessOrEqual))
+                return true;
+            if (currentToken.Equals(Operators.Minus))
+                return true;
+            if (currentToken.Equals(Operators.Multiply))
+                return true;
+            if (currentToken.Equals(Operators.Plus))
+                return true;
+            if (currentToken.Equals(Operators.Power))
+                return true;
 
             string currentTokenNomarlized = currentToken.ToUpperInvariant();
-
             if (currentTokenNomarlized.Equals(Operators.And) && IsCharTokenSeparator(nextChar))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.Different))
-                return true;
-            if (currentTokenNomarlized.Equals(Operators.Divide))
-                return true;
-            if (currentTokenNomarlized.Equals(Operators.Equal))
-                return true;
-            if (currentTokenNomarlized.Equals(Operators.Greater) && (!nextChar.HasValue || nextChar.Value != '='))
-                return true;
-            if (currentTokenNomarlized.Equals(Operators.GreaterOrEqual))
+            if (currentTokenNomarlized.Equals(Operators.Or) && IsCharTokenSeparator(nextChar))
                 return true;
             if (currentTokenNomarlized.Equals(Operators.In) && IsCharTokenSeparator(nextChar))
                 return true;
@@ -191,25 +185,11 @@ namespace ExpressionSolver
                 return true;
             if (currentTokenNomarlized.Equals(Operators.Is) && !expression.NextTextIs(currentCharIndex, " NOT"))
                 return true;
-            if (currentTokenNomarlized.Equals(Operators.Less) && (!nextChar.HasValue || nextChar.Value != '='))
-                return true;
-            if (currentTokenNomarlized.Equals(Operators.LessOrEqual))
-                return true;
             if (currentTokenNomarlized.Equals(Operators.Like) && IsCharTokenSeparator(nextChar))
-                return true;
-            if (currentTokenNomarlized.Equals(Operators.Minus))
-                return true;
-            if (currentTokenNomarlized.Equals(Operators.Multiply))
                 return true;
             if (currentTokenNomarlized.Equals(Operators.NotIn) && IsCharTokenSeparator(nextChar))
                 return true;
             if (currentTokenNomarlized.Equals(Operators.NotLike))
-                return true;
-            if (currentTokenNomarlized.Equals(Operators.Or) && IsCharTokenSeparator(nextChar))
-                return true;
-            if (currentTokenNomarlized.Equals(Operators.Plus))
-                return true;
-            if (currentTokenNomarlized.Equals(Operators.Power))
                 return true;
 
             return false;
@@ -259,15 +239,14 @@ namespace ExpressionSolver
                 return true;
             if (Operators.Power.StartsWith(currentTokenNomarlized))
                 return true;
+
             return false;
         }
 
-        private bool CanBeMathOperator(char startCharOperator)
+        private bool CanBeMathOperatorFirstChar(char startCharOperator)
         {
             startCharOperator = Char.ToUpperInvariant(startCharOperator);
 
-            if (Operators.And[0] == startCharOperator)
-                return true;
             if (Operators.Different[0] == startCharOperator)
                 return true;
             if (Operators.Divide[0] == startCharOperator)
@@ -297,7 +276,7 @@ namespace ExpressionSolver
         {
             return
                 (IsCharTokenSeparator(nextChar) || 
-                 (nextChar.HasValue && CanBeMathOperator(nextChar.Value))
+                 (nextChar.HasValue && CanBeMathOperatorFirstChar(nextChar.Value))
                 ) && currentToken.IsNumber();
         }
 
@@ -318,11 +297,12 @@ namespace ExpressionSolver
                 ) && (IsCharTokenSeparator(nextChar) );
         }
 
-        private bool IsLastOperatorIn(List<Token> tokens)
+        private bool IsLastOperatorIn(TokenExpression expression)
         {
-            if (tokens.Any())
+            if (expression.Any())
             {
-                return tokens.Last().Value.ToUpperInvariant() == Operators.In || tokens.Last().Value.ToUpperInvariant() == Operators.NotIn;
+                return expression.Last().Value.ToUpperInvariant() == Operators.In || 
+                       expression.Last().Value.ToUpperInvariant() == Operators.NotIn;
             }
             else
             {
@@ -332,21 +312,14 @@ namespace ExpressionSolver
 
         private bool IsCharTokenSeparator(char? character)
         {
-            return !character.HasValue || character == ' ' || character == '\r' || character == '\n' || character == '\t' || character == '(' || character == ')' ;
-        }
-
-        private bool IsDigit(char character) {
             return 
-                character == '0' ||
-                character == '1' ||
-                character == '2' ||
-                character == '3' ||
-                character == '4' ||
-                character == '5' ||
-                character == '6' ||
-                character == '7' ||
-                character == '8' ||
-                character == '9';
+               !character.HasValue || 
+                character == ' ' || 
+                character == '\r' || 
+                character == '\n' || 
+                character == '\t' || 
+                character == '(' || 
+                character == ')' ;
         }
     }
 }

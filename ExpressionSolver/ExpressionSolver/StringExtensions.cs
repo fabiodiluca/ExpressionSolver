@@ -41,5 +41,19 @@ namespace ExpressionSolver
         {
             return s.Trim().ToUpperInvariant();
         }
+
+        public static bool EqualsIgnoreCase(this string s, string value)
+        {
+            if (s == null && value == null)
+                return true;
+            else if (s == null && value != null)
+                return false;
+            else if (s != null && value == null)
+                return false;
+            else
+            {
+                return s.ToUpperInvariant() == value;
+            }
+        }
     }
 }

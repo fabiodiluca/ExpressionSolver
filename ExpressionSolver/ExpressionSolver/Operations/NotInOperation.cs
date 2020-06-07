@@ -6,7 +6,7 @@ namespace ExpressionSolver.Operations
     public class NotInOperation : Operation
     {
         protected Dictionary<string, string> _Parameters;
-        protected TokenReader _TokenReader = new TokenReader();
+        protected TokenExpressionReader _TokenReader = new TokenExpressionReader();
 
         public NotInOperation(Token Left, Token Right, Dictionary<string, string> Parameters) : base(Left, Right)
         {

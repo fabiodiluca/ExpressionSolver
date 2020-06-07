@@ -6,21 +6,21 @@ namespace ExpressionSolver
 {
     public class Solver
     {
-        protected readonly TokenReader _tokenExtractor;
+        protected readonly TokenExpressionReader _tokenExtractor;
         protected StringBuilder _log = null;
 
         public Dictionary<string, string> Parameters = new Dictionary<string,string>();
 
         public Solver() 
         {
-            _tokenExtractor = new TokenReader();
+            _tokenExtractor = new TokenExpressionReader();
         }
 
         public string Solve(string expression, ref StringBuilder log, Dictionary<string, string> parameters) 
         {
             this._log = log;
             this.Parameters = parameters;
-            var tokenExpression = _tokenExtractor.ReadExpression(expression, Parameters);
+            var tokenExpression = _tokenExtractor.Read(expression, Parameters);
 
             this.Log(tokenExpression);
 

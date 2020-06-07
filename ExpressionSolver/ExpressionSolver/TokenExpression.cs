@@ -56,11 +56,11 @@ namespace ExpressionSolver
 
         private void MathSimplifyPlusMinus()
         {
-            for (int i = 0; i < this.Count();)
+            for (int i = 0; i < Count;)
             {
                 var token = this[i];
                 Token nextToken = null;
-                if (i < this.Count() - 1)
+                if (i < Count - 1)
                     nextToken = this[i + 1];
 
                 //++=+
@@ -94,7 +94,7 @@ namespace ExpressionSolver
 
         private void MathAssignSignToNumber()
         {
-            for (int i = 0; i < this.Count();)
+            for (int i = 0; i < Count ;)
             {
                 var token = this[i];
                 Token previousPreviousToken = null;
@@ -104,7 +104,7 @@ namespace ExpressionSolver
                 if (i > 0)
                     previousToken = this[i - 1];
                 Token nextToken = null;
-                if (i < this.Count() - 1)
+                if (i < Count - 1)
                     nextToken = this[i + 1];
 
                 #region If a sign is the first token, assign the sign to number next it
@@ -141,7 +141,7 @@ namespace ExpressionSolver
 
         public void RemoveSolvedParenthesis()
         {
-            for (int i = 0; i < this.Count(); i++)
+            for (int i = 0; i < Count; i++)
             {
                 var token = this[i];
                 Token nextToken = null;
@@ -169,7 +169,7 @@ namespace ExpressionSolver
             int parenthesisCounter = 0;
             int maxParenthesisOpened = 0;
             int? indexStart = null;
-            for (int i = 0; i < this.Count(); i++)
+            for (int i = 0; i < Count; i++)
             {
                 if (this[i].Type == eTokenType.ParenthesisStart)
                 {
@@ -210,7 +210,7 @@ namespace ExpressionSolver
             var tokenParenthesisIndexes = GetInnerParenthesisIndexes();
 
             int tokenIndexStart = (tokenParenthesisIndexes != null ? tokenParenthesisIndexes.IndexStart : 0);
-            int tokenIndexEnd = (tokenParenthesisIndexes != null ? tokenParenthesisIndexes.IndexEnd : this.Count() - 1);
+            int tokenIndexEnd = (tokenParenthesisIndexes != null ? tokenParenthesisIndexes.IndexEnd : Count - 1);
 
             //Math will be priority
             for (int i = tokenIndexStart; i < tokenIndexEnd; i++)
