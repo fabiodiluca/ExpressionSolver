@@ -19,8 +19,6 @@ namespace ExpressionSolver
             {
                 MathSimplify();
                 RemoveSolvedParenthesis();
-            } else
-            {
                 SolveFirstCall = false;
             }
 
@@ -66,20 +64,20 @@ namespace ExpressionSolver
                 //++=+
                 if (token.Value == Operators.Plus && nextToken?.Value == Operators.Plus)
                 {
-                    this.RemoveRange(i, 2);
-                    this.Insert(i, new Token(eTokenType.Operator, Operators.Plus));
+                    RemoveRange(i, 2);
+                    Insert(i, new Token(eTokenType.Operator, Operators.Plus));
                     continue;
                 } //+-=+
                 else if (token.Value == Operators.Plus && nextToken?.Value == Operators.Minus)
                 {
-                    this.RemoveRange(i, 2);
-                    this.Insert(i, new Token(eTokenType.Operator, Operators.Minus));
+                    RemoveRange(i, 2);
+                    Insert(i, new Token(eTokenType.Operator, Operators.Minus));
                     continue;
                 } //-+=-
                 else if (token.Value == Operators.Minus && nextToken?.Value == Operators.Plus)
                 {
-                    this.RemoveRange(i, 2);
-                    this.Insert(i, new Token(eTokenType.Operator, Operators.Minus));
+                    RemoveRange(i, 2);
+                    Insert(i, new Token(eTokenType.Operator, Operators.Minus));
                     continue;
                 } //--=-
                 else if (token.Value == Operators.Minus && nextToken?.Value == Operators.Minus)
