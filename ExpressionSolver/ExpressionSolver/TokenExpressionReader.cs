@@ -154,50 +154,63 @@ namespace ExpressionSolver
             return tokens;
         }
 
+        /// <summary>
+        /// This is the most critical function for performance, must be very optmized
+        /// </summary>
+        /// <param name="currentToken"></param>
+        /// <param name="expression"></param>
+        /// <param name="currentCharIndex"></param>
+        /// <returns></returns>
         private bool IsOperator(string currentToken, string expression, int currentCharIndex)
         {
             char? nextChar = expression.NextChar(currentCharIndex);
 
-            if (currentToken == (Operators.Different))
-                return true;
-            if (currentToken == (Operators.Divide))
-                return true;
-            if (currentToken == (Operators.Equal))
-                return true;
-            if (currentToken == (Operators.Greater) && (!nextChar.HasValue || nextChar.Value != '='))
-                return true;
-            if (currentToken == (Operators.GreaterOrEqual))
-                return true;
-            if (currentToken == (Operators.Less) && (!nextChar.HasValue || nextChar.Value != '='))
-                return true;
-            if (currentToken == (Operators.LessOrEqual))
-                return true;
-            if (currentToken == (Operators.Minus))
-                return true;
-            if (currentToken == (Operators.Multiply))
-                return true;
-            if (currentToken == (Operators.Plus))
-                return true;
-            if (currentToken == (Operators.Power))
-                return true;
+            if (currentToken.Length <= 2)
+            {
+                if (currentToken == (Operators.Different))
+                    return true;
+                if (currentToken == (Operators.Divide))
+                    return true;
+                if (currentToken == (Operators.Equal))
+                    return true;
+                if (currentToken == (Operators.Greater) && (!nextChar.HasValue || nextChar.Value != '='))
+                    return true;
+                if (currentToken == (Operators.GreaterOrEqual))
+                    return true;
+                if (currentToken == (Operators.Less) && (!nextChar.HasValue || nextChar.Value != '='))
+                    return true;
+                if (currentToken == (Operators.LessOrEqual))
+                    return true;
+                if (currentToken == (Operators.Minus))
+                    return true;
+                if (currentToken == (Operators.Multiply))
+                    return true;
+                if (currentToken == (Operators.Plus))
+                    return true;
+                if (currentToken == (Operators.Power))
+                    return true;
+            }
 
-            string currentTokenNomarlized = currentToken.ToUpperInvariant();
-            if (currentTokenNomarlized == (Operators.And) && IsCharTokenSeparator(nextChar))
-                return true;
-            if (currentTokenNomarlized == (Operators.Or) && IsCharTokenSeparator(nextChar))
-                return true; 
-            if (currentTokenNomarlized == (Operators.In) && IsCharTokenSeparator(nextChar))
-                return true;
-            if (currentTokenNomarlized == (Operators.IsNot))
-                return true;
-            if (currentTokenNomarlized == (Operators.Is) && !expression.NextTextIs(currentCharIndex, " NOT"))
-                return true;
-            if (currentTokenNomarlized == (Operators.Like) && IsCharTokenSeparator(nextChar))
-                return true;
-            if (currentTokenNomarlized == (Operators.NotIn) && IsCharTokenSeparator(nextChar))
-                return true;
-            if (currentTokenNomarlized == (Operators.NotLike))
-                return true;
+            if (currentToken.Length >= 2)
+            {
+                string currentTokenNomarlized = currentToken.ToUpperInvariant();
+                if (currentTokenNomarlized == (Operators.And) && IsCharTokenSeparator(nextChar))
+                    return true;
+                if (currentTokenNomarlized == (Operators.Or) && IsCharTokenSeparator(nextChar))
+                    return true;
+                if (currentTokenNomarlized == (Operators.In) && IsCharTokenSeparator(nextChar))
+                    return true;
+                if (currentTokenNomarlized == (Operators.IsNot))
+                    return true;
+                if (currentTokenNomarlized == (Operators.Is) && !expression.NextTextIs(currentCharIndex, " NOT"))
+                    return true;
+                if (currentTokenNomarlized == (Operators.Like) && IsCharTokenSeparator(nextChar))
+                    return true;
+                if (currentTokenNomarlized == (Operators.NotIn) && IsCharTokenSeparator(nextChar))
+                    return true;
+                if (currentTokenNomarlized == (Operators.NotLike))
+                    return true;
+            }
 
             return false;
         }
