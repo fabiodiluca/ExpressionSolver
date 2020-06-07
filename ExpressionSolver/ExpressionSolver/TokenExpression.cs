@@ -196,15 +196,13 @@ namespace ExpressionSolver
             if (!indexStart.HasValue)
                 return null;
 
-            var tokenParenthesisEnd = this.Select((v, i) => new { Index = i, Value = v })
-            .Where(x => x.Index > indexStart.Value && x.Value.Type == eTokenType.ParenthesisEnd)
-            .OrderBy(x => x.Index)
-            .FirstOrDefault();
+            for (int i = indexStart.Value; i < Count; i++)
+            {
+                if (this[i].Type == eTokenType.ParenthesisEnd)
+                    return new ParenthesisIndexes(indexStart.Value, i);
+            }
 
-            if (tokenParenthesisEnd == null)
-                throw new Exception("Missing close parenthesis");
-
-            return new ParenthesisIndexes(indexStart.Value, tokenParenthesisEnd.Index);
+            throw new Exception("Missing close parenthesis");
         }
 
         private int GetTokenIndexOperatorByPriority()

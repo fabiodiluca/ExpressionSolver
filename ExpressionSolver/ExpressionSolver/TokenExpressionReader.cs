@@ -21,15 +21,22 @@ namespace ExpressionSolver
                 char? nextChar = expression.NextChar(i);
                 char? previousChar = expression.PreviousChar(i);
 
-                #region currentTokenIsString
-                if (string.IsNullOrEmpty(currentToken) && currentChar == '\'' 
-                    && !currentTokenIsString && !currentTokenIsInOrNotInValues && !IsLastOperatorIn(tokens))
+                #region String Token Processing
+                //Detects the begin of a string
+                if (string.IsNullOrEmpty(currentToken) && 
+                    currentChar == '\'' && 
+                    !currentTokenIsString && 
+                    !currentTokenIsInOrNotInValues && 
+                    !IsLastOperatorIn(tokens))
                 {
                     currentTokenIsString = true;
                     currentToken += currentChar;
                     continue;
                 }
-                else if (!string.IsNullOrEmpty(currentToken) && currentChar == '\'' && currentTokenIsString && !currentTokenIsInOrNotInValues 
+                //Detects the ends of a string
+                else if (!string.IsNullOrEmpty(currentToken) 
+                    && currentChar == '\'' 
+                    && currentTokenIsString 
                     && (!nextChar.HasValue || (nextChar != '\''))
                     && (currentToken.Where(x => x == '\'').Count() % 2 == 1) &&
                     !IsLastOperatorIn(tokens))
