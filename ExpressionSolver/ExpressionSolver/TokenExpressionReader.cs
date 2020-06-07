@@ -284,17 +284,23 @@ namespace ExpressionSolver
         {
             return
                 (
-                currentToken.Trim().ToUpperInvariant().Equals(TokenValueConstants.TRUE) ||
-                currentToken.Trim().ToUpperInvariant().Equals(TokenValueConstants.FALSE)
-                ) && (IsCharTokenSeparator(nextChar) || nextChar == '=' || nextChar == '!');
+                    (currentToken.Length == TokenValueConstants.TRUE.Length || currentToken.Length == TokenValueConstants.FALSE.Length) &&
+                    (IsCharTokenSeparator(nextChar) || nextChar == '=' || nextChar == '!') &&
+                    (
+                        currentToken.ToUpperInvariant().Equals(TokenValueConstants.TRUE) ||
+                        currentToken.ToUpperInvariant().Equals(TokenValueConstants.FALSE)
+                    )
+                ) ;
         }
 
         private bool IsNullIdentified(string currentToken, char? nextChar)
         {
             return
                 (
-                currentToken.Trim().ToUpperInvariant().Equals(TokenValueConstants.NULL)
-                ) && (IsCharTokenSeparator(nextChar) );
+                    IsCharTokenSeparator(nextChar) &&
+                    (currentToken.Length == TokenValueConstants.NULL.Length) &&
+                    currentToken.Trim().ToUpperInvariant().Equals(TokenValueConstants.NULL)
+                );
         }
 
         private bool IsLastOperatorIn(TokenExpression expression)
